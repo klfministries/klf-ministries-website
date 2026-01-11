@@ -1,6 +1,6 @@
 "use client";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "/components/ui/card";
+import { Button } from "../components/ui/button";
 import { useState } from "react";
 
 export default function AuthorWebsite() {
@@ -122,4 +122,5 @@ export default function AuthorWebsite() {
     </div>
   );
 }
+
 
