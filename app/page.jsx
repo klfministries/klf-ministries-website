@@ -200,7 +200,16 @@ export default function AuthorWebsite() {
       {/* CONTACT */}
       {page === "contact" && (
         <section className="bg-white p-8 rounded-xl max-w-md mx-auto text-center space-y-2">
-          <p>📧 info@klfministries.org</p>
+          <p>
+  📧{" "}
+  <a
+    href="mailto:kiwayne26@gmail.com?subject=KLF%20Ministries%20Inquiry"
+    className="text-blue-600 underline"
+  >
+    kiwayne26@gmail.com
+  </a>
+</p>
+
           <p>📞 +1 876 870 0508</p>
           <p>📸 @kiwayne27</p>
         </section>
@@ -218,3 +227,4 @@ export default function AuthorWebsite() {
     </div>
   );
 }
+
