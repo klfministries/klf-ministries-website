@@ -1,11 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 
+const DONATE_LINK =
+  "https://www.paypal.com/donate/?business=kiwayne26@gmail.com&no_recurring=0&item_name=Support+KLF+Ministries&currency_code=USD&return=https://klfministries.org/?thankyou=donation";
+
+const BOOK_BUY_LINK =
+  "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=kiwayne26@gmail.com&item_name=KLF+Ministries+Book&amount=15.00&currency_code=USD&return=https://klfministries.org/?thankyou=book";
+
+const WHATSAPP_LINK =
+  "https://wa.me/18768700508?text=Hello%20KLF%20Ministries,%20I%20would%20like%20to%20connect.";
+
 export default function AuthorWebsite() {
   const [page, setPage] = useState("home");
+  const [thankYou, setThankYou] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const thanks = params.get("thankyou");
+    if (thanks) setThankYou(thanks);
+  }, []);
 
   const NavButton = ({ label, value }) => (
     <button
@@ -19,27 +35,55 @@ export default function AuthorWebsite() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-6 relative">
+
+      {/* THANK YOU MESSAGE + EMAIL CAPTURE */}
+      {thankYou && (
+        <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded-lg mb-8 text-center max-w-2xl mx-auto">
+          {thankYou === "book" && (
+            <>
+              <p className="mb-4">
+                🙏 <strong>Thank you for your purchase!</strong><br />
+                Please enter your email below to receive your thank-you message.
+              </p>
+
+              {/* MailerLite Embed */}
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    <script>
+                      (function(w,d,e,u,f,l,n){
+                        w[f]=w[f]||function(){(w[f].q=w[f].q||[]).push(arguments);};
+                        l=d.createElement(e);l.async=1;l.src=u;
+                        n=d.getElementsByTagName(e)[0];n.parentNode.insertBefore(l,n);
+                      })
+                      (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+                      ml('account', '2031646');
+                    </script>
+
+                    <div class="ml-embedded" data-form="KsWnut"></div>
+                  `,
+                }}
+              />
+            </>
+          )}
+
+          {thankYou === "donation" && (
+            <p>
+              💝 <strong>Thank you for your donation!</strong><br />
+              Your generosity supports the mission of KLF Ministries.
+            </p>
+          )}
+        </div>
+      )}
+
       {/* HEADER */}
       <header className="text-center mb-10">
-        <div className="flex flex-col items-center gap-4 mb-2">
-          <div className="w-24 h-24 rounded-full border-2 border-black flex items-center justify-center text-center font-bold">
-            <span>
-              KLF <br /> 📖 ✝ 🔥
-            </span>
-          </div>
-
-          <h1 className="text-4xl font-bold">
-            KLF Ministries & Publications
-          </h1>
-
-          <p className="italic text-gray-700">
-            “God uses rescued people to rescue people”
-          </p>
-        </div>
-
-        <p className="text-lg text-gray-600 mb-6">
-          Books • Videos • Faith-Based Resources
+        <h1 className="text-4xl font-bold mb-2">
+          KLF Ministries & Publications
+        </h1>
+        <p className="italic text-gray-700 mb-4">
+          “God uses rescued people to rescue people”
         </p>
 
         <div className="flex justify-center gap-3 flex-wrap">
@@ -49,49 +93,45 @@ export default function AuthorWebsite() {
           <NavButton label="Books" value="books" />
           <NavButton label="Videos" value="videos" />
           <NavButton label="Contact" value="contact" />
+          <a
+            href={DONATE_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 rounded-lg bg-green-600 text-white"
+          >
+            Donate
+          </a>
         </div>
       </header>
 
       {/* HOME */}
       {page === "home" && (
         <section className="grid md:grid-cols-3 gap-6 mb-12">
-          <Card className="rounded-2xl shadow">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-2">📚 Books</h2>
-              <p className="mb-4 text-gray-600">
-                Purchase inspiring books that strengthen faith and purpose.
-              </p>
-              <Button
-                className="w-full"
-                onClick={() => setPage("books")}
-              >
-                View Books
-              </Button>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <h2 className="font-semibold mb-2">📚 Books</h2>
+              <Button onClick={() => setPage("books")}>View Books</Button>
             </CardContent>
           </Card>
 
-          <Card className="rounded-2xl shadow">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-2">🎥 Videos</h2>
-              <p className="mb-4 text-gray-600">
-                Watch sermons, teachings, and inspirational messages.
-              </p>
-              <Button
-                className="w-full"
-                onClick={() => setPage("videos")}
-              >
-                Watch Videos
-              </Button>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <h2 className="font-semibold mb-2">🎥 Videos</h2>
+              <Button onClick={() => setPage("videos")}>Watch Videos</Button>
             </CardContent>
           </Card>
 
-          <Card className="rounded-2xl shadow">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-2">📝 Resources</h2>
-              <p className="mb-4 text-gray-600">
-                Devotionals, study guides, and downloadable content.
-              </p>
-              <Button className="w-full">Explore Resources</Button>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <h2 className="font-semibold mb-2">🙏 Support</h2>
+              <a
+                href={DONATE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-green-600 text-white px-4 py-2 rounded"
+              >
+                Donate
+              </a>
             </CardContent>
           </Card>
         </section>
@@ -99,121 +139,74 @@ export default function AuthorWebsite() {
 
       {/* ABOUT */}
       {page === "about" && (
-        <section className="bg-white p-8 rounded-2xl shadow mb-12 max-w-3xl mx-auto">
+        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">About the Author</h2>
-          <p className="text-gray-700 leading-relaxed">
+          <p>
             Kiwayne Ferron is a pastor, speaker, and author committed to sharing
             the gospel of Jesus Christ with clarity, urgency, and hope. His
             ministry emphasizes spiritual preparation, discipleship, and
-            faithful living in anticipation of Christ’s soon return. He lives
-            by the philosophy, “To live is Christ; I know no other way.” His
-            guiding mantra is this: God uses rescued people to rescue people.
+            faithful living in anticipation of Christ’s soon return.
           </p>
         </section>
       )}
 
       {/* SPEAKING */}
       {page === "speaking" && (
-        <section className="bg-white p-8 rounded-2xl shadow mb-12 max-w-3xl mx-auto">
+        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">Speaking Engagements</h2>
-          <ul className="list-disc pl-6 text-gray-700 mb-6">
+          <ul className="list-disc pl-6">
             <li>Church Revivals & Camp Meetings</li>
             <li>Special Preaching Assignment</li>
             <li>Bible Study</li>
             <li>End-Time Prophecy Series</li>
             <li>Leadership & Stewardship Training</li>
           </ul>
-          <a href="mailto:info@klfministries.org">
-            <Button>Request a Booking</Button>
-          </a>
         </section>
       )}
 
       {/* BOOKS */}
       {page === "books" && (
-        <section className="bg-white p-8 rounded-2xl shadow mb-12 max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">Books</h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="border p-4 rounded-xl">
-              <h3 className="font-semibold text-lg mb-2">
-                Book Title Here
-              </h3>
-              <p className="text-gray-600 mb-3">
-                Short description of the book goes here.
-              </p>
-              <a
-                href="#"
-                className="inline-block bg-black text-white px-4 py-2 rounded-lg"
-              >
-                Buy Now
-              </a>
-            </div>
-          </div>
+        <section className="bg-white p-8 rounded-xl max-w-md mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-4">Books</h2>
+          <p className="mb-2">KLF Ministries Book</p>
+          <p className="mb-4 font-semibold">$15.00 USD</p>
+          <a
+            href={BOOK_BUY_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-black text-white px-4 py-2 rounded"
+          >
+            Buy Now
+          </a>
         </section>
       )}
 
       {/* VIDEOS */}
       {page === "videos" && (
-        <section className="bg-white p-8 rounded-2xl shadow mb-12 max-w-4xl mx-auto">
+        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4">Videos</h2>
-
-          <p className="text-gray-700 mb-4">
-            Watch sermons, teachings, and inspirational messages.
-          </p>
-
-          <div className="aspect-video">
-            <iframe
-              className="w-full h-full rounded-xl"
-              src="https://www.youtube.com/embed/YOUTUBE_VIDEO_ID"
-              title="KLF Ministries Video"
-              allowFullScreen
-            ></iframe>
-          </div>
+          <p>Coming soon.</p>
         </section>
       )}
 
       {/* CONTACT */}
       {page === "contact" && (
-        <section className="bg-white p-8 rounded-2xl shadow mb-12 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">
-            Contact / Prayer Request
-          </h2>
-          <p className="text-gray-700 mb-4">
-            For questions, invitations, or prayer requests, please reach out.
-          </p>
-
-          <form
-            action="mailto:info@klfministries.org"
-            method="POST"
-            encType="text/plain"
-            className="grid gap-4"
-          >
-            <input
-              name="name"
-              className="border p-3 rounded-lg"
-              placeholder="Your Name"
-            />
-            <input
-              name="email"
-              className="border p-3 rounded-lg"
-              placeholder="Your Email"
-            />
-            <textarea
-              name="message"
-              className="border p-3 rounded-lg"
-              rows="4"
-              placeholder="Your Message or Prayer Request"
-            ></textarea>
-            <Button type="submit">Send Message</Button>
-          </form>
+        <section className="bg-white p-8 rounded-xl max-w-md mx-auto text-center space-y-2">
+          <p>📧 info@klfministries.org</p>
+          <p>📞 +1 876 870 0508</p>
+          <p>📸 @kiwayne27</p>
         </section>
       )}
 
-      {/* FOOTER */}
-      <footer className="text-center text-gray-500">
-        <p>© {new Date().getFullYear()} KLF Ministries. All rights reserved.</p>
-      </footer>
+      {/* WHATSAPP BUTTON */}
+      <a
+        href={WHATSAPP_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 bg-green-500 text-white px-4 py-3 rounded-full shadow-lg"
+      >
+        WhatsApp
+      </a>
     </div>
   );
 }
