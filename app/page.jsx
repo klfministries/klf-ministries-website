@@ -40,15 +40,26 @@ export default function AuthorWebsite() {
             <CardContent className="p-6">
               <h2 className="text-xl font-semibold mb-2">📚 Books</h2>
               <p className="mb-4 text-gray-600">Purchase inspiring books that strengthen faith and purpose.</p>
-              <Button className="w-full">View Books</Button>
-            </CardContent>
+             <Button
+  className="w-full"
+  onClick={() => setPage("books")}
+>
+  View Books
+</Button>
+
           </Card>
 
           <Card className="rounded-2xl shadow">
             <CardContent className="p-6">
               <h2 className="text-xl font-semibold mb-2">🎥 Videos</h2>
               <p className="mb-4 text-gray-600">Watch sermons, teachings, and inspirational messages.</p>
-              <Button className="w-full">Watch Videos</Button>
+             <Button
+  className="w-full"
+  onClick={() => setPage("videos")}
+>
+  Watch Videos
+</Button>
+
             </CardContent>
           </Card>
 
@@ -123,6 +134,7 @@ export default function AuthorWebsite() {
     </div>
   );
 }
+
 
 
 
