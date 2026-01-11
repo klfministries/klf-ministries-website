@@ -79,12 +79,13 @@ export default function AuthorWebsite() {
           <p className="text-gray-700 mb-4">
             Available for revivals, conferences, seminars, youth events, and special services.
           </p>
-          <ul className="list-disc pl-6 text-gray-700 mb-6">
-            <li>Church Revivals & Camp Meetings</li>
-            <li>Youth & Family Life Seminars</li>
-            <li>End-Time Prophecy Series</li>
-            <li>Leadership & Stewardship Training</li>
-          </ul>
+         <ul className="list-disc pl-6 text-gray-700 mb-6">
+  <li>Church Revivals & Camp Meetings</li>
+  <li>Special Preaching Assignment</li>
+  <li>Bible Study</li>
+  <li>End-Time Prophecy Series</li>
+  <li>Leadership & Stewardship Training</li>
+</ul>
           <a href="mailto:yourministry@email.com?subject=Speaking Engagement Request">
             <Button>Request a Booking</Button>
           </a>
@@ -122,5 +123,6 @@ export default function AuthorWebsite() {
     </div>
   );
 }
+
 
 
