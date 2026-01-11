@@ -203,10 +203,10 @@ export default function AuthorWebsite() {
           <p>
   📧{" "}
   <a
-    href="mailto:kiwayne26@gmail.com?subject=KLF%20Ministries%20Inquiry"
+    href="mailto:klfministries7@gmail.com?subject=KLF%20Ministries%20Inquiry"
     className="text-blue-600 underline"
   >
-    kiwayne26@gmail.com
+    klfministries7@gmail.com
   </a>
 </p>
 
@@ -227,4 +227,5 @@ export default function AuthorWebsite() {
     </div>
   );
 }
+
 
