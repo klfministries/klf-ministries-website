@@ -66,10 +66,10 @@ export default function AuthorWebsite() {
         <section className="bg-white p-8 rounded-2xl shadow mb-12 max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">About the Author</h2>
           <p className="text-gray-700 leading-relaxed">
-            Jevair is a pastor, speaker, and author committed to sharing the gospel of Jesus Christ with clarity,
-            urgency, and hope. His ministry emphasizes spiritual preparation, discipleship, and faithful living
-            in anticipation of Christ’s soon return.
-          </p>
+       <p className="text-gray-700 leading-relaxed">
+  Kiwayne Ferron is a pastor, speaker, and author committed to sharing the gospel of Jesus Christ with clarity, urgency, and hope. His ministry emphasizes spiritual preparation, discipleship, and faithful living in anticipation of Christ’s soon return. He lives by the philosophy, “To live is Christ; I know no other way.” His guiding mantra is this: God uses rescued people to rescue people.
+</p>
+
         </section>
       )}
 
@@ -123,6 +123,7 @@ export default function AuthorWebsite() {
     </div>
   );
 }
+
 
 
 
