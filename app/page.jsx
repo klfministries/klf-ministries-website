@@ -47,7 +47,6 @@ export default function AuthorWebsite() {
                 Please enter your email below to receive your thank-you message.
               </p>
 
-              {/* MailerLite Embed */}
               <div
                 dangerouslySetInnerHTML={{
                   __html: `
@@ -79,9 +78,18 @@ export default function AuthorWebsite() {
 
       {/* HEADER */}
       <header className="text-center mb-10">
+
+        {/* LOGO */}
+        <img
+          src="/klf-logo.png"
+          alt="KLF Ministries Logo"
+          className="mx-auto mb-4 w-40 h-auto"
+        />
+
         <h1 className="text-4xl font-bold mb-2">
           KLF Ministries & Publications
         </h1>
+
         <p className="italic text-gray-700 mb-4">
           “God uses rescued people to rescue people”
         </p>
