@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 
 const PAYPAL_EMAIL = "kiwayne26@gmail.com";
-
 const WHATSAPP_LINK =
   "https://wa.me/18768700508?text=Hello%20KLF%20Ministries,%20I%20would%20like%20to%20connect.";
 
@@ -52,33 +51,24 @@ export default function AuthorWebsite() {
           <NavButton label="Books" value="books" />
           <NavButton label="Videos" value="videos" />
           <NavButton label="Contact" value="contact" />
+          <NavButton label="Terms" value="terms" />
+          <NavButton label="Privacy" value="privacy" />
         </div>
       </header>
 
       {/* HOME */}
       {page === "home" && (
         <section className="grid md:grid-cols-3 gap-6">
-          {/* DONATE */}
           <Card>
             <CardContent className="p-6 text-center">
               <h2 className="font-semibold mb-3">🙏 One-Time Donation</h2>
-
               <div className="grid grid-cols-3 gap-2 mb-4">
                 {[10, 25, 50, 100, 200, 500].map((amt) => (
-                  <a
-                    key={amt}
-                    href={oneTimeLink(amt)}
-                    target="_blank"
-                    className="border rounded py-2 hover:bg-gray-100"
-                  >
+                  <a key={amt} href={oneTimeLink(amt)} target="_blank" className="border rounded py-2">
                     ${amt}
                   </a>
                 ))}
-                <a
-                  href={oneTimeLink(1000)}
-                  target="_blank"
-                  className="border rounded py-2 col-span-3 hover:bg-gray-100"
-                >
+                <a href={oneTimeLink(1000)} target="_blank" className="border rounded py-2 col-span-3">
                   $1000
                 </a>
               </div>
@@ -89,27 +79,17 @@ export default function AuthorWebsite() {
 
               <div className="grid grid-cols-3 gap-2">
                 {[10, 25, 50, 100, 200, 500].map((amt) => (
-                  <a
-                    key={amt}
-                    href={monthlyLink(amt)}
-                    target="_blank"
-                    className="border rounded py-2 text-green-700 hover:bg-green-50"
-                  >
+                  <a key={amt} href={monthlyLink(amt)} target="_blank" className="border rounded py-2 text-green-700">
                     ${amt}/mo
                   </a>
                 ))}
-                <a
-                  href={monthlyLink(1000)}
-                  target="_blank"
-                  className="border rounded py-2 col-span-3 text-green-700 hover:bg-green-50"
-                >
+                <a href={monthlyLink(1000)} target="_blank" className="border rounded py-2 col-span-3 text-green-700">
                   $1000/month
                 </a>
               </div>
             </CardContent>
           </Card>
 
-          {/* BOOKS */}
           <Card>
             <CardContent className="p-6 text-center">
               <h2 className="font-semibold mb-2">📚 Books</h2>
@@ -117,7 +97,6 @@ export default function AuthorWebsite() {
             </CardContent>
           </Card>
 
-          {/* VIDEOS */}
           <Card>
             <CardContent className="p-6 text-center">
               <h2 className="font-semibold mb-2">🎥 Videos</h2>
@@ -127,28 +106,36 @@ export default function AuthorWebsite() {
         </section>
       )}
 
-      {/* CONTACT */}
-      {page === "contact" && (
-        <section className="bg-white p-8 rounded-xl max-w-md mx-auto text-center space-y-3 mt-10">
+      {/* TERMS */}
+      {page === "terms" && (
+        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4">Terms of Use</h2>
           <p>
-            📧{" "}
-            <a
-              href="mailto:klfministries7@gmail.com"
-              className="text-blue-600 underline"
-            >
-              klfministries7@gmail.com
-            </a>
+            All content on this website is the property of KLF Ministries and is
+            provided for informational and ministry purposes only. Unauthorized
+            reproduction, distribution, or use of content without written
+            permission is prohibited.
           </p>
-          <p>📞 +1 876 870 0508</p>
-          <a
-            href="https://instagram.com/kiwayne27"
-            target="_blank"
-            className="text-blue-700 hover:text-yellow-600"
-          >
-            @kiwayne27
-          </a>
         </section>
       )}
+
+      {/* PRIVACY */}
+      {page === "privacy" && (
+        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4">Privacy Policy</h2>
+          <p>
+            KLF Ministries respects your privacy. Any personal information
+            submitted through forms, email subscriptions, or donations is used
+            solely for ministry communication and will never be sold or shared
+            with third parties.
+          </p>
+        </section>
+      )}
+
+      {/* FOOTER */}
+      <footer className="text-center mt-12 text-sm text-gray-600">
+        © {new Date().getFullYear()} KLF Ministries. All rights reserved.
+      </footer>
 
       {/* WHATSAPP */}
       <a
