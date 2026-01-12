@@ -42,44 +42,6 @@ export default function AuthorWebsite() {
           "linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.95)), url('/faith-mission-bg.jpg')",
       }}
     >
-      {/* THANK YOU MESSAGE */}
-      {thankYou && (
-        <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded-lg mb-8 text-center max-w-2xl mx-auto">
-          {thankYou === "book" && (
-            <>
-              <p className="mb-4">
-                🙏 <strong>Thank you for your purchase!</strong><br />
-                Please enter your email below to receive your thank-you message.
-              </p>
-
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `
-                    <script>
-                      (function(w,d,e,u,f,l,n){
-                        w[f]=w[f]||function(){(w[f].q=w[f].q||[]).push(arguments);};
-                        l=d.createElement(e);l.async=1;l.src=u;
-                        n=d.getElementsByTagName(e)[0];n.parentNode.insertBefore(l,n);
-                      })
-                      (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-                      ml('account', '2031646');
-                    </script>
-                    <div class="ml-embedded" data-form="KsWnut"></div>
-                  `,
-                }}
-              />
-            </>
-          )}
-
-          {thankYou === "donation" && (
-            <p>
-              💝 <strong>Thank you for your donation!</strong><br />
-              Your generosity supports the mission of KLF Ministries.
-            </p>
-          )}
-        </div>
-      )}
-
       {/* HEADER */}
       <header className="text-center mb-10">
         <img
@@ -160,41 +122,29 @@ export default function AuthorWebsite() {
         </section>
       )}
 
-      {/* SPEAKING + APPOINTMENT FORM */}
+      {/* SPEAKING – GOOGLE FORM */}
       {page === "speaking" && (
-        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto">
+        <section className="bg-white p-8 rounded-xl max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">Speaking Engagements</h2>
 
-          <ul className="list-disc pl-6 mb-8">
-            <li>Church Revivals & Camp Meetings</li>
-            <li>Special Preaching Assignments</li>
-            <li>Bible Study</li>
-            <li>End-Time Prophecy Series</li>
-            <li>Leadership & Stewardship Training</li>
-          </ul>
+          <p className="mb-6">
+            To request a speaking engagement with KLF Ministries, please
+            complete the form below. We will review your request and respond as
+            soon as possible.
+          </p>
 
-          <h3 className="text-xl font-semibold mb-4">
-            Request a Speaking Engagement
-          </h3>
-
-          <form
-            action="mailto:klfministries7@gmail.com?subject=Speaking%20Engagement%20Request"
-            method="POST"
-            encType="text/plain"
-            className="space-y-4"
-          >
-            <input type="text" name="Name" placeholder="Your Name" required className="w-full border p-2 rounded" />
-            <input type="email" name="Email" placeholder="Your Email" required className="w-full border p-2 rounded" />
-            <input type="tel" name="Phone" placeholder="Phone Number" className="w-full border p-2 rounded" />
-            <input type="text" name="Organization" placeholder="Church / Organization" className="w-full border p-2 rounded" />
-            <input type="text" name="Event Type" placeholder="Type of Event" className="w-full border p-2 rounded" />
-            <input type="date" name="Preferred Date" className="w-full border p-2 rounded" />
-            <textarea name="Message" placeholder="Tell us about your event" rows="4" className="w-full border p-2 rounded"></textarea>
-
-            <button type="submit" className="bg-black text-white px-6 py-2 rounded">
-              Submit Request
-            </button>
-          </form>
+          <div className="w-full overflow-hidden rounded-lg">
+            <iframe
+              src="https://docs.google.com/forms/d/e/1FAIpQLSesBJjzAZPg7ylXIGcC4WFoEphcZP1apZfylh3fozrGnULP7w/viewform?embedded=true"
+              width="100%"
+              height="900"
+              frameBorder="0"
+              marginHeight="0"
+              marginWidth="0"
+            >
+              Loading…
+            </iframe>
+          </div>
         </section>
       )}
 
@@ -204,7 +154,12 @@ export default function AuthorWebsite() {
           <h2 className="text-2xl font-bold mb-4">Books</h2>
           <p className="mb-2">KLF Ministries Book</p>
           <p className="mb-4 font-semibold">$15.00 USD</p>
-          <a href={BOOK_BUY_LINK} target="_blank" rel="noopener noreferrer" className="bg-black text-white px-4 py-2 rounded">
+          <a
+            href={BOOK_BUY_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-black text-white px-4 py-2 rounded"
+          >
             Buy Now
           </a>
         </section>
