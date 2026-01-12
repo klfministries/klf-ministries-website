@@ -1,3 +1,5 @@
+// 🚨 TEST CHANGE — SHOULD APPEAR ON SITE
+
 "use client";
 
 import { useState } from "react";
@@ -44,9 +46,10 @@ export default function KLFMinistries() {
           className="mx-auto mb-4 w-40"
         />
 
-        <h1 className="text-4xl font-bold text-blue-900">
-          KLF Ministries & Publications
-        </h1>
+     <h1 className="text-4xl font-bold text-blue-900">
+  🚨 TEST — KLF Ministries & Publications
+</h1>
+
 
         <p className="italic text-gray-700 mt-2 mb-5">
           “God uses rescued people to rescue people”
@@ -299,4 +302,5 @@ export default function KLFMinistries() {
     </div>
   );
 }
+
 
