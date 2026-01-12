@@ -1,16 +1,67 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent } from "../components/ui/card";
-import { Button } from "../components/ui/button";
 
+/* =========================
+   SEO METADATA (APP ROUTER)
+========================= */
+export const metadata = {
+  title: "KLF Ministries | Christian Books, Sermons & Faith-Based Teaching",
+  description:
+    "Faith-based Christian books, sermons, and teaching resources by Pastor Kiwayne Ferron. Inspiring believers to live prepared, faithful, and active Christian lives.",
+  keywords: [
+    "Christian books",
+    "Christian sermons",
+    "Faith-based teaching",
+    "Seventh-day Adventist ministry",
+    "Christian author Jamaica",
+    "Bible teaching",
+    "Stewardship sermons",
+  ],
+  authors: [{ name: "Kiwayne Ferron" }],
+  alternates: {
+    canonical: "https://klfministries.org",
+  },
+  openGraph: {
+    title: "KLF Ministries | Christian Books & Sermons",
+    description:
+      "Explore faith-based Christian books, sermons, and teaching resources by Pastor Kiwayne Ferron.",
+    url: "https://klfministries.org",
+    siteName: "KLF Ministries",
+    images: [
+      {
+        url: "https://klfministries.org/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "KLF Ministries",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+};
+
+/* =========================
+   CONSTANTS
+========================= */
 const PAYPAL_EMAIL = "klfministries7@gmail.com";
 const WHATSAPP_LINK =
   "https://wa.me/18768700508?text=Hello%20KLF%20Ministries,%20I%20would%20like%20to%20connect.";
 
-export default function KLFMinistries() {
+/* =========================
+   MAIN PAGE
+========================= */
+export default function HomePage() {
   const [page, setPage] = useState("home");
   const [customAmount, setCustomAmount] = useState("");
+
+  const donateLink = (amount) =>
+    `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amount}&currency_code=USD`;
+
+  const handleCustomDonate = () => {
+    if (!customAmount) return;
+    window.open(donateLink(customAmount), "_blank");
+  };
 
   const NavButton = ({ label, value }) => (
     <button
@@ -23,25 +74,15 @@ export default function KLFMinistries() {
     </button>
   );
 
-  const donateLink = (amount) =>
-    `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amount}&currency_code=USD`;
-
-  const handleCustomDonate = () => {
-    if (!customAmount) return;
-    window.open(donateLink(customAmount), "_blank");
-  };
-
   return (
-    <div
-      className="min-h-screen p-6 bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)), url('/faith-mission-bg.jpg')",
-      }}
-    >
+    <main className="min-h-screen p-6 bg-gray-50">
       {/* HEADER */}
       <header className="text-center mb-10">
-        <img src="/klf-logo.png" alt="KLF Logo" className="mx-auto w-40 mb-4" />
+        <img
+          src="/klf-logo.png"
+          alt="KLF Ministries Logo"
+          className="mx-auto w-40 mb-4"
+        />
         <h1 className="text-4xl font-bold text-blue-900">
           KLF Ministries & Publications
         </h1>
@@ -61,114 +102,96 @@ export default function KLFMinistries() {
 
       {/* HOME */}
       {page === "home" && (
-        <section className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <section className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6">
           {/* DONATE */}
-          <Card>
-            <CardContent className="p-6 text-center space-y-4">
-              <h2 className="font-semibold text-lg">
-                💙 Support the Ministry
-              </h2>
+          <div className="bg-white p-6 rounded-xl shadow text-center space-y-4">
+            <h2 className="text-lg font-semibold">💙 Support the Ministry</h2>
 
-              <p className="text-sm text-gray-600 font-medium">
-                Suggested Donations
+            <p className="text-sm font-medium text-gray-600">
+              Suggested Donations
+            </p>
+
+            <div className="grid grid-cols-3 gap-2">
+              {[10, 25, 50, 100, 200, 500].map((amt) => (
+                <a
+                  key={amt}
+                  href={donateLink(amt)}
+                  target="_blank"
+                  className="border rounded py-2 hover:bg-gray-100"
+                >
+                  ${amt}
+                </a>
+              ))}
+            </div>
+
+            <input
+              type="number"
+              placeholder="Custom amount (USD)"
+              value={customAmount}
+              onChange={(e) => setCustomAmount(e.target.value)}
+              className="border rounded w-full p-2"
+            />
+
+            <button
+              onClick={handleCustomDonate}
+              className="w-full bg-blue-900 text-white py-2 rounded"
+            >
+              Donate via PayPal
+            </button>
+
+            <div className="border-t pt-4 text-sm text-left">
+              <h3 className="font-semibold mb-2">
+                🏦 Direct Deposit / Bank Transfer
+              </h3>
+              <p>
+                <strong>Account Name:</strong> KLF Ministries<br />
+                <strong>Bank:</strong> Your Bank Name<br />
+                <strong>Account #:</strong> 123456789
               </p>
-
-              <div className="grid grid-cols-3 gap-2">
-                {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
-                  <a
-                    key={amt}
-                    href={donateLink(amt)}
-                    target="_blank"
-                    className="border rounded py-2 hover:bg-gray-100"
-                  >
-                    ${amt}
-                  </a>
-                ))}
-              </div>
-
-              <input
-                type="number"
-                placeholder="Enter custom amount (USD)"
-                value={customAmount}
-                onChange={(e) => setCustomAmount(e.target.value)}
-                className="border rounded w-full p-2"
-              />
-
-              <Button
-                onClick={handleCustomDonate}
-                className="w-full bg-blue-900"
-              >
-                💳 Donate via PayPal
-              </Button>
-
-              {/* DIRECT DEPOSIT */}
-              <div className="border-t pt-4 text-left text-sm">
-                <h3 className="font-semibold mb-2">
-                  🏦 Direct Deposit / Bank Transfer
-                </h3>
-                <p>
-                  If you prefer to give via direct deposit, please use the
-                  banking details below:
-                </p>
-                <p className="mt-2">
-                  <strong>Bank:</strong> Example Bank Jamaica<br />
-                  <strong>Account Name:</strong> KLF Ministries<br />
-                  <strong>Account Number:</strong> 123456789<br />
-                  <strong>Branch:</strong> Kingston
-                </p>
-                <p className="mt-2 italic text-gray-600">
-                  Please include your name as the reference.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* BOOKS */}
-          <Card>
-            <CardContent className="p-6 text-center">
-              <h2 className="font-semibold text-lg mb-2">📚 Books</h2>
-              <p className="mb-3">Faith-centered resources</p>
-              <Button onClick={() => setPage("books")}>View Books</Button>
-            </CardContent>
-          </Card>
+          <div className="bg-white p-6 rounded-xl shadow text-center">
+            <h2 className="text-lg font-semibold">📚 Books</h2>
+            <p className="mb-3">Faith-centered resources</p>
+            <button
+              onClick={() => setPage("books")}
+              className="bg-blue-900 text-white px-4 py-2 rounded"
+            >
+              View Books
+            </button>
+          </div>
 
           {/* VIDEOS */}
-          <Card>
-            <CardContent className="p-6 text-center">
-              <h2 className="font-semibold text-lg mb-2">🎥 Videos</h2>
-              <p className="mb-3">Sermons & teaching</p>
-              <Button onClick={() => setPage("videos")}>Watch Videos</Button>
-            </CardContent>
-          </Card>
+          <div className="bg-white p-6 rounded-xl shadow text-center">
+            <h2 className="text-lg font-semibold">🎥 Videos</h2>
+            <p className="mb-3">Sermons & teaching</p>
+            <button
+              onClick={() => setPage("videos")}
+              className="bg-blue-900 text-white px-4 py-2 rounded"
+            >
+              Watch Videos
+            </button>
+          </div>
         </section>
       )}
 
       {/* ABOUT */}
       {page === "about" && (
-        <section className="bg-white p-8 rounded-xl max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <img
-              src="/author.jpg"
-              alt="Kiwayne Ferron"
-              className="rounded-xl shadow"
-            />
-            <div>
-              <h2 className="text-2xl font-bold mb-4">About the Author</h2>
-              <p className="leading-relaxed">
-                Kiwayne Ferron is a pastor, speaker, and author committed to
-                sharing the gospel of Jesus Christ with clarity, urgency, and
-                hope. Through KLF Ministries & Publications, his mission is to
-                equip believers, inspire faith, and call people to active
-                discipleship.
-              </p>
-            </div>
-          </div>
+        <section className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow">
+          <h2 className="text-2xl font-bold mb-4">About the Author</h2>
+          <p>
+            Kiwayne Ferron is a pastor, speaker, and author committed to sharing
+            the gospel of Jesus Christ with clarity, urgency, and hope through
+            preaching, teaching, and writing.
+          </p>
         </section>
       )}
 
       {/* SPEAKING */}
       {page === "speaking" && (
-        <section className="bg-white p-8 rounded-xl max-w-4xl mx-auto">
+        <section className="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow">
           <iframe
             src="https://docs.google.com/forms/d/e/1FAIpQLSesBJjzAZPg7ylXIGcC4WFoEphcZP1apZfylh3fozrGnULP7w/viewform?embedded=true"
             width="100%"
@@ -179,7 +202,7 @@ export default function KLFMinistries() {
 
       {/* CONTACT */}
       {page === "contact" && (
-        <section className="bg-white p-8 rounded-xl max-w-md mx-auto text-center space-y-4">
+        <section className="max-w-md mx-auto bg-white p-6 rounded-xl shadow text-center space-y-4">
           <p>
             📧{" "}
             <a
@@ -189,23 +212,20 @@ export default function KLFMinistries() {
               klfministries7@gmail.com
             </a>
           </p>
-
           <p>📞 +1 876 870 0508</p>
-
           <a
             href="https://instagram.com/kiwayne27"
             target="_blank"
-            className="flex justify-center items-center gap-2 text-pink-600"
+            className="text-pink-600 font-medium"
           >
-            <img src="/instagram.svg" alt="Instagram" className="w-5" />
-            <span>Instagram</span>
+            Instagram
           </a>
         </section>
       )}
 
       {/* FOOTER */}
       <footer className="text-center mt-12 text-sm text-gray-600">
-        <p>© {new Date().getFullYear()} KLF Ministries. All rights reserved.</p>
+        © {new Date().getFullYear()} KLF Ministries. All rights reserved.
       </footer>
 
       {/* WHATSAPP */}
@@ -216,6 +236,6 @@ export default function KLFMinistries() {
       >
         WhatsApp
       </a>
-    </div>
+    </main>
   );
 }
