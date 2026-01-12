@@ -64,11 +64,20 @@ export default function AuthorWebsite() {
               <h2 className="font-semibold mb-3">🙏 One-Time Donation</h2>
               <div className="grid grid-cols-3 gap-2 mb-4">
                 {[10, 25, 50, 100, 200, 500].map((amt) => (
-                  <a key={amt} href={oneTimeLink(amt)} target="_blank" className="border rounded py-2">
+                  <a
+                    key={amt}
+                    href={oneTimeLink(amt)}
+                    target="_blank"
+                    className="border rounded py-2 hover:bg-gray-100"
+                  >
                     ${amt}
                   </a>
                 ))}
-                <a href={oneTimeLink(1000)} target="_blank" className="border rounded py-2 col-span-3">
+                <a
+                  href={oneTimeLink(1000)}
+                  target="_blank"
+                  className="border rounded py-2 col-span-3 hover:bg-gray-100"
+                >
                   $1000
                 </a>
               </div>
@@ -79,11 +88,20 @@ export default function AuthorWebsite() {
 
               <div className="grid grid-cols-3 gap-2">
                 {[10, 25, 50, 100, 200, 500].map((amt) => (
-                  <a key={amt} href={monthlyLink(amt)} target="_blank" className="border rounded py-2 text-green-700">
+                  <a
+                    key={amt}
+                    href={monthlyLink(amt)}
+                    target="_blank"
+                    className="border rounded py-2 text-green-700 hover:bg-green-50"
+                  >
                     ${amt}/mo
                   </a>
                 ))}
-                <a href={monthlyLink(1000)} target="_blank" className="border rounded py-2 col-span-3 text-green-700">
+                <a
+                  href={monthlyLink(1000)}
+                  target="_blank"
+                  className="border rounded py-2 col-span-3 text-green-700 hover:bg-green-50"
+                >
                   $1000/month
                 </a>
               </div>
@@ -106,15 +124,22 @@ export default function AuthorWebsite() {
         </section>
       )}
 
-      {/* ABOUT (WITH PHOTO) */}
+      {/* ABOUT WITH PHOTO + CAPTION + ANIMATION */}
       {page === "about" && (
-        <section className="bg-white p-8 rounded-xl max-w-4xl mx-auto">
+        <section className="bg-white p-8 rounded-xl max-w-4xl mx-auto animate-fadeIn">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <img
-              src="/author.jpg"
-              alt="Kiwayne Ferron"
-              className="w-full max-w-sm mx-auto rounded-xl shadow"
-            />
+            <div className="text-center">
+              <img
+                src="/author.jpg"
+                alt="Kiwayne Ferron"
+                loading="lazy"
+                className="w-full max-w-sm mx-auto rounded-xl shadow-lg mb-3"
+              />
+              <p className="font-semibold">Kiwayne Ferron</p>
+              <p className="text-sm text-gray-600">
+                Pastor • Speaker • Author
+              </p>
+            </div>
 
             <div>
               <h2 className="text-2xl font-bold mb-4">About the Author</h2>
@@ -145,6 +170,23 @@ export default function AuthorWebsite() {
       >
         WhatsApp
       </a>
+
+      {/* SIMPLE FADE-IN ANIMATION */}
+      <style jsx>{`
+        .animate-fadeIn {
+          animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }
