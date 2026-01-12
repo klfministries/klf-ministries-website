@@ -106,29 +106,29 @@ export default function AuthorWebsite() {
         </section>
       )}
 
-      {/* TERMS */}
-      {page === "terms" && (
-        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Terms of Use</h2>
-          <p>
-            All content on this website is the property of KLF Ministries and is
-            provided for informational and ministry purposes only. Unauthorized
-            reproduction, distribution, or use of content without written
-            permission is prohibited.
-          </p>
-        </section>
-      )}
+      {/* ABOUT (WITH PHOTO) */}
+      {page === "about" && (
+        <section className="bg-white p-8 rounded-xl max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <img
+              src="/author.jpg"
+              alt="Kiwayne Ferron"
+              className="w-full max-w-sm mx-auto rounded-xl shadow"
+            />
 
-      {/* PRIVACY */}
-      {page === "privacy" && (
-        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Privacy Policy</h2>
-          <p>
-            KLF Ministries respects your privacy. Any personal information
-            submitted through forms, email subscriptions, or donations is used
-            solely for ministry communication and will never be sold or shared
-            with third parties.
-          </p>
+            <div>
+              <h2 className="text-2xl font-bold mb-4">About the Author</h2>
+              <p>
+                Kiwayne Ferron is a pastor, speaker, and author committed to
+                sharing the gospel of Jesus Christ with clarity, urgency, and
+                hope. His ministry emphasizes spiritual preparation,
+                discipleship, and faithful living in anticipation of Christ’s
+                soon return. He lives by the philosophy, “To live is Christ; I
+                know no other way.” His guiding mantra is this: God uses rescued
+                people to rescue people.
+              </p>
+            </div>
+          </div>
         </section>
       )}
 
