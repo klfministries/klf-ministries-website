@@ -2,44 +2,7 @@
 
 import { useState } from "react";
 
-/* =========================
-   SEO METADATA (APP ROUTER)
-========================= */
-export const metadata = {
-  title: "KLF Ministries | Christian Books, Sermons & Faith-Based Teaching",
-  description:
-    "Faith-based Christian books, sermons, and teaching resources by Pastor Kiwayne Ferron. Inspiring believers to live prepared, faithful, and active Christian lives.",
-  keywords: [
-    "Christian books",
-    "Christian sermons",
-    "Faith-based teaching",
-    "Seventh-day Adventist ministry",
-    "Christian author Jamaica",
-    "Bible teaching",
-    "Stewardship sermons",
-  ],
-  authors: [{ name: "Kiwayne Ferron" }],
-  alternates: {
-    canonical: "https://klfministries.org",
-  },
-  openGraph: {
-    title: "KLF Ministries | Christian Books & Sermons",
-    description:
-      "Explore faith-based Christian books, sermons, and teaching resources by Pastor Kiwayne Ferron.",
-    url: "https://klfministries.org",
-    siteName: "KLF Ministries",
-    images: [
-      {
-        url: "https://klfministries.org/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "KLF Ministries",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-};
+
 
 /* =========================
    CONSTANTS
@@ -239,3 +202,4 @@ export default function HomePage() {
     </main>
   );
 }
+
