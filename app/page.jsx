@@ -135,15 +135,15 @@ export default function AuthorWebsite() {
 
           <div className="w-full overflow-hidden rounded-lg">
             <iframe
-              src="https://docs.google.com/forms/d/e/1FAIpQLSesBJjzAZPg7ylXIGcC4WFoEphcZP1apZfylh3fozrGnULP7w/viewform?embedded=true"
-              width="100%"
-              height="900"
-              frameBorder="0"
-              marginHeight="0"
-              marginWidth="0"
-            >
-              Loading…
-            </iframe>
+  src="https://docs.google.com/forms/d/e/1FAIpQLSesBJjzAZPg7ylXIGcC4WFoEphcZP1apZfylh3fozrGnULP7w/viewform?embedded=true"
+  width="100%"
+  height="800"
+  frameBorder="0"
+  marginHeight="0"
+  marginWidth="0"
+>
+  Loading…
+</iframe>
           </div>
         </section>
       )}
@@ -202,3 +202,4 @@ export default function AuthorWebsite() {
     </div>
   );
 }
+
