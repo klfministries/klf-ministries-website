@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+console.log("🔥 NEW PAGE.JSX IS LIVE 🔥");
+
 "use client";
 
 import { useState } from "react";
@@ -299,3 +302,4 @@ export default function KLFMinistries() {
     </div>
   );
 }
+
