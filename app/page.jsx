@@ -4,17 +4,21 @@ import { useState } from "react";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 
-const PAYPAL_EMAIL = "klfministries7@gmail.com";
+const PAYPAL_EMAIL = "kiwayne26@gmail.com";
 const WHATSAPP_LINK =
   "https://wa.me/18768700508?text=Hello%20KLF%20Ministries,%20I%20would%20like%20to%20connect.";
 
 export default function KLFMinistries() {
   const [page, setPage] = useState("home");
+  const [showDonate, setShowDonate] = useState(false);
   const [customAmount, setCustomAmount] = useState("");
 
   const NavButton = ({ label, value }) => (
     <button
-      onClick={() => setPage(value)}
+      onClick={() => {
+        setPage(value);
+        setShowDonate(false);
+      }}
       className={`px-4 py-2 rounded-lg font-medium ${
         page === value ? "bg-blue-900 text-white" : "bg-gray-200"
       }`}
@@ -23,7 +27,7 @@ export default function KLFMinistries() {
     </button>
   );
 
-  const oneTimeLink = (amount) =>
+  const donateLink = (amount) =>
     `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amount}&currency_code=USD`;
 
   const customDonateLink = () =>
@@ -40,9 +44,11 @@ export default function KLFMinistries() {
       {/* HEADER */}
       <header className="text-center mb-10">
         <img src="/klf-logo.png" alt="KLF Logo" className="mx-auto w-40 mb-4" />
+
         <h1 className="text-4xl font-bold text-blue-900">
           KLF Ministries & Publications
         </h1>
+
         <p className="italic text-gray-700 mt-2 mb-5">
           “God uses rescued people to rescue people”
         </p>
@@ -60,41 +66,50 @@ export default function KLFMinistries() {
       {/* HOME */}
       {page === "home" && (
         <section className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {/* DONATE */}
+          {/* DONATE ICON */}
           <Card>
             <CardContent className="p-6 text-center">
-              <h2 className="font-semibold text-lg mb-3">
-                💙 Support the Ministry
-              </h2>
+              <h2 className="font-semibold text-lg mb-3">💙 Donate</h2>
 
-              <div className="grid grid-cols-3 gap-2 mb-4">
-                {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
-                  <a
-                    key={amt}
-                    href={oneTimeLink(amt)}
-                    target="_blank"
-                    className="border rounded py-2 hover:bg-gray-100"
-                  >
-                    ${amt}
-                  </a>
-                ))}
-              </div>
-
-              <input
-                type="number"
-                placeholder="Custom amount"
-                value={customAmount}
-                onChange={(e) => setCustomAmount(e.target.value)}
-                className="border rounded w-full p-2 mb-3"
-              />
-
-              <a
-                href={customDonateLink()}
-                target="_blank"
-                className="block bg-blue-900 text-white py-2 rounded font-medium"
+              <Button
+                onClick={() => setShowDonate(!showDonate)}
+                className="mb-4"
               >
-                💳 Donate via PayPal
-              </a>
+                {showDonate ? "Hide Donation Options" : "Support the Ministry"}
+              </Button>
+
+              {showDonate && (
+                <>
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
+                      <a
+                        key={amt}
+                        href={donateLink(amt)}
+                        target="_blank"
+                        className="border rounded py-2 hover:bg-gray-100"
+                      >
+                        ${amt}
+                      </a>
+                    ))}
+                  </div>
+
+                  <input
+                    type="number"
+                    placeholder="Custom amount"
+                    value={customAmount}
+                    onChange={(e) => setCustomAmount(e.target.value)}
+                    className="border rounded w-full p-2 mb-3"
+                  />
+
+                  <a
+                    href={customDonateLink()}
+                    target="_blank"
+                    className="block bg-blue-900 text-white py-2 rounded font-medium"
+                  >
+                    Donate via PayPal
+                  </a>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -122,11 +137,7 @@ export default function KLFMinistries() {
       {page === "about" && (
         <section className="bg-white p-8 rounded-xl max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <img
-              src="/author.jpg"
-              alt="Kiwayne Ferron"
-              className="rounded-xl shadow"
-            />
+            <img src="/author.jpg" alt="Kiwayne Ferron" className="rounded-xl" />
             <div>
               <h2 className="text-2xl font-bold mb-4">About the Author</h2>
               <p>
@@ -177,12 +188,38 @@ export default function KLFMinistries() {
         </section>
       )}
 
+      {/* PRIVACY */}
+      {page === "privacy" && (
+        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4">Privacy Policy</h2>
+          <p>
+            KLF Ministries respects your privacy. Information submitted is used
+            solely for ministry purposes and is never sold or shared.
+          </p>
+        </section>
+      )}
+
+      {/* TERMS */}
+      {page === "terms" && (
+        <section className="bg-white p-8 rounded-xl max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4">Terms & Conditions</h2>
+          <p>
+            All content on this site is the property of KLF Ministries.
+            Unauthorized reproduction is prohibited.
+          </p>
+        </section>
+      )}
+
       {/* FOOTER */}
       <footer className="text-center mt-12 text-sm text-gray-600">
         <p>© {new Date().getFullYear()} KLF Ministries. All rights reserved.</p>
         <div className="flex justify-center gap-4 mt-2">
-          <span>Privacy Policy</span>
-          <span>Terms of Use</span>
+          <button onClick={() => setPage("privacy")} className="underline">
+            Privacy Policy
+          </button>
+          <button onClick={() => setPage("terms")} className="underline">
+            Terms & Conditions
+          </button>
         </div>
       </footer>
 
