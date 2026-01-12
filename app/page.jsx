@@ -23,11 +23,13 @@ export default function KLFMinistries() {
     </button>
   );
 
-  const oneTimeLink = (amount) =>
+  const donateLink = (amount) =>
     `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amount}&currency_code=USD`;
 
-  const customDonateLink = () =>
-    `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD`;
+  const handleCustomDonate = () => {
+    if (!customAmount) return;
+    window.open(donateLink(customAmount), "_blank");
+  };
 
   return (
     <div
@@ -62,16 +64,20 @@ export default function KLFMinistries() {
         <section className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {/* DONATE */}
           <Card>
-            <CardContent className="p-6 text-center">
-              <h2 className="font-semibold text-lg mb-3">
+            <CardContent className="p-6 text-center space-y-4">
+              <h2 className="font-semibold text-lg">
                 💙 Support the Ministry
               </h2>
 
-              <div className="grid grid-cols-3 gap-2 mb-4">
+              <p className="text-sm text-gray-600 font-medium">
+                Suggested Donations
+              </p>
+
+              <div className="grid grid-cols-3 gap-2">
                 {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
                   <a
                     key={amt}
-                    href={oneTimeLink(amt)}
+                    href={donateLink(amt)}
                     target="_blank"
                     className="border rounded py-2 hover:bg-gray-100"
                   >
@@ -82,19 +88,38 @@ export default function KLFMinistries() {
 
               <input
                 type="number"
-                placeholder="Custom amount"
+                placeholder="Enter custom amount (USD)"
                 value={customAmount}
                 onChange={(e) => setCustomAmount(e.target.value)}
-                className="border rounded w-full p-2 mb-3"
+                className="border rounded w-full p-2"
               />
 
-              <a
-                href={customDonateLink()}
-                target="_blank"
-                className="block bg-blue-900 text-white py-2 rounded font-medium"
+              <Button
+                onClick={handleCustomDonate}
+                className="w-full bg-blue-900"
               >
                 💳 Donate via PayPal
-              </a>
+              </Button>
+
+              {/* DIRECT DEPOSIT */}
+              <div className="border-t pt-4 text-left text-sm">
+                <h3 className="font-semibold mb-2">
+                  🏦 Direct Deposit / Bank Transfer
+                </h3>
+                <p>
+                  If you prefer to give via direct deposit, please use the
+                  banking details below:
+                </p>
+                <p className="mt-2">
+                  <strong>Bank:</strong> Example Bank Jamaica<br />
+                  <strong>Account Name:</strong> KLF Ministries<br />
+                  <strong>Account Number:</strong> 123456789<br />
+                  <strong>Branch:</strong> Kingston
+                </p>
+                <p className="mt-2 italic text-gray-600">
+                  Please include your name as the reference.
+                </p>
+              </div>
             </CardContent>
           </Card>
 
@@ -129,11 +154,12 @@ export default function KLFMinistries() {
             />
             <div>
               <h2 className="text-2xl font-bold mb-4">About the Author</h2>
-              <p>
+              <p className="leading-relaxed">
                 Kiwayne Ferron is a pastor, speaker, and author committed to
                 sharing the gospel of Jesus Christ with clarity, urgency, and
-                hope. His guiding mantra is: God uses rescued people to rescue
-                people.
+                hope. Through KLF Ministries & Publications, his mission is to
+                equip believers, inspire faith, and call people to active
+                discipleship.
               </p>
             </div>
           </div>
@@ -180,10 +206,6 @@ export default function KLFMinistries() {
       {/* FOOTER */}
       <footer className="text-center mt-12 text-sm text-gray-600">
         <p>© {new Date().getFullYear()} KLF Ministries. All rights reserved.</p>
-        <div className="flex justify-center gap-4 mt-2">
-          <span>Privacy Policy</span>
-          <span>Terms of Use</span>
-        </div>
       </footer>
 
       {/* WHATSAPP */}
