@@ -5,7 +5,7 @@ import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 
 const DONATE_LINK =
-  "https://www.paypal.com/donate/?business=kiwayne26@gmail.com&no_recurring=0&item_name=Support+KLF+Ministries&currency_code=USD&return=https://klfministries.org/?thankyou=donation";
+  "https://www.paypal.com/donate/?business=kiwayne26@gmail.com&currency_code=USD";
 
 const BOOK_BUY_LINK =
   "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=kiwayne26@gmail.com&item_name=KLF+Ministries+Book&amount=15.00&currency_code=USD&return=https://klfministries.org/?thankyou=book";
@@ -65,20 +65,13 @@ export default function AuthorWebsite() {
           <NavButton label="Books" value="books" />
           <NavButton label="Videos" value="videos" />
           <NavButton label="Contact" value="contact" />
-          <a
-            href={DONATE_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 py-2 rounded-lg bg-green-600 text-white"
-          >
-            Donate
-          </a>
         </div>
       </header>
 
       {/* HOME */}
       {page === "home" && (
         <section className="grid md:grid-cols-3 gap-6 mb-12">
+          {/* BOOKS */}
           <Card>
             <CardContent className="p-6 text-center">
               <h2 className="font-semibold mb-2">📚 Books</h2>
@@ -86,6 +79,7 @@ export default function AuthorWebsite() {
             </CardContent>
           </Card>
 
+          {/* VIDEOS */}
           <Card>
             <CardContent className="p-6 text-center">
               <h2 className="font-semibold mb-2">🎥 Videos</h2>
@@ -93,16 +87,43 @@ export default function AuthorWebsite() {
             </CardContent>
           </Card>
 
+          {/* DONATE */}
           <Card>
             <CardContent className="p-6 text-center">
-              <h2 className="font-semibold mb-2">🙏 Support</h2>
+              <h2 className="font-semibold mb-4">🙏 Support the Ministry</h2>
+
+              <div className="grid grid-cols-3 gap-3 mb-5">
+                {[
+                  10, 25, 50, 100, 200, 500
+                ].map((amount) => (
+                  <a
+                    key={amount}
+                    href={`https://www.paypal.com/donate/?business=kiwayne26@gmail.com&amount=${amount}&currency_code=USD`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 border rounded hover:bg-gray-100"
+                  >
+                    ${amount}
+                  </a>
+                ))}
+
+                <a
+                  href="https://www.paypal.com/donate/?business=kiwayne26@gmail.com&amount=1000&currency_code=USD"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 border rounded hover:bg-gray-100 col-span-3"
+                >
+                  $1000
+                </a>
+              </div>
+
               <a
                 href={DONATE_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block bg-green-600 text-white px-4 py-2 rounded"
+                className="inline-block bg-green-600 text-white px-6 py-2 rounded"
               >
-                Donate
+                Donate (Custom Amount)
               </a>
             </CardContent>
           </Card>
@@ -122,29 +143,26 @@ export default function AuthorWebsite() {
         </section>
       )}
 
-      {/* SPEAKING – GOOGLE FORM */}
+      {/* SPEAKING */}
       {page === "speaking" && (
         <section className="bg-white p-8 rounded-xl max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">Speaking Engagements</h2>
 
           <p className="mb-6">
             To request a speaking engagement with KLF Ministries, please
-            complete the form below. We will review your request and respond as
-            soon as possible.
+            complete the form below.
           </p>
 
-          <div className="w-full overflow-hidden rounded-lg">
-            <iframe
-  src="https://docs.google.com/forms/d/e/1FAIpQLSesBJjzAZPg7ylXIGcC4WFoEphcZP1apZfylh3fozrGnULP7w/viewform?embedded=true"
-  width="100%"
-  height="800"
-  frameBorder="0"
-  marginHeight="0"
-  marginWidth="0"
->
-  Loading…
-</iframe>
-          </div>
+          <iframe
+            src="https://docs.google.com/forms/d/e/1FAIpQLSesBJjzAZPg7ylXIGcC4WFoEphcZP1apZfylh3fozrGnULP7w/viewform?embedded=true"
+            width="100%"
+            height="800"
+            frameBorder="0"
+            marginHeight="0"
+            marginWidth="0"
+          >
+            Loading…
+          </iframe>
         </section>
       )}
 
@@ -175,7 +193,7 @@ export default function AuthorWebsite() {
 
       {/* CONTACT */}
       {page === "contact" && (
-        <section className="bg-white p-8 rounded-xl max-w-md mx-auto text-center space-y-2">
+        <section className="bg-white p-8 rounded-xl max-w-md mx-auto text-center space-y-3">
           <p>
             📧{" "}
             <a
@@ -185,31 +203,32 @@ export default function AuthorWebsite() {
               klfministries7@gmail.com
             </a>
           </p>
-          <p>📞 +1 876 870 0508</p>
-          <p className="flex justify-center items-center gap-2">
-  <a
-    href="https://instagram.com/kiwayne27"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-pink-600 hover:text-pink-700 flex items-center gap-2"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-    >
-      <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5Zm8.9 2.25a.85.85 0 1 1 0 1.7.85.85 0 0 1 0-1.7ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
-    </svg>
-    <span>@kiwayne27</span>
-  </a>
-</p>
 
+          <p>📞 +1 876 870 0508</p>
+
+          <p className="flex justify-center">
+            <a
+              href="https://instagram.com/kiwayne27"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-blue-700 hover:text-yellow-600"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5Zm8.9 2.25a.85.85 0 1 1 0 1.7.85.85 0 0 1 0-1.7ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z" />
+              </svg>
+              @kiwayne27
+            </a>
+          </p>
         </section>
       )}
 
-      {/* WHATSAPP BUTTON */}
+      {/* WHATSAPP */}
       <a
         href={WHATSAPP_LINK}
         target="_blank"
@@ -221,5 +240,3 @@ export default function AuthorWebsite() {
     </div>
   );
 }
-
-
