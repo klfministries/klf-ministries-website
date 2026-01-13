@@ -10,16 +10,16 @@ export default function Nav({ lang }) {
   const switchedPath = pathname.replace(`/${lang}`, `/${switchLang}`);
 
   const linkClass = (path) =>
-    `px-4 py-2 rounded ${
+    `px-5 py-3 rounded text-sm md:text-base ${
       pathname === `${base}${path}`
         ? "bg-blue-900 text-white"
         : "bg-gray-200 hover:bg-gray-300"
     }`;
 
   return (
-    <div className="flex flex-col items-center gap-4 mt-6">
+    <div className="flex flex-col items-center gap-5 mt-6">
       {/* NAV LINKS */}
-      <nav className="flex flex-wrap justify-center gap-2">
+      <nav className="flex flex-wrap justify-center gap-3 px-4">
         <Link href={base} className={linkClass("")}>
           {lang === "es" ? "Inicio" : "Home"}
         </Link>
@@ -43,7 +43,7 @@ export default function Nav({ lang }) {
       {/* LANGUAGE SWITCHER BADGE */}
       <Link
         href={switchedPath}
-        className="text-sm px-3 py-1 border rounded-full hover:bg-gray-100"
+        className="text-sm px-4 py-2 border rounded-full hover:bg-gray-100"
       >
         {lang === "en" ? "ES 🇪🇸" : "EN 🇺🇸"}
       </Link>
