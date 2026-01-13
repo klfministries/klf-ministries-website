@@ -1,6 +1,6 @@
 import "./globals.css";
-import Link from "next/link";
 import Script from "next/script";
+import Nav from "./components/Nav";
 
 /* =========================
    SITE METADATA
@@ -32,9 +32,6 @@ export const metadata = {
   },
 };
 
-/* =========================
-   ROOT LAYOUT
-========================= */
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -74,27 +71,8 @@ export default function RootLayout({ children }) {
               “God uses rescued people to rescue people”
             </p>
 
-            {/* NAVIGATION */}
-            <nav className="flex justify-center gap-3 flex-wrap">
-              <Link href="/" className="px-4 py-2 rounded-lg font-medium hover:bg-gray-200">
-                Home
-              </Link>
-              <Link href="/about" className="px-4 py-2 rounded-lg font-medium hover:bg-gray-200">
-                About
-              </Link>
-              <Link href="/speaking" className="px-4 py-2 rounded-lg font-medium hover:bg-gray-200">
-                Speaking
-              </Link>
-              <Link href="/books" className="px-4 py-2 rounded-lg font-medium hover:bg-gray-200">
-                Books
-              </Link>
-              <Link href="/videos" className="px-4 py-2 rounded-lg font-medium hover:bg-gray-200">
-                Videos
-              </Link>
-              <Link href="/contact" className="px-4 py-2 rounded-lg font-medium hover:bg-gray-200">
-                Contact
-              </Link>
-            </nav>
+            {/* ACTIVE NAV */}
+            <Nav />
           </div>
         </header>
 
