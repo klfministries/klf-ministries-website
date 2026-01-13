@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export function middleware(request) {
   const pathname = request.nextUrl.pathname;
 
-  // Ignore Next.js internals & public files
+  // Ignore Next.js internals and static files
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -12,18 +12,10 @@ export function middleware(request) {
     return NextResponse.next();
   }
 
-  // If already has language, continue
-  if (pathname.startsWith("/en") || pathname.startsWith("/es")) {
-    return NextResponse.next();
+  // Redirect root to English
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/en", request.url));
   }
 
-  // Detect browser language
-  const lang =
-    request.headers.get("accept-language")?.startsWith("es") ? "es" : "en";
-
-  return NextResponse.redirect(new URL(`/${lang}`, request.url));
+  return NextResponse.next();
 }
-
-export const config = {
-  matcher: ["/((?!_next).*)"],
-};
