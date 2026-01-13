@@ -6,8 +6,6 @@ import { usePathname } from "next/navigation";
 export default function Nav({ lang }) {
   const pathname = usePathname();
 
-  const isActive = (path) => pathname === path;
-
   const labels = {
     en: {
       home: "Home",
@@ -29,9 +27,9 @@ export default function Nav({ lang }) {
 
   const t = labels[lang] || labels.en;
 
-  const linkClass = (path) =>
-    `px-4 py-2 rounded-lg ${
-      isActive(path)
+  const linkClass = (href) =>
+    `px-4 py-2 rounded-lg transition ${
+      pathname === href
         ? "bg-blue-900 text-white"
         : "bg-gray-200 hover:bg-gray-300"
     }`;
@@ -46,10 +44,7 @@ export default function Nav({ lang }) {
         {t.about}
       </Link>
 
-      <Link
-        href={`/${lang}/speaking`}
-        className={linkClass(`/${lang}/speaking`)}
-      >
+      <Link href={`/${lang}/speaking`} className={linkClass(`/${lang}/speaking`)}>
         {t.speaking}
       </Link>
 
