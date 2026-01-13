@@ -1,14 +1,20 @@
+export async function generateStaticParams() {
+  return [{ lang: "en" }, { lang: "es" }];
+}
+
 export default function LangHome({ params }) {
-  const { lang } = params;
+  const lang = params.lang === "es" ? "es" : "en";
 
   const content = {
     en: {
       title: "Welcome to KLF Ministries",
-      text: "Faith-based Christian resources inspiring prepared and faithful living.",
+      text:
+        "Faith-based Christian resources inspiring prepared and faithful living.",
     },
     es: {
       title: "Bienvenidos a KLF Ministries",
-      text: "Recursos cristianos basados en la fe que inspiran una vida fiel y preparada.",
+      text:
+        "Recursos cristianos basados en la fe que inspiran una vida fiel y preparada.",
     },
   };
 
