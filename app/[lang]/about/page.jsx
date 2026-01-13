@@ -15,7 +15,7 @@ export default function About({ params }) {
         </h1>
         <p className="text-gray-700 leading-relaxed">
           {lang === "es"
-            ? "Kiwayne Ferron es pastor, autor y conferencista comprometido con predicar el evangelio de Jesucristo con claridad, urgencia y esperanza."
+            ? "Kiwayne Ferron es pastor, autor y conferencista, llamado a proclamar el evangelio de Jesucristo con fidelidad, claridad y esperanza, preparando al pueblo de Dios para el tiempo del fin."
             : "Kiwayne Ferron is a pastor, author, and speaker committed to preaching the gospel of Jesus Christ with clarity, urgency, and hope."}
         </p>
       </div>
