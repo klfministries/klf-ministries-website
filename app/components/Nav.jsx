@@ -6,38 +6,48 @@ import { usePathname } from "next/navigation";
 export default function Nav({ lang }) {
   const pathname = usePathname();
 
-  const linkClass = (href) =>
-    pathname === href
-      ? "bg-blue-800 text-white px-4 py-2 rounded"
-      : "bg-gray-200 px-4 py-2 rounded";
+  const switchLang = lang === "en" ? "es" : "en";
+  const switchedPath = pathname.replace(`/${lang}`, `/${switchLang}`);
+
+  const links = {
+    en: [
+      { href: "/about", label: "About" },
+      { href: "/books", label: "Books" },
+      { href: "/speaking", label: "Speaking" },
+      { href: "/videos", label: "Videos" },
+      { href: "/contact", label: "Contact" },
+    ],
+    es: [
+      { href: "/about", label: "Acerca de" },
+      { href: "/books", label: "Libros" },
+      { href: "/speaking", label: "Predicación" },
+      { href: "/videos", label: "Videos" },
+      { href: "/contact", label: "Contacto" },
+    ],
+  };
 
   return (
-    <nav className="flex flex-wrap justify-center gap-3 py-6">
-      <Link href={`/${lang}`} className={linkClass(`/${lang}`)}>
-        {lang === "es" ? "Inicio" : "Home"}
-      </Link>
+    <nav className="flex flex-wrap items-center justify-center gap-3 mt-6">
+      {links[lang].map((link) => (
+        <Link
+          key={link.href}
+          href={`/${lang}${link.href}`}
+          className={`px-4 py-2 rounded-lg ${
+            pathname === `/${lang}${link.href}`
+              ? "bg-blue-900 text-white"
+              : "bg-gray-200"
+          }`}
+        >
+          {link.label}
+        </Link>
+      ))}
 
-      <Link href={`/${lang}/about`} className={linkClass(`/${lang}/about`)}>
-        {lang === "es" ? "Acerca de" : "About"}
-      </Link>
-
+      {/* Language toggle */}
       <Link
-        href={`/${lang}/speaking`}
-        className={linkClass(`/${lang}/speaking`)}
+        href={switchedPath}
+        className="ml-4 px-4 py-2 rounded-lg border border-gray-400"
       >
-        {lang === "es" ? "Predicación" : "Speaking"}
-      </Link>
-
-      <Link href={`/${lang}/books`} className={linkClass(`/${lang}/books`)}>
-        {lang === "es" ? "Libros" : "Books"}
-      </Link>
-
-      <Link href={`/${lang}/videos`} className={linkClass(`/${lang}/videos`)}>
-        {lang === "es" ? "Videos" : "Videos"}
-      </Link>
-
-      <Link href={`/${lang}/contact`} className={linkClass(`/${lang}/contact`)}>
-        {lang === "es" ? "Contacto" : "Contact"}
+        {lang === "en" ? "ES" : "EN"}
       </Link>
     </nav>
   );
