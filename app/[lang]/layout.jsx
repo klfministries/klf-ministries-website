@@ -70,8 +70,44 @@ export default function LangLayout({ children, params }) {
 
         {/* FOOTER */}
         <footer className="text-center text-sm text-gray-600 py-10 border-t mt-12">
-          © {new Date().getFullYear()} KLF Ministries. All rights reserved.
-        </footer>
+  {/* EMAIL SIGNUP */}
+  <div className="max-w-md mx-auto mb-6">
+    <p className="font-medium mb-2">
+      {lang === "es"
+        ? "Reciba actualizaciones del ministerio"
+        : "Receive ministry updates"}
+    </p>
+
+    <form
+      action="https://formspree.io/f/YOUR_FORM_ID"
+      method="POST"
+      className="flex gap-2 justify-center"
+    >
+      <input
+        type="email"
+        name="email"
+        required
+        placeholder={lang === "es" ? "Su correo electrónico" : "Your email"}
+        className="flex-1 border px-3 py-2 rounded"
+      />
+      <button
+        type="submit"
+        className="bg-blue-900 text-white px-4 py-2 rounded"
+      >
+        {lang === "es" ? "Suscribirse" : "Subscribe"}
+      </button>
+    </form>
+
+    <p className="text-xs text-gray-500 mt-2">
+      {lang === "es"
+        ? "Respetamos su privacidad. No enviamos spam."
+        : "We respect your privacy. No spam."}
+    </p>
+  </div>
+
+  © {new Date().getFullYear()} KLF Ministries. All rights reserved.
+</footer>
+
 
         {/* WHATSAPP FLOATING BUTTON (STEP 7) */}
         <a
