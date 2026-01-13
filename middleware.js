@@ -12,9 +12,13 @@ export function middleware(request) {
     return NextResponse.next();
   }
 
-  // Redirect root to English
+  // Only run language detection on root
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/en", request.url));
+    const acceptLanguage = request.headers.get("accept-language") || "";
+    const prefersSpanish = acceptLanguage.toLowerCase().startsWith("es");
+
+    const lang = prefersSpanish ? "es" : "en";
+    return NextResponse.redirect(new URL(`/${lang}`, request.url));
   }
 
   return NextResponse.next();
