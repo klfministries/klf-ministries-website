@@ -2,67 +2,57 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 
-const links = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/speaking", label: "Speaking" },
-  { href: "/books", label: "Books" },
-  { href: "/videos", label: "Videos" },
-  { href: "/contact", label: "Contact" },
-];
+const labels = {
+  en: {
+    home: "Home",
+    about: "About",
+    books: "Books",
+    videos: "Videos",
+    contact: "Contact",
+    speaking: "Speaking",
+  },
+  es: {
+    home: "Inicio",
+    about: "Acerca de",
+    books: "Libros",
+    videos: "Videos",
+    contact: "Contacto",
+    speaking: "Predicación",
+  },
+};
 
-export default function Nav() {
+export default function Nav({ lang = "en" }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+
+  const links = [
+    { href: `/${lang}`, key: "home" },
+    { href: `/${lang}/about`, key: "about" },
+    { href: `/${lang}/speaking`, key: "speaking" },
+    { href: `/${lang}/books`, key: "books" },
+    { href: `/${lang}/videos`, key: "videos" },
+    { href: `/${lang}/contact`, key: "contact" },
+  ];
 
   return (
-    <>
-      {/* DESKTOP NAV */}
-      <nav className="hidden md:flex justify-center gap-3 flex-wrap">
-        {links.map(({ href, label }) => {
-          const isActive = pathname === href;
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`px-4 py-2 rounded-lg font-medium transition ${
-                isActive
-                  ? "bg-blue-900 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-            >
-              {label}
-            </Link>
-          );
-        })}
-      </nav>
+    <nav className="flex justify-center gap-3 flex-wrap">
+      {links.map(({ href, key }) => {
+        const isActive = pathname === href;
 
-      {/* MOBILE TOGGLE */}
-      <div className="md:hidden text-center">
-        <button
-          onClick={() => setOpen(!open)}
-          className="bg-blue-900 text-white px-4 py-2 rounded"
-        >
-          Menu
-        </button>
-
-        {open && (
-          <div className="mt-4 flex flex-col gap-2">
-            {links.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className="bg-gray-200 py-2 rounded"
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
-    </>
+        return (
+          <Link
+            key={href}
+            href={href}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              isActive
+                ? "bg-blue-900 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+          >
+            {labels[lang][key]}
+          </Link>
+        );
+      })}
+    </nav>
   );
 }
