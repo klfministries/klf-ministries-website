@@ -29,7 +29,7 @@ export default function Home({ params }) {
   return (
     <section className="max-w-6xl mx-auto py-16 px-6 grid md:grid-cols-3 gap-6">
       {/* DONATIONS */}
-      <div className="bg-white p-6 rounded-xl shadow text-center space-y-4">
+      <div className="card p-6 text-center space-y-4">
         <h2 className="text-lg font-semibold">💙 {t[lang].support}</h2>
 
         <p className="text-sm font-medium text-gray-600">
@@ -55,7 +55,7 @@ export default function Home({ params }) {
           href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD`}
           target="_blank"
           rel="noopener noreferrer"
-          className="block bg-blue-900 text-white py-2 rounded font-medium"
+          className="btn-primary block text-center"
           data-event="donate"
         >
           {t[lang].donate}
@@ -72,7 +72,7 @@ export default function Home({ params }) {
       </div>
 
       {/* BOOKS */}
-      <div className="bg-white p-6 rounded-xl shadow text-center">
+      <div className="card p-6 text-center">
         <h2 className="text-lg font-semibold">📚 {t[lang].books}</h2>
         <p className="mb-3">Faith-centered resources</p>
         <a href={`/${lang}/books`} className="text-blue-700 underline">
@@ -81,7 +81,7 @@ export default function Home({ params }) {
       </div>
 
       {/* VIDEOS */}
-      <div className="bg-white p-6 rounded-xl shadow text-center">
+      <div className="card p-6 text-center">
         <h2 className="text-lg font-semibold">🎥 {t[lang].videos}</h2>
         <p className="mb-3">Sermons & teaching</p>
         <a href={`/${lang}/videos`} className="text-blue-700 underline">
