@@ -1,8 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-
-
 
 /* =========================
    CONSTANTS
@@ -11,11 +10,7 @@ const PAYPAL_EMAIL = "klfministries7@gmail.com";
 const WHATSAPP_LINK =
   "https://wa.me/18768700508?text=Hello%20KLF%20Ministries,%20I%20would%20like%20to%20connect.";
 
-/* =========================
-   MAIN PAGE
-========================= */
 export default function HomePage() {
-  const [page, setPage] = useState("home");
   const [customAmount, setCustomAmount] = useState("");
 
   const donateLink = (amount) =>
@@ -26,168 +21,142 @@ export default function HomePage() {
     window.open(donateLink(customAmount), "_blank");
   };
 
-  const NavButton = ({ label, value }) => (
-    <button
-      onClick={() => setPage(value)}
-      className={`px-4 py-2 rounded-lg font-medium ${
-        page === value ? "bg-blue-900 text-white" : "bg-gray-200"
-      }`}
-    >
-      {label}
-    </button>
-  );
-
   return (
-    <main className="min-h-screen p-6 bg-gray-50">
+    <main className="min-h-screen bg-gray-50 px-6 py-8">
       {/* HEADER */}
-      <header className="text-center mb-10">
+      <header className="text-center mb-12">
         <img
           src="/klf-logo.png"
           alt="KLF Ministries Logo"
           className="mx-auto w-40 mb-4"
         />
+
         <h1 className="text-4xl font-bold text-blue-900">
           KLF Ministries & Publications
         </h1>
-        <p className="italic text-gray-700 mt-2 mb-5">
+
+        <p className="italic text-gray-700 mt-2 mb-6">
           “God uses rescued people to rescue people”
         </p>
 
-        <div className="flex justify-center gap-3 flex-wrap">
-          <NavButton label="Home" value="home" />
-          <NavButton label="About" value="about" />
-          <NavButton label="Speaking" value="speaking" />
-          <NavButton label="Books" value="books" />
-          <NavButton label="Videos" value="videos" />
-          <NavButton label="Contact" value="contact" />
-        </div>
+        {/* NAVIGATION */}
+        <nav className="flex justify-center gap-3 flex-wrap">
+          <Link
+            href="/"
+            className="px-4 py-2 rounded-lg font-medium bg-blue-900 text-white"
+          >
+            Home
+          </Link>
+          <Link
+            href="/about"
+            className="px-4 py-2 rounded-lg font-medium bg-gray-200"
+          >
+            About
+          </Link>
+          <Link
+            href="/books"
+            className="px-4 py-2 rounded-lg font-medium bg-gray-200"
+          >
+            Books
+          </Link>
+          <Link
+            href="/videos"
+            className="px-4 py-2 rounded-lg font-medium bg-gray-200"
+          >
+            Videos
+          </Link>
+          <Link
+            href="/contact"
+            className="px-4 py-2 rounded-lg font-medium bg-gray-200"
+          >
+            Contact
+          </Link>
+        </nav>
       </header>
 
-      {/* HOME */}
-      {page === "home" && (
-        <section className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6">
-          {/* DONATE */}
-          <div className="bg-white p-6 rounded-xl shadow text-center space-y-4">
-            <h2 className="text-lg font-semibold">💙 Support the Ministry</h2>
+      {/* HOME CONTENT */}
+      <section className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+        {/* DONATE */}
+        <div className="bg-white p-6 rounded-2xl shadow-md text-center space-y-4">
+          <h2 className="text-lg font-semibold text-blue-900">
+            💙 Support the Ministry
+          </h2>
 
-            <p className="text-sm font-medium text-gray-600">
-              Suggested Donations
-            </p>
-
-            <div className="grid grid-cols-3 gap-2">
-              {[10, 25, 50, 100, 200, 500].map((amt) => (
-                <a
-                  key={amt}
-                  href={donateLink(amt)}
-                  target="_blank"
-                  className="border rounded py-2 hover:bg-gray-100"
-                >
-                  ${amt}
-                </a>
-              ))}
-            </div>
-
-            <input
-              type="number"
-              placeholder="Custom amount (USD)"
-              value={customAmount}
-              onChange={(e) => setCustomAmount(e.target.value)}
-              className="border rounded w-full p-2"
-            />
-
-            <button
-              onClick={handleCustomDonate}
-              className="w-full bg-blue-900 text-white py-2 rounded"
-            >
-              Donate via PayPal
-            </button>
-
-            <div className="border-t pt-4 text-sm text-left">
-              <h3 className="font-semibold mb-2">
-                🏦 Direct Deposit / Bank Transfer
-              </h3>
-              <p>
-                <strong>Account Name:</strong> KLF Ministries<br />
-                <strong>Bank:</strong> Your Bank Name<br />
-                <strong>Account #:</strong> 123456789
-              </p>
-            </div>
-          </div>
-
-          {/* BOOKS */}
-          <div className="bg-white p-6 rounded-xl shadow text-center">
-            <h2 className="text-lg font-semibold">📚 Books</h2>
-            <p className="mb-3">Faith-centered resources</p>
-            <button
-              onClick={() => setPage("books")}
-              className="bg-blue-900 text-white px-4 py-2 rounded"
-            >
-              View Books
-            </button>
-          </div>
-
-          {/* VIDEOS */}
-          <div className="bg-white p-6 rounded-xl shadow text-center">
-            <h2 className="text-lg font-semibold">🎥 Videos</h2>
-            <p className="mb-3">Sermons & teaching</p>
-            <button
-              onClick={() => setPage("videos")}
-              className="bg-blue-900 text-white px-4 py-2 rounded"
-            >
-              Watch Videos
-            </button>
-          </div>
-        </section>
-      )}
-
-      {/* ABOUT */}
-      {page === "about" && (
-        <section className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow">
-          <h2 className="text-2xl font-bold mb-4">About the Author</h2>
-          <p>
-            Kiwayne Ferron is a pastor, speaker, and author committed to sharing
-            the gospel of Jesus Christ with clarity, urgency, and hope through
-            preaching, teaching, and writing.
+          <p className="text-sm font-medium text-gray-600">
+            Suggested Donations
           </p>
-        </section>
-      )}
 
-      {/* SPEAKING */}
-      {page === "speaking" && (
-        <section className="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow">
-          <iframe
-            src="https://docs.google.com/forms/d/e/1FAIpQLSesBJjzAZPg7ylXIGcC4WFoEphcZP1apZfylh3fozrGnULP7w/viewform?embedded=true"
-            width="100%"
-            height="800"
+          <div className="grid grid-cols-3 gap-2">
+            {[10, 25, 50, 100, 200, 500].map((amt) => (
+              <a
+                key={amt}
+                href={donateLink(amt)}
+                target="_blank"
+                className="border rounded py-2 hover:bg-gray-100"
+              >
+                ${amt}
+              </a>
+            ))}
+          </div>
+
+          <input
+            type="number"
+            placeholder="Custom amount (USD)"
+            value={customAmount}
+            onChange={(e) => setCustomAmount(e.target.value)}
+            className="border rounded w-full p-2"
           />
-        </section>
-      )}
 
-      {/* CONTACT */}
-      {page === "contact" && (
-        <section className="max-w-md mx-auto bg-white p-6 rounded-xl shadow text-center space-y-4">
-          <p>
-            📧{" "}
-            <a
-              href="mailto:klfministries7@gmail.com"
-              className="text-blue-700 underline"
-            >
-              klfministries7@gmail.com
-            </a>
-          </p>
-          <p>📞 +1 876 870 0508</p>
-          <a
-            href="https://instagram.com/kiwayne27"
-            target="_blank"
-            className="text-pink-600 font-medium"
+          <button
+            onClick={handleCustomDonate}
+            className="w-full bg-blue-900 text-white py-2 rounded"
           >
-            Instagram
-          </a>
-        </section>
-      )}
+            Donate via PayPal
+          </button>
+
+          <div className="border-t pt-4 text-sm text-left">
+            <h3 className="font-semibold mb-2">
+              🏦 Direct Deposit / Bank Transfer
+            </h3>
+            <p>
+              <strong>Account Name:</strong> KLF Ministries<br />
+              <strong>Bank:</strong> Your Bank Name<br />
+              <strong>Account #:</strong> 123456789
+            </p>
+          </div>
+        </div>
+
+        {/* BOOKS */}
+        <div className="bg-white p-6 rounded-2xl shadow-md text-center">
+          <h2 className="text-lg font-semibold mb-2">📚 Books</h2>
+          <p className="mb-4 text-gray-600">
+            Faith-centered resources for spiritual growth
+          </p>
+          <Link
+            href="/books"
+            className="inline-block bg-blue-900 text-white px-4 py-2 rounded"
+          >
+            View Books
+          </Link>
+        </div>
+
+        {/* VIDEOS */}
+        <div className="bg-white p-6 rounded-2xl shadow-md text-center">
+          <h2 className="text-lg font-semibold mb-2">🎥 Videos</h2>
+          <p className="mb-4 text-gray-600">
+            Sermons and Bible teaching
+          </p>
+          <Link
+            href="/videos"
+            className="inline-block bg-blue-900 text-white px-4 py-2 rounded"
+          >
+            Watch Videos
+          </Link>
+        </div>
+      </section>
 
       {/* FOOTER */}
-      <footer className="text-center mt-12 text-sm text-gray-600">
+      <footer className="text-center mt-16 text-sm text-gray-600">
         © {new Date().getFullYear()} KLF Ministries. All rights reserved.
       </footer>
 
@@ -202,4 +171,3 @@ export default function HomePage() {
     </main>
   );
 }
-
