@@ -8,7 +8,7 @@ import Nav from "./components/Nav";
 export const metadata = {
   title: "KLF Ministries | Christian Books, Sermons & Faith-Based Teaching",
   description:
-    "Faith-based Christian books, sermons, and teaching resources by Pastor Kiwayne Ferron.",
+    "Faith-based Christian books, sermons, and teaching resources inspiring prepared, faithful, and active Christian living.",
   authors: [{ name: "Kiwayne Ferron" }],
   alternates: {
     canonical: "https://klfministries.org",
@@ -16,12 +16,12 @@ export const metadata = {
   openGraph: {
     title: "KLF Ministries | Christian Books & Sermons",
     description:
-      "Explore Christian books, sermons, and teaching resources by Pastor Kiwayne Ferron.",
+      "A Christian ministry dedicated to preaching, teaching, and sharing faith-centered resources that call believers to faithfulness, stewardship, and readiness for Christ’s return.",
     url: "https://klfministries.org",
     siteName: "KLF Ministries",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "https://klfministries.org/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "KLF Ministries",
@@ -32,13 +32,16 @@ export const metadata = {
   },
 };
 
+/* =========================
+   ROOT LAYOUT
+========================= */
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
         {/* GOOGLE ANALYTICS (GA4) */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+          src="https://www.googletagmanager.com/gtag/js?id=G-RY05JQHSR1"
           strategy="afterInteractive"
         />
         <Script id="ga4" strategy="afterInteractive">
@@ -71,7 +74,7 @@ export default function RootLayout({ children }) {
               “God uses rescued people to rescue people”
             </p>
 
-            {/* ACTIVE NAV */}
+            {/* ACTIVE NAVIGATION */}
             <Nav />
           </div>
         </header>
