@@ -53,7 +53,7 @@ function FeaturedDevotional({ lang }) {
   }, [lang]);
 
   return (
-    <div className="max-w-3xl mx-auto text-center card p-8 transition-all">
+    <div className="max-w-3xl mx-auto text-center card p-8">
       <h2 className="text-2xl font-bold mb-3">
         {lang === "es" ? "Devocional Destacado" : "Featured Devotional"}
       </h2>
@@ -66,10 +66,7 @@ function FeaturedDevotional({ lang }) {
         {devotionals[lang][index].text}
       </p>
 
-      <a
-        href={`/${lang}/devotionals`}
-        className="text-blue-700 underline"
-      >
+      <a href={`/${lang}/devotionals`} className="text-blue-700 underline">
         {lang === "es" ? "Leer más devocionales" : "Read more devotionals"}
       </a>
     </div>
@@ -111,7 +108,7 @@ export default function Home({ params }) {
         </div>
       </section>
 
-      {/* ================= FEATURED DEVOTIONAL (STEP 3) ================= */}
+      {/* ================= FEATURED DEVOTIONAL ================= */}
       <section className="bg-white py-16 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
@@ -157,6 +154,34 @@ export default function Home({ params }) {
               {lang === "es" ? "Apoyar" : "Give"}
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* ================= TESTIMONIALS + CTA (STEP 4A) ================= */}
+      <section className="bg-white py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-8">
+            {lang === "es" ? "Testimonios" : "Testimonies"}
+          </h2>
+
+          <blockquote className="italic text-gray-700 mb-6">
+            “This ministry reminded me that faithfulness in small things still
+            matters to God.”
+            <div className="mt-2 font-medium">— Listener</div>
+          </blockquote>
+
+          <blockquote className="italic text-gray-700 mb-10">
+            “Each devotional strengthens my walk with Christ.”
+            <div className="mt-2 font-medium">— Subscriber</div>
+          </blockquote>
+
+          {/* SUBMIT TESTIMONY CTA */}
+          <a
+            href={`/${lang}/testimonials`}
+            className="inline-block px-6 py-3 border border-blue-900 text-blue-900 rounded hover:bg-blue-50"
+          >
+            {lang === "es" ? "Enviar un Testimonio" : "Submit a Testimony"}
+          </a>
         </div>
       </section>
 
