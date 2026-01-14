@@ -6,21 +6,7 @@ const PAYPAL_EMAIL = "kiwayne26@gmail.com";
 
 export default function Home({ params }) {
   const lang = params.lang === "es" ? "es" : "en";
-
   const [showDonate, setShowDonate] = useState(false);
-  const [customAmount, setCustomAmount] = useState("");
-  const [currency, setCurrency] = useState("USD");
-  const [recurring, setRecurring] = useState(false);
-
-  const amounts =
-    currency === "USD"
-      ? [10, 25, 50, 100, 200, 500, 1000]
-      : [1500, 3000, 5000, 10000, 20000];
-
-  const paypalLink = (amount) =>
-    `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amount}&currency_code=${currency}${
-      recurring ? "&interval=M" : ""
-    }`;
 
   return (
     <>
@@ -34,8 +20,8 @@ export default function Home({ params }) {
 
         <p className="text-lg text-gray-700 max-w-3xl mx-auto mb-8">
           {lang === "es"
-            ? "Un ministerio cristiano dedicado a predicar, enseñar y equipar al pueblo de Dios para una vida fiel y activa."
-            : "A Christian ministry dedicated to preaching, teaching, and equipping God’s people for faithful and active living."}
+            ? "Un ministerio cristiano dedicado a predicar, enseñar y equipar al pueblo de Dios."
+            : "A Christian ministry dedicated to preaching, teaching, and equipping God’s people."}
         </p>
 
         <button onClick={() => setShowDonate(true)} className="btn-primary">
@@ -43,20 +29,40 @@ export default function Home({ params }) {
         </button>
       </section>
 
+      {/* HOME CARDS */}
+      <section className="max-w-6xl mx-auto py-10 px-6 grid md:grid-cols-3 gap-6">
+        <div className="card text-center">
+          <h2 className="text-lg font-semibold">📚 {lang === "es" ? "Libros" : "Books"}</h2>
+          <p className="mb-3">Faith-centered resources</p>
+          <a href={`/${lang}/books`} className="text-blue-700 underline">
+            View Books
+          </a>
+        </div>
+
+        <div className="card text-center">
+          <h2 className="text-lg font-semibold">🎥 Videos</h2>
+          <p className="mb-3">Sermons & Bible teaching</p>
+          <a href={`/${lang}/videos`} className="text-blue-700 underline">
+            Watch Videos
+          </a>
+        </div>
+
+        <div className="card text-center">
+          <h2 className="text-lg font-semibold">🎤 {lang === "es" ? "Predicación" : "Speaking"}</h2>
+          <p className="mb-3">Invite KLF Ministries</p>
+          <a href={`/${lang}/speaking`} className="text-blue-700 underline">
+            Learn More
+          </a>
+        </div>
+      </section>
+
       {/* DONATE MODAL */}
       {showDonate && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
-          onClick={() => setShowDonate(false)}
-        >
-          <div
-            className="bg-white rounded-xl max-w-md w-full p-6 relative"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 relative">
             <button
               onClick={() => setShowDonate(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-black"
-              aria-label="Close donation window"
+              className="absolute top-3 right-3 text-gray-500"
             >
               ✕
             </button>
@@ -65,88 +71,41 @@ export default function Home({ params }) {
               {lang === "es" ? "Apoyar el Ministerio" : "Support the Ministry"}
             </h2>
 
-            {/* TOGGLES */}
-            <div className="flex justify-between items-center mb-4 gap-3">
-              {/* RECURRING */}
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  checked={recurring}
-                  onChange={() => setRecurring(!recurring)}
-                />
-                {lang === "es" ? "Donación mensual" : "Monthly donation"}
-              </label>
-
-              {/* CURRENCY */}
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="border px-2 py-1 rounded text-sm"
-              >
-                <option value="USD">USD</option>
-                <option value="JMD">JMD</option>
-              </select>
-            </div>
-
-            {/* SUGGESTED AMOUNTS */}
             <div className="grid grid-cols-3 gap-2 mb-4">
-              {amounts.map((amt) => (
+              {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
                 <a
                   key={amt}
-                  href={paypalLink(amt)}
+                  href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amt}&currency_code=USD`}
                   target="_blank"
-                  rel="noopener noreferrer"
                   className="border rounded py-2 text-center hover:bg-gray-100"
                 >
-                  {currency} {amt}
+                  ${amt}
                 </a>
               ))}
             </div>
 
-            {/* CUSTOM AMOUNT */}
-            <div className="mb-4">
-              <input
-                type="number"
-                min="1"
-                placeholder={
-                  lang === "es"
-                    ? `Monto personalizado (${currency})`
-                    : `Custom amount (${currency})`
-                }
-                value={customAmount}
-                onChange={(e) => setCustomAmount(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
-              />
-            </div>
+            <a
+              href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD`}
+              target="_blank"
+              className="btn-primary block text-center mb-4"
+            >
+              {lang === "es" ? "Donar por PayPal" : "Donate via PayPal"}
+            </a>
 
-            {customAmount && (
-              <a
-                href={paypalLink(customAmount)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary block text-center mb-4"
-              >
-                {lang === "es"
-                  ? "Donar monto personalizado"
-                  : "Donate Custom Amount"}
-              </a>
-            )}
-
-            {/* BANK TRANSFER */}
             <div className="border-t pt-4 text-sm text-center">
               <p className="mb-2 font-medium">
                 {lang === "es"
-                  ? "¿Prefiere transferencia o depósito bancario?"
-                  : "Prefer bank transfer or direct deposit?"}
+                  ? "¿Prefiere transferencia bancaria?"
+                  : "Prefer bank transfer?"}
               </p>
 
               <a
-                href={`mailto:${PAYPAL_EMAIL}?subject=Bank%20Transfer%20Donation&body=Hello%20KLF%20Ministries,%0A%0AI%20would%20like%20to%20make%20a%20donation%20via%20direct%20transfer.%20Please%20send%20me%20the%20bank%20details.%0A%0AThank%20you.`}
+                href={`mailto:klfministries7@gmail.com?subject=Bank%20Transfer%20Request`}
                 className="text-blue-700 underline"
               >
                 {lang === "es"
-                  ? "Solicitar detalles bancarios por correo"
-                  : "Request bank details by email"}
+                  ? "Solicitar detalles bancarios"
+                  : "Request bank details"}
               </a>
             </div>
           </div>
