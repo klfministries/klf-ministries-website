@@ -6,11 +6,21 @@ const PAYPAL_EMAIL = "kiwayne26@gmail.com";
 
 export default function Home({ params }) {
   const lang = params.lang === "es" ? "es" : "en";
+
   const [showDonate, setShowDonate] = useState(false);
   const [customAmount, setCustomAmount] = useState("");
+  const [currency, setCurrency] = useState("USD");
+  const [recurring, setRecurring] = useState(false);
+
+  const amounts =
+    currency === "USD"
+      ? [10, 25, 50, 100, 200, 500, 1000]
+      : [1500, 3000, 5000, 10000, 20000];
 
   const paypalLink = (amount) =>
-    `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amount}&currency_code=USD`;
+    `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amount}&currency_code=${currency}${
+      recurring ? "&interval=M" : ""
+    }`;
 
   return (
     <>
@@ -55,9 +65,32 @@ export default function Home({ params }) {
               {lang === "es" ? "Apoyar el Ministerio" : "Support the Ministry"}
             </h2>
 
+            {/* TOGGLES */}
+            <div className="flex justify-between items-center mb-4 gap-3">
+              {/* RECURRING */}
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={recurring}
+                  onChange={() => setRecurring(!recurring)}
+                />
+                {lang === "es" ? "Donación mensual" : "Monthly donation"}
+              </label>
+
+              {/* CURRENCY */}
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="border px-2 py-1 rounded text-sm"
+              >
+                <option value="USD">USD</option>
+                <option value="JMD">JMD</option>
+              </select>
+            </div>
+
             {/* SUGGESTED AMOUNTS */}
             <div className="grid grid-cols-3 gap-2 mb-4">
-              {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
+              {amounts.map((amt) => (
                 <a
                   key={amt}
                   href={paypalLink(amt)}
@@ -65,7 +98,7 @@ export default function Home({ params }) {
                   rel="noopener noreferrer"
                   className="border rounded py-2 text-center hover:bg-gray-100"
                 >
-                  ${amt}
+                  {currency} {amt}
                 </a>
               ))}
             </div>
@@ -77,8 +110,8 @@ export default function Home({ params }) {
                 min="1"
                 placeholder={
                   lang === "es"
-                    ? "Monto personalizado (USD)"
-                    : "Custom amount (USD)"
+                    ? `Monto personalizado (${currency})`
+                    : `Custom amount (${currency})`
                 }
                 value={customAmount}
                 onChange={(e) => setCustomAmount(e.target.value)}
@@ -99,19 +132,7 @@ export default function Home({ params }) {
               </a>
             )}
 
-            {/* GENERAL PAYPAL */}
-            <a
-              href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-700 underline block text-center mb-4"
-            >
-              {lang === "es"
-                ? "Donar otro monto por PayPal"
-                : "Donate another amount via PayPal"}
-            </a>
-
-            {/* BANK TRANSFER REQUEST */}
+            {/* BANK TRANSFER */}
             <div className="border-t pt-4 text-sm text-center">
               <p className="mb-2 font-medium">
                 {lang === "es"
