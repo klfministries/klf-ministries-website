@@ -4,18 +4,42 @@ import { useState, useEffect } from "react";
 
 const PAYPAL_EMAIL = "kiwayne26@gmail.com";
 
-/* ================= TESTIMONIAL ROTATOR ================= */
-function RotatingTestimonials({ lang }) {
-  const testimonials = {
+/* ================= FEATURED DEVOTIONAL ROTATOR ================= */
+function FeaturedDevotional({ lang }) {
+  const devotionals = {
     en: [
-      "This ministry reminded me that faithfulness in small things still matters to God.",
-      "Each devotional speaks directly to real life and strengthens my walk with Christ.",
-      "The messages are timely, biblical, and deeply encouraging.",
+      {
+        verse: "Matthew 25:21",
+        text:
+          "Faithfulness is proven in unseen moments. God rewards obedience more than recognition.",
+      },
+      {
+        verse: "Luke 19:13",
+        text:
+          "Prepared people live differently. Christ calls us to active, faithful service.",
+      },
+      {
+        verse: "Matthew 10:8",
+        text:
+          "God uses rescued people to rescue others. Your testimony has purpose.",
+      },
     ],
     es: [
-      "Este ministerio me recordó que la fidelidad en las cosas pequeñas todavía importa para Dios.",
-      "Cada devocional fortalece mi caminar con Cristo.",
-      "Los mensajes son oportunos, bíblicos y alentadores.",
+      {
+        verse: "Mateo 25:21",
+        text:
+          "La fidelidad se demuestra en lo secreto. Dios recompensa la obediencia.",
+      },
+      {
+        verse: "Lucas 19:13",
+        text:
+          "Las personas preparadas viven diferente. Cristo llama a servir fielmente.",
+      },
+      {
+        verse: "Mateo 10:8",
+        text:
+          "Dios usa a los rescatados para rescatar a otros. Tu testimonio tiene propósito.",
+      },
     ],
   };
 
@@ -23,24 +47,31 @@ function RotatingTestimonials({ lang }) {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % testimonials[lang].length);
-    }, 6000);
+      setIndex((prev) => (prev + 1) % devotionals[lang].length);
+    }, 7000);
     return () => clearInterval(timer);
   }, [lang]);
 
   return (
-    <div className="max-w-4xl mx-auto text-center">
-      <h2 className="text-2xl font-bold mb-10">
-        {lang === "es" ? "Testimonios" : "Testimonies"}
+    <div className="max-w-3xl mx-auto text-center card p-8 transition-all">
+      <h2 className="text-2xl font-bold mb-3">
+        {lang === "es" ? "Devocional Destacado" : "Featured Devotional"}
       </h2>
 
-      <blockquote className="italic text-gray-700 text-lg transition-all duration-500">
-        “{testimonials[lang][index]}”
-      </blockquote>
-
-      <p className="mt-4 font-medium text-gray-600">
-        — {lang === "es" ? "Participante" : "Listener"}
+      <p className="italic text-gray-700 mb-4">
+        {devotionals[lang][index].verse}
       </p>
+
+      <p className="text-gray-700 mb-6">
+        {devotionals[lang][index].text}
+      </p>
+
+      <a
+        href={`/${lang}/devotionals`}
+        className="text-blue-700 underline"
+      >
+        {lang === "es" ? "Leer más devocionales" : "Read more devotionals"}
+      </a>
     </div>
   );
 }
@@ -80,32 +111,9 @@ export default function Home({ params }) {
         </div>
       </section>
 
-      {/* ================= TODAY’S WORD ================= */}
+      {/* ================= FEATURED DEVOTIONAL (STEP 3) ================= */}
       <section className="bg-white py-16 px-6">
-        <div className="max-w-3xl mx-auto text-center card p-8">
-          <h2 className="text-2xl font-bold mb-3">
-            {lang === "es" ? "Palabra para Hoy" : "Today’s Word"}
-          </h2>
-
-          <p className="italic text-gray-700 mb-4">
-            “Well done, good and faithful servant.” — Matthew 25:21
-          </p>
-
-          <p className="text-gray-700 mb-6">
-            {lang === "es"
-              ? "Dios valora la fidelidad silenciosa. Cuando permanecemos firmes aun cuando nadie ve, el cielo toma nota."
-              : "God values quiet faithfulness. When we remain faithful even when no one sees, heaven takes notice."}
-          </p>
-
-          <a
-            href={`/${lang}/devotionals`}
-            className="text-blue-700 underline"
-          >
-            {lang === "es"
-              ? "Leer más devocionales"
-              : "Read more devotionals"}
-          </a>
-        </div>
+        <FeaturedDevotional lang={lang} />
       </section>
 
       {/* ================= MINISTRY PATHS ================= */}
@@ -150,31 +158,6 @@ export default function Home({ params }) {
             </button>
           </div>
         </div>
-      </section>
-
-      {/* ================= TESTIMONIALS (STEP 2) ================= */}
-      <section className="bg-white py-20 px-6">
-        <RotatingTestimonials lang={lang} />
-      </section>
-
-      {/* ================= SUPPORT CTA ================= */}
-      <section className="bg-blue-900 text-white py-20 px-6 text-center">
-        <h2 className="text-3xl font-bold mb-4">
-          {lang === "es" ? "Apoye la Misión" : "Support the Mission"}
-        </h2>
-
-        <p className="max-w-2xl mx-auto mb-8">
-          {lang === "es"
-            ? "Su generosidad ayuda a compartir recursos cristianos fieles y centrados en Cristo."
-            : "Your generosity helps share faithful, Christ-centered resources with others."}
-        </p>
-
-        <button
-          onClick={() => setShowDonate(true)}
-          className="bg-white text-blue-900 px-6 py-3 rounded font-medium hover:bg-gray-100"
-        >
-          {lang === "es" ? "Dar Ahora" : "Give Now"}
-        </button>
       </section>
 
       {/* ================= DONATION MODAL ================= */}
