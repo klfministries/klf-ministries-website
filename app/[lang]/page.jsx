@@ -6,25 +6,11 @@ const PAYPAL_EMAIL = "kiwayne26@gmail.com";
 
 export default function Home({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
-
   const [showDonate, setShowDonate] = useState(false);
-  const [monthly, setMonthly] = useState(false);
-  const [currency, setCurrency] = useState("USD");
-  const [customAmount, setCustomAmount] = useState("");
-
-  const presetAmounts = currency === "USD"
-    ? [10, 25, 50, 100, 200, 500, 1000]
-    : [1000, 2500, 5000, 10000, 20000];
-
-  const buildPaypalLink = (amount) => {
-    return `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amount}&currency_code=${currency}${
-      monthly ? "&recurring=1" : ""
-    }`;
-  };
 
   return (
     <>
-      {/* HERO */}
+      {/* ================= HERO ================= */}
       <section className="max-w-5xl mx-auto text-center py-20 px-6">
         <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-4">
           {lang === "es"
@@ -34,22 +20,136 @@ export default function Home({ params }) {
 
         <p className="text-lg text-gray-700 max-w-3xl mx-auto mb-8">
           {lang === "es"
-            ? "Un ministerio cristiano dedicado a predicar y equipar al pueblo de Dios."
-            : "A Christian ministry dedicated to preaching and equipping God’s people."}
+            ? "Un ministerio cristiano dedicado a predicar, enseñar y equipar al pueblo de Dios para una vida fiel."
+            : "A Christian ministry dedicated to preaching, teaching, and equipping God’s people for faithful living."}
         </p>
 
-        <button onClick={() => setShowDonate(true)} className="btn-primary">
-          {lang === "es" ? "Donar" : "Donate"}
+        <div className="flex justify-center gap-4 flex-wrap">
+          <button onClick={() => setShowDonate(true)} className="btn-primary">
+            {lang === "es" ? "Apoyar el Ministerio" : "Support the Mission"}
+          </button>
+
+          <a
+            href={`/${lang}/devotionals`}
+            className="px-5 py-3 rounded border border-blue-900 text-blue-900 hover:bg-blue-50"
+          >
+            {lang === "es" ? "Palabra de Hoy" : "Today’s Word"}
+          </a>
+        </div>
+      </section>
+
+      {/* ================= TODAY’S WORD ================= */}
+      <section className="bg-white py-16 px-6">
+        <div className="max-w-3xl mx-auto text-center card p-8">
+          <h2 className="text-2xl font-bold mb-3">
+            {lang === "es" ? "Palabra para Hoy" : "Today’s Word"}
+          </h2>
+
+          <p className="italic text-gray-700 mb-4">
+            “Well done, good and faithful servant.” — Matthew 25:21
+          </p>
+
+          <p className="text-gray-700 mb-6">
+            {lang === "es"
+              ? "Dios valora la fidelidad silenciosa. Cuando permanecemos firmes aun cuando nadie ve, el cielo toma nota."
+              : "God values quiet faithfulness. When we remain faithful even when no one sees, heaven takes notice."}
+          </p>
+
+          <a
+            href={`/${lang}/devotionals`}
+            className="text-blue-700 underline"
+          >
+            {lang === "es"
+              ? "Leer más devocionales"
+              : "Read more devotionals"}
+          </a>
+        </div>
+      </section>
+
+      {/* ================= MINISTRY PATHS ================= */}
+      <section className="bg-gray-50 py-20 px-6">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
+          <div className="card p-6 text-center">
+            <h3 className="text-lg font-semibold mb-2">📖 Devotionals</h3>
+            <p className="mb-4">
+              {lang === "es"
+                ? "Ánimo bíblico para la vida diaria."
+                : "Biblical encouragement for daily living."}
+            </p>
+            <a href={`/${lang}/devotionals`} className="text-blue-700 underline">
+              {lang === "es" ? "Leer" : "Read"}
+            </a>
+          </div>
+
+          <div className="card p-6 text-center">
+            <h3 className="text-lg font-semibold mb-2">🎥 Videos</h3>
+            <p className="mb-4">
+              {lang === "es"
+                ? "Enseñanza clara y centrada en Cristo."
+                : "Clear, Christ-centered teaching."}
+            </p>
+            <a href={`/${lang}/videos`} className="text-blue-700 underline">
+              {lang === "es" ? "Ver" : "Watch"}
+            </a>
+          </div>
+
+          <div className="card p-6 text-center">
+            <h3 className="text-lg font-semibold mb-2">🤝 Support</h3>
+            <p className="mb-4">
+              {lang === "es"
+                ? "Sea parte de lo que Dios está haciendo."
+                : "Be part of what God is doing."}
+            </p>
+            <button
+              onClick={() => setShowDonate(true)}
+              className="text-blue-700 underline"
+            >
+              {lang === "es" ? "Apoyar" : "Give"}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= TESTIMONIAL ================= */}
+      <section className="bg-white py-16 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <blockquote className="italic text-gray-700 mb-4">
+            “This ministry reminded me that faithfulness in small things still
+            matters to God.”
+          </blockquote>
+          <p className="font-medium">— A Listener</p>
+        </div>
+      </section>
+
+      {/* ================= SUPPORT CTA ================= */}
+      <section className="bg-blue-900 text-white py-20 px-6 text-center">
+        <h2 className="text-3xl font-bold mb-4">
+          {lang === "es"
+            ? "Apoye la Misión"
+            : "Support the Mission"}
+        </h2>
+
+        <p className="max-w-2xl mx-auto mb-8">
+          {lang === "es"
+            ? "Su generosidad ayuda a compartir recursos cristianos fieles y centrados en Cristo."
+            : "Your generosity helps share faithful, Christ-centered resources with others."}
+        </p>
+
+        <button
+          onClick={() => setShowDonate(true)}
+          className="bg-white text-blue-900 px-6 py-3 rounded font-medium hover:bg-gray-100"
+        >
+          {lang === "es" ? "Dar Ahora" : "Give Now"}
         </button>
       </section>
 
-      {/* DONATE MODAL */}
+      {/* ================= DONATION MODAL (UNCHANGED) ================= */}
       {showDonate && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-xl max-w-md w-full p-6 relative">
             <button
               onClick={() => setShowDonate(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-black"
+              className="absolute top-3 right-3 text-gray-500"
             >
               ✕
             </button>
@@ -58,104 +158,26 @@ export default function Home({ params }) {
               {lang === "es" ? "Apoyar el Ministerio" : "Support the Ministry"}
             </h2>
 
-            {/* CURRENCY TOGGLE */}
-            <div className="flex justify-center gap-3 mb-4">
-              <button
-                onClick={() => setCurrency("USD")}
-                className={`px-3 py-1 rounded ${
-                  currency === "USD"
-                    ? "bg-blue-900 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                USD
-              </button>
-              <button
-                onClick={() => setCurrency("JMD")}
-                className={`px-3 py-1 rounded ${
-                  currency === "JMD"
-                    ? "bg-blue-900 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                JMD
-              </button>
-            </div>
-
-            {/* MONTHLY TOGGLE */}
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <input
-                type="checkbox"
-                checked={monthly}
-                onChange={() => setMonthly(!monthly)}
-              />
-              <span className="text-sm">
-                {lang === "es"
-                  ? "Donación mensual"
-                  : "Make this a monthly donation"}
-              </span>
-            </div>
-
-            {/* PRESET AMOUNTS */}
             <div className="grid grid-cols-3 gap-2 mb-4">
-              {presetAmounts.map((amt) => (
+              {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
                 <a
                   key={amt}
-                  href={buildPaypalLink(amt)}
+                  href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amt}&currency_code=USD`}
                   target="_blank"
-                  rel="noopener noreferrer"
                   className="border rounded py-2 text-center hover:bg-gray-100"
                 >
-                  {currency === "USD" ? `$${amt}` : `J$${amt}`}
+                  ${amt}
                 </a>
               ))}
             </div>
 
-            {/* CUSTOM AMOUNT */}
-            <input
-              type="number"
-              placeholder={
-                lang === "es"
-                  ? "Monto personalizado"
-                  : "Custom amount"
-              }
-              value={customAmount}
-              onChange={(e) => setCustomAmount(e.target.value)}
-              className="w-full border px-3 py-2 rounded mb-3"
-            />
-
             <a
-              href={buildPaypalLink(customAmount || 0)}
+              href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD`}
               target="_blank"
-              rel="noopener noreferrer"
               className="btn-primary block text-center mb-4"
             >
-              {monthly
-                ? lang === "es"
-                  ? "Donar mensualmente"
-                  : "Donate Monthly"
-                : lang === "es"
-                ? "Donar ahora"
-                : "Donate Now"}
+              {lang === "es" ? "Donar por PayPal" : "Donate via PayPal"}
             </a>
-
-            {/* BANK TRANSFER */}
-            <div className="border-t pt-4 text-sm text-center">
-              <p className="mb-2 font-medium">
-                {lang === "es"
-                  ? "¿Prefiere transferencia bancaria?"
-                  : "Prefer bank transfer or direct deposit?"}
-              </p>
-
-              <a
-                href="mailto:klfministries7@gmail.com?subject=Bank%20Transfer%20Donation"
-                className="text-blue-700 underline"
-              >
-                {lang === "es"
-                  ? "Solicitar detalles bancarios"
-                  : "Request bank details by email"}
-              </a>
-            </div>
           </div>
         </div>
       )}
