@@ -1,27 +1,25 @@
-export default function Contact() {
-  return (
-    <section className="max-w-md mx-auto py-16 px-6 text-center space-y-4">
-      <h1 className="text-3xl font-bold mb-4">Contact</h1>
+<section className="max-w-xl mx-auto text-center">
+  <div className="card p-8 space-y-4">
+    <h1 className="text-2xl font-bold">Contact</h1>
 
-      <p>
-        📧{" "}
-        <a
-          href="mailto:klfministries7@gmail.com"
-          className="text-blue-700 underline"
-        >
-          klfministries7@gmail.com
-        </a>
-      </p>
-
-      <p>📞 +1 876 870 0508</p>
-
+    <p>
+      📧{" "}
       <a
-        href="https://instagram.com/kiwayne27"
-        target="_blank"
-        className="text-pink-600 font-medium"
+        href="mailto:klfministries7@gmail.com"
+        className="text-blue-700 underline"
       >
-        Instagram
+        klfministries7@gmail.com
       </a>
-    </section>
-  );
-}
+    </p>
+
+    <p>📞 +1 876 870 0508</p>
+
+    <a
+      href="https://instagram.com/yourhandle"
+      className="text-pink-600 underline"
+      target="_blank"
+    >
+      Instagram
+    </a>
+  </div>
+</section>
