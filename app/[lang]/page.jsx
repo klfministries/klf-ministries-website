@@ -5,8 +5,11 @@ import { useState } from "react";
 const PAYPAL_EMAIL = "kiwayne26@gmail.com";
 
 export default function Home({ params }) {
-  const lang = params.lang === "es" ? "es" : "en";
+  const lang = params?.lang === "es" ? "es" : "en";
   const [showDonate, setShowDonate] = useState(false);
+  const [monthly, setMonthly] = useState(false);
+
+  const amounts = [10, 25, 50, 100, 200, 500, 1000];
 
   return (
     <>
@@ -24,45 +27,21 @@ export default function Home({ params }) {
             : "A Christian ministry dedicated to preaching, teaching, and equipping God’s people."}
         </p>
 
-        <button onClick={() => setShowDonate(true)} className="btn-primary">
+        <button
+          onClick={() => setShowDonate(true)}
+          className="btn-primary"
+        >
           {lang === "es" ? "Donar" : "Donate"}
         </button>
       </section>
 
-      {/* HOME CARDS */}
-      <section className="max-w-6xl mx-auto py-10 px-6 grid md:grid-cols-3 gap-6">
-        <div className="card text-center">
-          <h2 className="text-lg font-semibold">📚 {lang === "es" ? "Libros" : "Books"}</h2>
-          <p className="mb-3">Faith-centered resources</p>
-          <a href={`/${lang}/books`} className="text-blue-700 underline">
-            View Books
-          </a>
-        </div>
-
-        <div className="card text-center">
-          <h2 className="text-lg font-semibold">🎥 Videos</h2>
-          <p className="mb-3">Sermons & Bible teaching</p>
-          <a href={`/${lang}/videos`} className="text-blue-700 underline">
-            Watch Videos
-          </a>
-        </div>
-
-        <div className="card text-center">
-          <h2 className="text-lg font-semibold">🎤 {lang === "es" ? "Predicación" : "Speaking"}</h2>
-          <p className="mb-3">Invite KLF Ministries</p>
-          <a href={`/${lang}/speaking`} className="text-blue-700 underline">
-            Learn More
-          </a>
-        </div>
-      </section>
-
-      {/* DONATE MODAL */}
+      {/* DONATION MODAL */}
       {showDonate && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-xl max-w-md w-full p-6 relative">
             <button
               onClick={() => setShowDonate(false)}
-              className="absolute top-3 right-3 text-gray-500"
+              className="absolute top-3 right-3 text-gray-500 hover:text-black"
             >
               ✕
             </button>
@@ -71,12 +50,31 @@ export default function Home({ params }) {
               {lang === "es" ? "Apoyar el Ministerio" : "Support the Ministry"}
             </h2>
 
+            {/* MONTHLY TOGGLE */}
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <input
+                type="checkbox"
+                id="monthly"
+                checked={monthly}
+                onChange={() => setMonthly(!monthly)}
+              />
+              <label htmlFor="monthly" className="text-sm font-medium">
+                {lang === "es"
+                  ? "Donación mensual"
+                  : "Make this a monthly donation"}
+              </label>
+            </div>
+
+            {/* AMOUNTS */}
             <div className="grid grid-cols-3 gap-2 mb-4">
-              {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
+              {amounts.map((amt) => (
                 <a
                   key={amt}
-                  href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amt}&currency_code=USD`}
+                  href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amt}&currency_code=USD${
+                    monthly ? "&recurring=1" : ""
+                  }`}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="border rounded py-2 text-center hover:bg-gray-100"
                 >
                   ${amt}
@@ -84,28 +82,39 @@ export default function Home({ params }) {
               ))}
             </div>
 
+            {/* PAYPAL BUTTON */}
             <a
-              href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD`}
+              href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD${
+                monthly ? "&recurring=1" : ""
+              }`}
               target="_blank"
+              rel="noopener noreferrer"
               className="btn-primary block text-center mb-4"
             >
-              {lang === "es" ? "Donar por PayPal" : "Donate via PayPal"}
+              {monthly
+                ? lang === "es"
+                  ? "Donar mensualmente por PayPal"
+                  : "Donate Monthly via PayPal"
+                : lang === "es"
+                ? "Donar por PayPal"
+                : "Donate via PayPal"}
             </a>
 
+            {/* BANK TRANSFER (RESTORED) */}
             <div className="border-t pt-4 text-sm text-center">
               <p className="mb-2 font-medium">
                 {lang === "es"
-                  ? "¿Prefiere transferencia bancaria?"
-                  : "Prefer bank transfer?"}
+                  ? "¿Prefiere transferencia o depósito bancario?"
+                  : "Prefer bank transfer or direct deposit?"}
               </p>
 
               <a
-                href={`mailto:klfministries7@gmail.com?subject=Bank%20Transfer%20Request`}
+                href={`mailto:klfministries7@gmail.com?subject=Bank%20Transfer%20Donation&body=Hello%20KLF%20Ministries,%0A%0AI%20would%20like%20to%20support%20the%20ministry%20via%20bank%20transfer.%20Please%20send%20me%20the%20account%20details.%0A%0AThank%20you.`}
                 className="text-blue-700 underline"
               >
                 {lang === "es"
-                  ? "Solicitar detalles bancarios"
-                  : "Request bank details"}
+                  ? "Solicitar detalles bancarios por correo"
+                  : "Request bank details by email"}
               </a>
             </div>
           </div>
