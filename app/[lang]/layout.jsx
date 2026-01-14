@@ -45,9 +45,9 @@ export default function LangLayout({ children, params }) {
 
   return (
     <html lang={lang}>
-      <body className="bg-white text-gray-900">
+      <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen">
         {/* HEADER */}
-        <header className="text-center py-10 border-b">
+        <header className="text-center py-10 border-b bg-white">
           <img
             src="/klf-logo.png"
             alt="KLF Ministries Logo"
@@ -65,56 +65,56 @@ export default function LangLayout({ children, params }) {
           <Nav lang={lang} />
         </header>
 
-        {/* PAGE CONTENT */}
-        <main className="min-h-screen px-6">{children}</main>
+        {/* PAGE CONTENT (STEP 2 FIX) */}
+        <main className="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
+          {children}
+        </main>
 
         {/* FOOTER */}
-        <footer className="text-center text-sm text-gray-600 py-10 border-t mt-12">
-  {/* EMAIL SIGNUP */}
-  <div className="max-w-md mx-auto mb-6">
-    <p className="font-medium mb-2">
-      {lang === "es"
-        ? "Reciba actualizaciones del ministerio"
-        : "Receive ministry updates"}
-    </p>
+        <footer className="bg-gray-100 text-center text-sm text-gray-600 py-10 border-t">
+          {/* EMAIL SIGNUP */}
+          <div className="max-w-md mx-auto mb-6">
+            <p className="font-medium mb-2">
+              {lang === "es"
+                ? "Reciba actualizaciones del ministerio"
+                : "Receive ministry updates"}
+            </p>
 
-    <form
-      action="https://formspree.io/f/YOUR_FORM_ID"
-      method="POST"
-      className="flex gap-2 justify-center"
-    >
-      <input
-        type="email"
-        name="email"
-        required
-        placeholder={lang === "es" ? "Su correo electrónico" : "Your email"}
-        className="flex-1 border px-3 py-2 rounded"
-      />
-      <button
-        type="submit"
-        className="bg-blue-900 text-white px-4 py-2 rounded"
-      >
-        {lang === "es" ? "Suscribirse" : "Subscribe"}
-      </button>
-    </form>
+            <form
+              action="https://formspree.io/f/YOUR_FORM_ID"
+              method="POST"
+              className="flex gap-2 justify-center"
+            >
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder={
+                  lang === "es" ? "Su correo electrónico" : "Your email"
+                }
+                className="flex-1 border px-3 py-2 rounded"
+              />
+              <button type="submit" className="btn-primary">
+                {lang === "es" ? "Suscribirse" : "Subscribe"}
+              </button>
+            </form>
 
-    <p className="text-xs text-gray-500 mt-2">
-      {lang === "es"
-        ? "Respetamos su privacidad. No enviamos spam."
-        : "We respect your privacy. No spam."}
-    </p>
-  </div>
+            <p className="text-xs text-gray-500 mt-2">
+              {lang === "es"
+                ? "Respetamos su privacidad. No enviamos spam."
+                : "We respect your privacy. No spam."}
+            </p>
+          </div>
 
-  © {new Date().getFullYear()} KLF Ministries. All rights reserved.
-</footer>
+          © {new Date().getFullYear()} KLF Ministries. All rights reserved.
+        </footer>
 
-
-        {/* WHATSAPP FLOATING BUTTON (STEP 7) */}
+        {/* WHATSAPP FLOATING BUTTON */}
         <a
           href="https://wa.me/18768700508"
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 bg-green-600 text-white px-4 py-3 rounded-full shadow-lg hover:bg-green-700 transition"
+          className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-green-700 transition"
         >
           WhatsApp
         </a>
