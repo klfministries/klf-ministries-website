@@ -110,23 +110,38 @@ export default function Home({ params }) {
         </div>
       </section>
 
-      {/* ================= TESTIMONIAL ================= */}
-      <section className="bg-white py-16 px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <blockquote className="italic text-gray-700 mb-4">
-            “This ministry reminded me that faithfulness in small things still
-            matters to God.”
-          </blockquote>
-          <p className="font-medium">— A Listener</p>
+      {/* ================= TESTIMONIALS (STEP 2) ================= */}
+      <section className="bg-white py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-10">
+            {lang === "es" ? "Testimonios" : "Testimonies"}
+          </h2>
+
+          <div className="space-y-10">
+            <blockquote className="italic text-gray-700">
+              “This ministry reminded me that faithfulness in small things still
+              matters to God.”
+              <div className="mt-2 font-medium">— Listener</div>
+            </blockquote>
+
+            <blockquote className="italic text-gray-700">
+              “Each devotional speaks directly to real life and strengthens my
+              walk with Christ.”
+              <div className="mt-2 font-medium">— Subscriber</div>
+            </blockquote>
+
+            <blockquote className="italic text-gray-700">
+              “The messages are timely, biblical, and deeply encouraging.”
+              <div className="mt-2 font-medium">— Viewer</div>
+            </blockquote>
+          </div>
         </div>
       </section>
 
       {/* ================= SUPPORT CTA ================= */}
       <section className="bg-blue-900 text-white py-20 px-6 text-center">
         <h2 className="text-3xl font-bold mb-4">
-          {lang === "es"
-            ? "Apoye la Misión"
-            : "Support the Mission"}
+          {lang === "es" ? "Apoye la Misión" : "Support the Mission"}
         </h2>
 
         <p className="max-w-2xl mx-auto mb-8">
@@ -143,7 +158,7 @@ export default function Home({ params }) {
         </button>
       </section>
 
-      {/* ================= DONATION MODAL (UNCHANGED) ================= */}
+      {/* ================= DONATION MODAL ================= */}
       {showDonate && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-xl max-w-md w-full p-6 relative">
