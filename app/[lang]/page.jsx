@@ -1,9 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const PAYPAL_EMAIL = "kiwayne26@gmail.com";
 
+/* ================= TESTIMONIAL ROTATOR ================= */
+function RotatingTestimonials({ lang }) {
+  const testimonials = {
+    en: [
+      "This ministry reminded me that faithfulness in small things still matters to God.",
+      "Each devotional speaks directly to real life and strengthens my walk with Christ.",
+      "The messages are timely, biblical, and deeply encouraging.",
+    ],
+    es: [
+      "Este ministerio me recordó que la fidelidad en las cosas pequeñas todavía importa para Dios.",
+      "Cada devocional fortalece mi caminar con Cristo.",
+      "Los mensajes son oportunos, bíblicos y alentadores.",
+    ],
+  };
+
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % testimonials[lang].length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [lang]);
+
+  return (
+    <div className="max-w-4xl mx-auto text-center">
+      <h2 className="text-2xl font-bold mb-10">
+        {lang === "es" ? "Testimonios" : "Testimonies"}
+      </h2>
+
+      <blockquote className="italic text-gray-700 text-lg transition-all duration-500">
+        “{testimonials[lang][index]}”
+      </blockquote>
+
+      <p className="mt-4 font-medium text-gray-600">
+        — {lang === "es" ? "Participante" : "Listener"}
+      </p>
+    </div>
+  );
+}
+
+/* ================= HOME PAGE ================= */
 export default function Home({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
   const [showDonate, setShowDonate] = useState(false);
@@ -112,30 +154,7 @@ export default function Home({ params }) {
 
       {/* ================= TESTIMONIALS (STEP 2) ================= */}
       <section className="bg-white py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-10">
-            {lang === "es" ? "Testimonios" : "Testimonies"}
-          </h2>
-
-          <div className="space-y-10">
-            <blockquote className="italic text-gray-700">
-              “This ministry reminded me that faithfulness in small things still
-              matters to God.”
-              <div className="mt-2 font-medium">— Listener</div>
-            </blockquote>
-
-            <blockquote className="italic text-gray-700">
-              “Each devotional speaks directly to real life and strengthens my
-              walk with Christ.”
-              <div className="mt-2 font-medium">— Subscriber</div>
-            </blockquote>
-
-            <blockquote className="italic text-gray-700">
-              “The messages are timely, biblical, and deeply encouraging.”
-              <div className="mt-2 font-medium">— Viewer</div>
-            </blockquote>
-          </div>
-        </div>
+        <RotatingTestimonials lang={lang} />
       </section>
 
       {/* ================= SUPPORT CTA ================= */}
