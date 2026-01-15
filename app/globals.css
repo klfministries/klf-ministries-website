@@ -2,47 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* GLOBAL */
+/* ===== GLOBAL POLISH ===== */
 body {
   font-family: system-ui, sans-serif;
   background-color: #f9fafb;
-  color: #1f2937;
 }
 
-/* REUSABLE CARDS */
+/* ===== CARDS ===== */
 .card {
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  @apply bg-white rounded-xl shadow transition transform duration-300 ease-out;
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  @apply -translate-y-1 shadow-lg;
 }
 
-/* PRIMARY BUTTON */
+/* ===== BUTTONS ===== */
 .btn-primary {
-  background-color: #1e3a8a;
-  color: white;
-  padding: 0.6rem 1.25rem;
-  border-radius: 0.75rem;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+  @apply bg-blue-900 text-white px-6 py-3 rounded font-medium transition duration-300 ease-out;
 }
 
 .btn-primary:hover {
-  background-color: #1e40af;
+  @apply bg-blue-800;
 }
 
-/* SECTION SPACING */
-.section {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+/* ===== FADE-IN ===== */
+.fade-in {
+  animation: fadeIn 0.8s ease-out both;
 }
 
-/* FOOTER */
-footer {
-  background-color: #f3f4f6;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
