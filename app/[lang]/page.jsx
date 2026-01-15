@@ -77,6 +77,8 @@ function FeaturedDevotional({ lang }) {
 export default function Home({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
   const [showDonate, setShowDonate] = useState(false);
+  const [currency, setCurrency] = useState("USD");
+  const [customAmount, setCustomAmount] = useState("");
 
   return (
     <>
@@ -205,43 +207,91 @@ export default function Home({ params }) {
 </section>
 
       {/* ================= DONATION MODAL ================= */}
-      {showDonate && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6 relative">
-            <button
-              onClick={() => setShowDonate(false)}
-              className="absolute top-3 right-3 text-gray-500"
-            >
-              ✕
-            </button>
+{showDonate && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+    <div className="bg-white rounded-xl max-w-md w-full p-6 relative">
+      <button
+        onClick={() => setShowDonate(false)}
+        className="absolute top-3 right-3 text-gray-500"
+      >
+        ✕
+      </button>
 
-            <h2 className="text-xl font-bold mb-4 text-center">
-              {lang === "es" ? "Apoyar el Ministerio" : "Support the Ministry"}
-            </h2>
+      <h2 className="text-xl font-bold mb-4 text-center">
+        {lang === "es" ? "Apoyar el Ministerio" : "Support the Ministry"}
+      </h2>
 
-            <div className="grid grid-cols-3 gap-2 mb-4">
-              {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
-                <a
-                  key={amt}
-                  href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amt}&currency_code=USD`}
-                  target="_blank"
-                  className="border rounded py-2 text-center hover:bg-gray-100"
-                >
-                  ${amt}
-                </a>
-              ))}
-            </div>
+      {/* CURRENCY TOGGLE */}
+      <div className="flex justify-center gap-2 mb-4">
+        {["USD", "JMD"].map((cur) => (
+          <button
+            key={cur}
+            onClick={() => setCurrency(cur)}
+            className={`px-4 py-1 rounded border ${
+              currency === cur
+                ? "bg-blue-900 text-white"
+                : "bg-gray-100"
+            }`}
+          >
+            {cur}
+          </button>
+        ))}
+      </div>
 
-            <a
-              href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD`}
-              target="_blank"
-              className="btn-primary block text-center mb-4"
-            >
-              {lang === "es" ? "Donar por PayPal" : "Donate via PayPal"}
-            </a>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
+      {/* SUGGESTED AMOUNTS */}
+      <div className="grid grid-cols-3 gap-2 mb-4">
+        {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
+          <a
+            key={amt}
+            href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amt}&currency_code=${currency}`}
+            target="_blank"
+            className="border rounded py-2 text-center hover:bg-gray-100"
+          >
+            {currency} {amt}
+          </a>
+        ))}
+      </div>
+
+      {/* CUSTOM AMOUNT */}
+      <input
+        type="number"
+        placeholder={
+          lang === "es"
+            ? "Monto personalizado"
+            : "Custom amount"
+        }
+        value={customAmount}
+        onChange={(e) => setCustomAmount(e.target.value)}
+        className="w-full border rounded px-3 py-2 mb-4"
+      />
+
+      <a
+        href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${customAmount}&currency_code=${currency}`}
+        target="_blank"
+        className="btn-primary block text-center mb-4"
+      >
+        {lang === "es" ? "Donar por PayPal" : "Donate via PayPal"}
+      </a>
+
+      {/* BANK TRANSFER / DIRECT DEPOSIT */}
+      <div className="border-t pt-4 text-sm text-center">
+        <p className="mb-2 font-medium">
+          {lang === "es"
+            ? "¿Prefiere transferencia o depósito bancario?"
+            : "Prefer bank transfer or direct deposit?"}
+        </p>
+
+        <a
+          href={`mailto:${PAYPAL_EMAIL}?subject=Bank%20Transfer%20Request&body=Hello%20KLF%20Ministries,%0A%0AI%20would%20like%20to%20make%20a%20donation%20via%20direct%20transfer.%20Please%20send%20me%20the%20bank%20details.%0A%0AThank%20you.`}
+          className="text-blue-700 underline"
+        >
+          {lang === "es"
+            ? "Solicitar detalles bancarios por correo"
+            : "Request bank details by email"}
+        </a>
+      </div>
+    </div>
+  </div>
+)}
+
+      
