@@ -81,7 +81,7 @@ export default function Home({ params }) {
   return (
     <>
       {/* ================= HERO ================= */}
-      <section className="max-w-5xl mx-auto text-center py-20 px-6">
+      <section className="fade-in max-w-5xl mx-auto text-center py-20 px-6">
         <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-4">
           {lang === "es"
             ? "Preparados para Vivir, Listos para Su Regreso"
@@ -109,7 +109,7 @@ export default function Home({ params }) {
       </section>
 
       {/* ================= FEATURED DEVOTIONAL ================= */}
-      <section className="bg-white py-16 px-6">
+      <section className="fade-in bg-white py-16 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
 
@@ -158,7 +158,7 @@ export default function Home({ params }) {
       </section>
 
       {/* ================= TESTIMONIALS + CTA (STEP 4A) ================= */}
-      <section className="bg-white py-20 px-6">
+      <section className="fade-in bg-white py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-8">
             {lang === "es" ? "Testimonios" : "Testimonies"}
@@ -184,6 +184,25 @@ export default function Home({ params }) {
           </a>
         </div>
       </section>
+{/* ================= SUPPORT CTA ================= */}
+<section className="fade-in bg-blue-900 text-white py-20 px-6 text-center">
+  <h2 className="text-3xl font-bold mb-4">
+    {lang === "es" ? "Apoye la Misión" : "Support the Mission"}
+  </h2>
+
+  <p className="max-w-2xl mx-auto mb-8">
+    {lang === "es"
+      ? "Su generosidad ayuda a compartir recursos cristianos fieles y centrados en Cristo."
+      : "Your generosity helps share faithful, Christ-centered resources with others."}
+  </p>
+
+  <button
+    onClick={() => setShowDonate(true)}
+    className="bg-white text-blue-900 px-6 py-3 rounded font-medium hover:bg-gray-100"
+  >
+    {lang === "es" ? "Dar Ahora" : "Give Now"}
+  </button>
+</section>
 
       {/* ================= DONATION MODAL ================= */}
       {showDonate && (
