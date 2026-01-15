@@ -74,6 +74,52 @@ function FeaturedDevotional({ lang }) {
 }
 
 /* ================= HOME PAGE ================= */
+function RotatingTestimonials({ lang }) {
+  const testimonials = {
+    en: [
+      {
+        text:
+          "This ministry reminded me that faithfulness in small things still matters to God.",
+        author: "Listener",
+      },
+      {
+        text:
+          "Each devotional strengthens my walk with Christ and keeps me spiritually focused.",
+        author: "Subscriber",
+      },
+    ],
+    es: [
+      {
+        text:
+          "Este ministerio me recordó que la fidelidad en lo pequeño todavía importa a Dios.",
+        author: "Oyente",
+      },
+      {
+        text:
+          "Cada devocional fortalece mi caminar con Cristo y me mantiene enfocado.",
+        author: "Suscriptor",
+      },
+    ],
+  };
+
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % testimonials[lang].length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [lang]);
+
+  return (
+    <blockquote className="italic text-gray-700 text-lg transition-all">
+      “{testimonials[lang][index].text}”
+      <div className="mt-4 font-medium">
+        — {testimonials[lang][index].author}
+      </div>
+    </blockquote>
+  );
+}
 export default function Home({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
   const [showDonate, setShowDonate] = useState(false);
@@ -115,6 +161,25 @@ export default function Home({ params }) {
       <section className="fade-in bg-white py-16 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
+{/* ================= TESTIMONIALS + CTA ================= */}
+<section className="fade-in bg-white py-20 px-6">
+  <div className="max-w-4xl mx-auto text-center">
+    <h2 className="text-2xl font-bold mb-10">
+      {lang === "es" ? "Testimonios" : "Testimonies"}
+    </h2>
+
+    <RotatingTestimonials lang={lang} />
+
+    <div className="mt-10">
+      <a
+        href={`/${lang}/testimonials`}
+        className="inline-block px-6 py-3 border border-blue-900 text-blue-900 rounded hover:bg-blue-50"
+      >
+        {lang === "es" ? "Enviar un Testimonio" : "Submit a Testimony"}
+      </a>
+    </div>
+  </div>
+</section>
 
       {/* ================= SUPPORT CTA ================= */}
       <section className="fade-in bg-blue-900 text-white py-20 px-6 text-center">
