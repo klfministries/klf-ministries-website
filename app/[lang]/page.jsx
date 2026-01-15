@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from "react";
 
-const PAYPAL_EMAIL = "kiwayne26@gmail.com";
+const PAYPAL_EMAIL = "klfministries7@gmail.com";
+const PAYPAL_MONTHLY_URL =
+  "https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-35B24923MR782421ANFUQJKA";
+
+// Simple conversion rate (can be adjusted anytime)
+const USD_TO_JMD = 155;
 
 /* ================= FEATURED DEVOTIONAL ROTATOR ================= */
 function FeaturedDevotional({ lang }) {
@@ -74,52 +79,6 @@ function FeaturedDevotional({ lang }) {
 }
 
 /* ================= HOME PAGE ================= */
-function RotatingTestimonials({ lang }) {
-  const testimonials = {
-    en: [
-      {
-        text:
-          "This ministry reminded me that faithfulness in small things still matters to God.",
-        author: "Listener",
-      },
-      {
-        text:
-          "Each devotional strengthens my walk with Christ and keeps me spiritually focused.",
-        author: "Subscriber",
-      },
-    ],
-    es: [
-      {
-        text:
-          "Este ministerio me recordó que la fidelidad en lo pequeño todavía importa a Dios.",
-        author: "Oyente",
-      },
-      {
-        text:
-          "Cada devocional fortalece mi caminar con Cristo y me mantiene enfocado.",
-        author: "Suscriptor",
-      },
-    ],
-  };
-
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % testimonials[lang].length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [lang]);
-
-  return (
-    <blockquote className="italic text-gray-700 text-lg transition-all">
-      “{testimonials[lang][index].text}”
-      <div className="mt-4 font-medium">
-        — {testimonials[lang][index].author}
-      </div>
-    </blockquote>
-  );
-}
 export default function Home({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
   const [showDonate, setShowDonate] = useState(false);
@@ -127,10 +86,15 @@ export default function Home({ params }) {
   const [customAmount, setCustomAmount] = useState("");
   const [isMonthly, setIsMonthly] = useState(false);
 
+  const suggestedUSD = [10, 25, 50, 100, 200, 500, 1000];
+
+  const convertAmount = (amt) =>
+    currency === "USD" ? amt : Math.round(amt * USD_TO_JMD);
+
   return (
     <>
       {/* ================= HERO ================= */}
-      <section className="fade-in max-w-5xl mx-auto text-center py-20 px-6">
+      <section className="max-w-5xl mx-auto text-center py-20 px-6">
         <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-4">
           {lang === "es"
             ? "Preparados para Vivir, Listos para Su Regreso"
@@ -158,31 +122,32 @@ export default function Home({ params }) {
       </section>
 
       {/* ================= FEATURED DEVOTIONAL ================= */}
-      <section className="fade-in bg-white py-16 px-6">
+      <section className="bg-white py-16 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
-{/* ================= TESTIMONIALS + CTA ================= */}
-<section className="fade-in bg-white py-20 px-6">
-  <div className="max-w-4xl mx-auto text-center">
-    <h2 className="text-2xl font-bold mb-10">
-      {lang === "es" ? "Testimonios" : "Testimonies"}
-    </h2>
 
-    <RotatingTestimonials lang={lang} />
+      {/* ================= TESTIMONIALS + CTA ================= */}
+      <section className="bg-white py-20 px-6 text-center">
+        <h2 className="text-2xl font-bold mb-8">
+          {lang === "es" ? "Testimonios" : "Testimonies"}
+        </h2>
 
-    <div className="mt-10">
-      <a
-        href={`/${lang}/testimonials`}
-        className="inline-block px-6 py-3 border border-blue-900 text-blue-900 rounded hover:bg-blue-50"
-      >
-        {lang === "es" ? "Enviar un Testimonio" : "Submit a Testimony"}
-      </a>
-    </div>
-  </div>
-</section>
+        <blockquote className="italic text-gray-700 mb-6">
+          “This ministry reminded me that faithfulness in small things still
+          matters to God.”
+          <div className="mt-2 font-medium">— Listener</div>
+        </blockquote>
+
+        <a
+          href={`/${lang}/testimonials`}
+          className="inline-block px-6 py-3 border border-blue-900 text-blue-900 rounded hover:bg-blue-50"
+        >
+          {lang === "es" ? "Enviar un Testimonio" : "Submit a Testimony"}
+        </a>
+      </section>
 
       {/* ================= SUPPORT CTA ================= */}
-      <section className="fade-in bg-blue-900 text-white py-20 px-6 text-center">
+      <section className="bg-blue-900 text-white py-20 px-6 text-center">
         <h2 className="text-3xl font-bold mb-4">
           {lang === "es" ? "Apoye la Misión" : "Support the Mission"}
         </h2>
@@ -195,7 +160,7 @@ export default function Home({ params }) {
 
         <button
           onClick={() => setShowDonate(true)}
-          className="bg-white text-blue-900 px-6 py-3 rounded font-medium hover:bg-gray-100"
+          className="bg-white text-blue-900 px-6 py-3 rounded font-medium"
         >
           {lang === "es" ? "Dar Ahora" : "Give Now"}
         </button>
@@ -253,47 +218,58 @@ export default function Home({ params }) {
               ))}
             </div>
 
-            {/* SUGGESTED AMOUNTS */}
-            <div className="grid grid-cols-3 gap-2 mb-4">
-              {[10, 25, 50, 100, 200, 500, 1000].map((amt) => (
+            {/* MONTHLY LINK */}
+            {isMonthly ? (
+              <a
+                href={PAYPAL_MONTHLY_URL}
+                target="_blank"
+                className="btn-primary block text-center mb-4"
+              >
+                {lang === "es"
+                  ? "Comenzar Donación Mensual"
+                  : "Start Monthly Support"}
+              </a>
+            ) : (
+              <>
+                {/* SUGGESTED AMOUNTS */}
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  {suggestedUSD.map((amt) => (
+                    <a
+                      key={amt}
+                      href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${convertAmount(
+                        amt
+                      )}&currency_code=${currency}`}
+                      target="_blank"
+                      className="border rounded py-2 text-center hover:bg-gray-100"
+                    >
+                      {currency} {convertAmount(amt)}
+                    </a>
+                  ))}
+                </div>
+
+                {/* CUSTOM AMOUNT */}
+                <input
+                  type="number"
+                  placeholder={
+                    lang === "es" ? "Monto personalizado" : "Custom amount"
+                  }
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value)}
+                  className="w-full border rounded px-3 py-2 mb-4"
+                />
+
                 <a
-                  key={amt}
-                  href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${amt}&currency_code=${currency}&return=https://klfministries.org/${lang}/thank-you`}
+                  href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${customAmount}&currency_code=${currency}`}
                   target="_blank"
-                  className="border rounded py-2 text-center hover:bg-gray-100"
+                  className="btn-primary block text-center mb-4"
                 >
-                  {currency} {amt}
+                  {lang === "es" ? "Donar por PayPal" : "Donate via PayPal"}
                 </a>
-              ))}
-            </div>
-
-            {/* CUSTOM AMOUNT */}
-            <input
-              type="number"
-              placeholder={
-                lang === "es" ? "Monto personalizado" : "Custom amount"
-              }
-              value={customAmount}
-              onChange={(e) => setCustomAmount(e.target.value)}
-              className="w-full border rounded px-3 py-2 mb-4"
-            />
-
-            <a
-              href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${customAmount}&currency_code=${currency}&return=https://klfministries.org/${lang}/thank-you`}
-              target="_blank"
-              className="btn-primary block text-center mb-4"
-            >
-              {lang === "es" ? "Donar por PayPal" : "Donate via PayPal"}
-            </a>
+              </>
+            )}
 
             {/* BANK TRANSFER */}
             <div className="border-t pt-4 text-sm text-center">
-              <p className="mb-2 font-medium">
-                {lang === "es"
-                  ? "¿Prefiere transferencia o depósito bancario?"
-                  : "Prefer bank transfer or direct deposit?"}
-              </p>
-
               <a
                 href={`mailto:${PAYPAL_EMAIL}?subject=Bank%20Transfer%20Request`}
                 className="text-blue-700 underline"
