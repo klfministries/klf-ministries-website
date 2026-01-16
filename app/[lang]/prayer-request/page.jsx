@@ -45,6 +45,13 @@ export default function PrayerRequest({ params }) {
         method="POST"
         className="bg-white shadow-lg rounded-lg p-8 space-y-6"
       >
+        {/* 🔹 REDIRECT AFTER SUBMISSION (FREE FORMSPREE) */}
+        <input
+          type="hidden"
+          name="_redirect"
+          value={`/${lang}/prayer-request/thank-you`}
+        />
+
         <input
           type="text"
           name="name"
