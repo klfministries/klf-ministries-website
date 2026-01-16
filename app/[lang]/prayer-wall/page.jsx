@@ -2,7 +2,7 @@
 export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
-import { supabase } from "../../../lib/supabaseClient";
+import { getSupabaseClient } from "@/lib/supabaseClient";
 
 export default function PrayerWall({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
@@ -12,26 +12,39 @@ export default function PrayerWall({ params }) {
   const text = {
     en: {
       title: "Prayer Wall",
-      subtitle: "These prayers are shared anonymously. We stand together in faith.",
+      subtitle:
+        "These prayers are shared anonymously. We stand together in faith.",
       empty: "No prayers have been shared yet.",
+      loading: "Loading prayers…",
     },
     es: {
       title: "Muro de Oración",
-      subtitle: "Estas oraciones se comparten de forma anónima. Caminamos juntos en fe.",
+      subtitle:
+        "Estas oraciones se comparten de forma anónima. Caminamos juntos en fe.",
       empty: "Aún no se han compartido oraciones.",
+      loading: "Cargando oraciones…",
     },
   };
 
   useEffect(() => {
     async function fetchPrayers() {
-      const { data, error } = await supabase
-        .from("prayer_wall")
-        .select("id, message, created_at")
-        .eq("approved", true)
-        .order("created_at", { ascending: false });
+      try {
+        const supabase = getSupabaseClient();
 
-      if (!error) setPrayers(data || []);
-      setLoading(false);
+        const { data, error } = await supabase
+          .from("prayer_wall")
+          .select("id, message, created_at")
+          .eq("approved", true)
+          .order("created_at", { ascending: false });
+
+        if (!error) {
+          setPrayers(data || []);
+        }
+      } catch (err) {
+        console.error("Prayer Wall error:", err);
+      } finally {
+        setLoading(false);
+      }
     }
 
     fetchPrayers();
@@ -48,7 +61,9 @@ export default function PrayerWall({ params }) {
       </p>
 
       {loading ? (
-        <p className="text-center text-gray-500">Loading…</p>
+        <p className="text-center text-gray-500">
+          {text[lang].loading}
+        </p>
       ) : prayers.length === 0 ? (
         <p className="text-center italic text-gray-500">
           {text[lang].empty}
