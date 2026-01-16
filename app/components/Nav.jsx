@@ -23,18 +23,31 @@ export default function Nav({ lang }) {
         <Link href={base} className={linkClass("")}>
           {lang === "es" ? "Inicio" : "Home"}
         </Link>
+
         <Link href={`${base}/about`} className={linkClass("/about")}>
           {lang === "es" ? "Acerca de" : "About"}
         </Link>
+
         <Link href={`${base}/speaking`} className={linkClass("/speaking")}>
           {lang === "es" ? "Predicación" : "Speaking"}
         </Link>
+
         <Link href={`${base}/books`} className={linkClass("/books")}>
           {lang === "es" ? "Libros" : "Books"}
         </Link>
+
         <Link href={`${base}/videos`} className={linkClass("/videos")}>
           Videos
         </Link>
+
+        {/* 🕊️ PRAYER REQUEST LINK (NEW) */}
+        <Link
+          href={`${base}/prayer-request`}
+          className={linkClass("/prayer-request")}
+        >
+          {lang === "es" ? "Petición de Oración" : "Prayer Request"}
+        </Link>
+
         <Link href={`${base}/contact`} className={linkClass("/contact")}>
           {lang === "es" ? "Contacto" : "Contact"}
         </Link>
