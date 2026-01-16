@@ -41,7 +41,7 @@ export default function PrayerRequest({ params }) {
       </p>
 
       <form
-        action="https://formspree.io/f/ ID HERE"
+        action="https://formspree.io/f/xlgggdll"
         method="POST"
         className="bg-white shadow-lg rounded-lg p-8 space-y-6"
       >
