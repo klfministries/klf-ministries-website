@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "../../../lib/supabaseClient";
-import FadeIn from "../../components/FadeIn";
+import FadeIn from "../../../components/ui/FadeIn";
 
 export default function PrayerWall({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
@@ -48,28 +48,24 @@ export default function PrayerWall({ params }) {
 
   return (
     <section className="max-w-4xl mx-auto py-20 px-6">
-      {/* Title */}
       <FadeIn>
         <h1 className="text-3xl font-bold text-blue-900 text-center mb-4">
           {text[lang].title}
         </h1>
       </FadeIn>
 
-      {/* Subtitle */}
       <FadeIn delay={0.1}>
         <p className="text-center text-gray-600 mb-6">
           {text[lang].subtitle}
         </p>
       </FadeIn>
 
-      {/* Trust banner */}
       <FadeIn delay={0.2}>
         <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 text-center text-blue-900 mb-10">
           <p className="font-medium">{text[lang].praying}</p>
         </div>
       </FadeIn>
 
-      {/* Content */}
       {loading ? (
         <p className="text-center text-gray-500">
           {text[lang].loading}
