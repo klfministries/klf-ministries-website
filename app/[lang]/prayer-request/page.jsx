@@ -1,99 +1,144 @@
 "use client";
 
+import { useState } from "react";
+
 export default function PrayerRequest({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const content = {
     en: {
       title: "Submit a Prayer Request",
       intro:
         "You are not alone. Whatever you are facing, God cares deeply about it—and so do we. Please share your prayer request below. Our ministry will pray with you and for you.",
+      successTitle: "We Have Received Your Prayer",
+      successMessage:
+        "Thank you for trusting us with your prayer request. You are not alone, and our ministry is lifting you up in prayer.",
+      prayer:
+        "May the Lord surround you with His peace, strengthen your heart, and remind you that He walks with you each day.",
       name: "Your Name (optional)",
       email: "Your Email (optional)",
       message: "Your Prayer Request",
       button: "Send Prayer Request",
-      footer:
-        "“Cast all your anxiety on Him because He cares for you.” — 1 Peter 5:7",
+      sending: "Sending...",
       privacy:
         "Your prayer request is confidential. It will only be seen by our ministry team and will never be shared publicly without your permission.",
+      scripture:
+        "“Cast all your anxiety on Him because He cares for you.” — 1 Peter 5:7",
     },
     es: {
       title: "Enviar una Petición de Oración",
       intro:
         "No estás solo. Dios se interesa profundamente por lo que estás enfrentando, y nosotros también. Comparte tu petición de oración y estaremos orando contigo.",
+      successTitle: "Hemos Recibido Tu Petición",
+      successMessage:
+        "Gracias por confiar en nosotros con su petición de oración. No está solo y nuestro ministerio está orando por usted.",
+      prayer:
+        "Oramos para que el Señor le rodee con Su paz, fortalezca su corazón y le recuerde que Él camina con usted cada día.",
       name: "Tu Nombre (opcional)",
       email: "Tu Correo Electrónico (opcional)",
       message: "Tu Petición de Oración",
       button: "Enviar Petición",
-      footer:
-        "“Echando toda vuestra ansiedad sobre Él, porque Él tiene cuidado de vosotros.” — 1 Pedro 5:7",
+      sending: "Enviando...",
       privacy:
         "Su petición de oración es confidencial. Solo será vista por el equipo del ministerio y no se compartirá públicamente sin su permiso.",
+      scripture:
+        "“Echando toda vuestra ansiedad sobre Él, porque Él tiene cuidado de vosotros.” — 1 Pedro 5:7",
     },
   };
 
   const t = content[lang];
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+
+    const form = e.target;
+    const data = new FormData(form);
+
+    await fetch("https://formspree.io/f/xlgggdll", {
+      method: "POST",
+      body: data,
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    setLoading(false);
+    setSubmitted(true);
+  }
+
   return (
-    <section className="max-w-3xl mx-auto py-20 px-6">
-      <h1 className="text-3xl font-bold text-blue-900 text-center mb-6">
-        {t.title}
-      </h1>
+    <section className="max-w-3xl mx-auto py-20 px-6 text-center">
+      {!submitted ? (
+        <>
+          <h1 className="text-3xl font-bold text-blue-900 mb-6">
+            {t.title}
+          </h1>
 
-      <p className="text-center text-gray-700 mb-10 leading-relaxed">
-        {t.intro}
-      </p>
+          <p className="text-gray-700 mb-10 leading-relaxed">
+            {t.intro}
+          </p>
 
-      <form
-        action="https://formspree.io/f/xlgggdll"
-        method="POST"
-        className="bg-white shadow-lg rounded-lg p-8 space-y-6"
-      >
-        {/* ✅ FORMSpree redirect (correct field name) */}
-        <input
-          type="hidden"
-          name="_next"
-          value={`/${lang}/prayer-request/thank-you`}
-        />
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white shadow-lg rounded-lg p-8 space-y-6 text-left"
+          >
+            <input
+              type="text"
+              name="name"
+              placeholder={t.name}
+              className="w-full border rounded-md px-4 py-3"
+            />
 
-        <input
-          type="text"
-          name="name"
-          placeholder={t.name}
-          className="w-full border rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+            <input
+              type="email"
+              name="email"
+              placeholder={t.email}
+              className="w-full border rounded-md px-4 py-3"
+            />
 
-        <input
-          type="email"
-          name="email"
-          placeholder={t.email}
-          className="w-full border rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+            <textarea
+              name="message"
+              rows="6"
+              required
+              placeholder={t.message}
+              className="w-full border rounded-md px-4 py-3"
+            ></textarea>
 
-        <textarea
-          name="message"
-          rows="6"
-          required
-          placeholder={t.message}
-          className="w-full border rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        ></textarea>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-800 text-white py-3 rounded-md font-semibold hover:bg-blue-900 transition"
+            >
+              {loading ? t.sending : t.button}
+            </button>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-800 text-white py-3 rounded-md font-semibold hover:bg-blue-900 transition"
-        >
-          {t.button}
-        </button>
+            <p className="text-sm text-gray-500 text-center mt-2">
+              🔒 {t.privacy}
+            </p>
+          </form>
+        </>
+      ) : (
+        <>
+          <h2 className="text-3xl font-bold text-blue-900 mb-6">
+            {t.successTitle}
+          </h2>
 
-        {/* 🔒 CONFIDENTIALITY NOTICE */}
-        <p className="text-sm text-gray-500 mt-4 text-center">
-          🔒 {t.privacy}
-        </p>
-      </form>
+          <p className="text-lg text-gray-700 mb-6">
+            {t.successMessage}
+          </p>
 
-      <p className="text-center italic text-gray-600 mt-8">
-        {t.footer}
-      </p>
+          <p className="italic text-gray-600 mb-6">
+            {t.scripture}
+          </p>
+
+          <p className="text-gray-700 leading-relaxed">
+            {t.prayer}
+          </p>
+        </>
+      )}
     </section>
   );
 }
