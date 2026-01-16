@@ -28,21 +28,16 @@ export default function PrayerWall({ params }) {
 
   useEffect(() => {
     async function fetchPrayers() {
-      try {
-        const supabase = getSupabaseClient();
+      const supabase = getSupabaseClient();
 
-        const { data, error } = await supabase
-          .from("prayer_wall")
-          .select("id, message, created_at")
-          .eq("approved", true)
-          .order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("prayer_wall")
+        .select("id, message, created_at")
+        .eq("approved", true)
+        .order("created_at", { ascending: false });
 
-        if (!error) setPrayers(data || []);
-      } catch (err) {
-        console.error("Prayer Wall error:", err);
-      } finally {
-        setLoading(false);
-      }
+      if (!error) setPrayers(data || []);
+      setLoading(false);
     }
 
     fetchPrayers();
