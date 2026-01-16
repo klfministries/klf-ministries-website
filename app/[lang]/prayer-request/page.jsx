@@ -14,6 +14,8 @@ export default function PrayerRequest({ params }) {
       button: "Send Prayer Request",
       footer:
         "“Cast all your anxiety on Him because He cares for you.” — 1 Peter 5:7",
+      privacy:
+        "Your prayer request is confidential. It will only be seen by our ministry team and will never be shared publicly without your permission.",
     },
     es: {
       title: "Enviar una Petición de Oración",
@@ -25,6 +27,8 @@ export default function PrayerRequest({ params }) {
       button: "Enviar Petición",
       footer:
         "“Echando toda vuestra ansiedad sobre Él, porque Él tiene cuidado de vosotros.” — 1 Pedro 5:7",
+      privacy:
+        "Su petición de oración es confidencial. Solo será vista por el equipo del ministerio y no se compartirá públicamente sin su permiso.",
     },
   };
 
@@ -45,10 +49,10 @@ export default function PrayerRequest({ params }) {
         method="POST"
         className="bg-white shadow-lg rounded-lg p-8 space-y-6"
       >
-        {/* 🔹 REDIRECT AFTER SUBMISSION (FREE FORMSPREE) */}
+        {/* ✅ FORMSpree redirect (correct field name) */}
         <input
           type="hidden"
-          name="_redirect"
+          name="_next"
           value={`/${lang}/prayer-request/thank-you`}
         />
 
@@ -80,6 +84,11 @@ export default function PrayerRequest({ params }) {
         >
           {t.button}
         </button>
+
+        {/* 🔒 CONFIDENTIALITY NOTICE */}
+        <p className="text-sm text-gray-500 mt-4 text-center">
+          🔒 {t.privacy}
+        </p>
       </form>
 
       <p className="text-center italic text-gray-600 mt-8">
