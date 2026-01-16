@@ -37,9 +37,7 @@ export default function PrayerWall({ params }) {
           .eq("approved", true)
           .order("created_at", { ascending: false });
 
-        if (!error) {
-          setPrayers(data || []);
-        }
+        if (!error) setPrayers(data || []);
       } catch (err) {
         console.error("Prayer Wall error:", err);
       } finally {
