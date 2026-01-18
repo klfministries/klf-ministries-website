@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabaseClient";
 
 export default function AdminPrayers() {
-  const router = useRouter();
   const supabase = getSupabaseClient();
 
   const [prayers, setPrayers] = useState([]);
@@ -17,7 +15,6 @@ export default function AdminPrayers() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 🔐 ADMIN EMAIL LOCK
   async function checkAuth() {
     const { data } = await supabase.auth.getUser();
 
@@ -60,12 +57,6 @@ export default function AdminPrayers() {
     fetchPrayers();
   }
 
-  // 🚪 FIXED LOGOUT (FORCED REDIRECT)
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    window.location.href = "/en/login";
-  }
-
   if (loading) {
     return (
       <div className="p-6 text-center">
@@ -75,19 +66,30 @@ export default function AdminPrayers() {
   }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div
+      className="
+        relative
+        z-50
+        pointer-events-auto
+        p-6
+        max-w-3xl
+        mx-auto
+        bg-white
+      "
+    >
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">
           Prayer Requests (Admin)
         </h1>
 
-        <button
-          onClick={handleLogout}
-          className="text-sm text-blue-600 underline"
+        {/* LOGOUT LINK — NOW CLICKABLE */}
+        <a
+          href="/en/logout"
+          className="text-sm text-blue-600 underline cursor-pointer"
         >
           Log out
-        </button>
+        </a>
       </div>
 
       {prayers.length === 0 && (
@@ -130,12 +132,12 @@ export default function AdminPrayers() {
               </button>
             )}
 
-            <a
-  href="/en/logout"
-  className="text-sm text-blue-600 underline cursor-pointer"
->
-  Log out
-</a>
+            <button
+              onClick={() => deletePrayer(p.id)}
+              className="px-4 py-1 rounded bg-red-600 text-white"
+            >
+              Delete
+            </button>
           </div>
         </div>
       ))}
