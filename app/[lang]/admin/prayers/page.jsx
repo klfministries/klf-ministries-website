@@ -130,12 +130,12 @@ export default function AdminPrayers() {
               </button>
             )}
 
-            <button
-              onClick={() => deletePrayer(p.id)}
-              className="px-4 py-1 rounded bg-red-600 text-white"
-            >
-              Delete
-            </button>
+            <a
+  href="/en/logout"
+  className="text-sm text-blue-600 underline cursor-pointer"
+>
+  Log out
+</a>
           </div>
         </div>
       ))}
