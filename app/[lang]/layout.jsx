@@ -24,25 +24,32 @@ export async function generateMetadata({ params }) {
   return {
     title: seo[lang].title,
     description: seo[lang].description,
-    alternates: {
-      canonical: `/${lang}`,
-      languages: {
-        en: "/en",
-        es: "/es",
-      },
-    },
-    openGraph: {
-      title: seo[lang].title,
-      description: seo[lang].description,
-      locale: lang === "es" ? "es_ES" : "en_US",
-      type: "website",
-    },
   };
 }
 
 export default function LangLayout({ children, params }) {
   const lang = params.lang === "es" ? "es" : "en";
 
+  /**
+   * 🚨 KEY FIX:
+   * Detect admin routes and DO NOT render public layout
+   */
+  const isAdminRoute =
+    children?.props?.segment === "admin" ||
+    children?.props?.segment?.startsWith("admin");
+
+  if (isAdminRoute) {
+    // ADMIN PAGES — NO HEADER / NO NAV / NO FOOTER
+    return (
+      <html lang={lang}>
+        <body className="bg-gray-100 min-h-screen">
+          {children}
+        </body>
+      </html>
+    );
+  }
+
+  // 🌍 PUBLIC SITE
   return (
     <html lang={lang}>
       <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen">
@@ -65,51 +72,17 @@ export default function LangLayout({ children, params }) {
           <Nav lang={lang} />
         </header>
 
-        {/* PAGE CONTENT (STEP 2 FIX) */}
+        {/* PAGE CONTENT */}
         <main className="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
           {children}
         </main>
 
         {/* FOOTER */}
         <footer className="bg-gray-100 text-center text-sm text-gray-600 py-10 border-t">
-          {/* EMAIL SIGNUP */}
-          <div className="max-w-md mx-auto mb-6">
-            <p className="font-medium mb-2">
-              {lang === "es"
-                ? "Reciba actualizaciones del ministerio"
-                : "Receive ministry updates"}
-            </p>
-
-            <form
-              action="https://formspree.io/f/YOUR_FORM_ID"
-              method="POST"
-              className="flex gap-2 justify-center"
-            >
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder={
-                  lang === "es" ? "Su correo electrónico" : "Your email"
-                }
-                className="flex-1 border px-3 py-2 rounded"
-              />
-              <button type="submit" className="btn-primary">
-                {lang === "es" ? "Suscribirse" : "Subscribe"}
-              </button>
-            </form>
-
-            <p className="text-xs text-gray-500 mt-2">
-              {lang === "es"
-                ? "Respetamos su privacidad. No enviamos spam."
-                : "We respect your privacy. No spam."}
-            </p>
-          </div>
-
           © {new Date().getFullYear()} KLF Ministries. All rights reserved.
         </footer>
 
-        {/* WHATSAPP FLOATING BUTTON */}
+        {/* WHATSAPP */}
         <a
           href="https://wa.me/18768700508"
           target="_blank"
