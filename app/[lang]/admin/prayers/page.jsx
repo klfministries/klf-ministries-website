@@ -14,12 +14,19 @@ export default function AdminPrayers() {
   useEffect(() => {
     checkAuth();
     fetchPrayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 🔐 ADMIN EMAIL LOCK
   async function checkAuth() {
     const { data } = await supabase.auth.getUser();
-    if (!data.user) {
-      router.push("/login");
+
+    if (
+      !data.user ||
+      data.user.email !== "klfministries7@gmail.com"
+    ) {
+      await supabase.auth.signOut();
+      window.location.href = "/en/login";
     }
   }
 
@@ -53,18 +60,47 @@ export default function AdminPrayers() {
     fetchPrayers();
   }
 
-  if (loading) return <p className="p-6">Loading prayers...</p>;
+  // 🚪 FIXED LOGOUT (FORCED REDIRECT)
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    window.location.href = "/en/login";
+  }
+
+  if (loading) {
+    return (
+      <div className="p-6 text-center">
+        Loading prayer requests...
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">
-        Prayer Requests (Admin)
-      </h1>
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">
+          Prayer Requests (Admin)
+        </h1>
 
-      {prayers.length === 0 && <p>No prayer requests yet.</p>}
+        <button
+          onClick={handleLogout}
+          className="text-sm text-blue-600 underline"
+        >
+          Log out
+        </button>
+      </div>
+
+      {prayers.length === 0 && (
+        <p className="text-center text-gray-600">
+          No prayer requests yet.
+        </p>
+      )}
 
       {prayers.map((p) => (
-        <div key={p.id} className="border rounded p-4 mb-4">
+        <div
+          key={p.id}
+          className="border rounded p-4 mb-4 bg-white shadow-sm"
+        >
           <p className="font-semibold">
             {p.name || "Anonymous"}
           </p>
@@ -72,14 +108,23 @@ export default function AdminPrayers() {
           <p className="mt-2">{p.message}</p>
 
           <p className="text-sm text-gray-500 mt-2">
-            Status: {p.approved ? "Approved" : "Pending"}
+            Status:{" "}
+            <span
+              className={
+                p.approved
+                  ? "text-green-600 font-medium"
+                  : "text-orange-600 font-medium"
+              }
+            >
+              {p.approved ? "Approved" : "Pending"}
+            </span>
           </p>
 
-          <div className="mt-3 space-x-4">
+          <div className="mt-4 flex gap-4">
             {!p.approved && (
               <button
                 onClick={() => approvePrayer(p.id)}
-                className="text-green-600 font-medium"
+                className="px-4 py-1 rounded bg-green-600 text-white"
               >
                 Approve
               </button>
@@ -87,7 +132,7 @@ export default function AdminPrayers() {
 
             <button
               onClick={() => deletePrayer(p.id)}
-              className="text-red-600 font-medium"
+              className="px-4 py-1 rounded bg-red-600 text-white"
             >
               Delete
             </button>
