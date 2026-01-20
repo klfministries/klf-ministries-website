@@ -70,75 +70,77 @@ export default function PrayerRequest({ params }) {
   }
 
   return (
-    <section className="max-w-3xl mx-auto py-20 px-6 text-center fade-up">
-      {!submitted ? (
-        <>
-          <h1 className="text-3xl font-bold text-blue-900 mb-6 fade-up">
-            {t.title}
-          </h1>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100">
+      <section className="max-w-3xl mx-auto py-20 px-6 text-center fade-up">
+        {!submitted ? (
+          <>
+            <h1 className="text-3xl font-bold text-blue-900 mb-6 fade-up">
+              {t.title}
+            </h1>
 
-          <p className="text-gray-700 mb-10 leading-relaxed fade-up fade-delay-1">
-            {t.intro}
-          </p>
-
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white shadow-lg rounded-lg p-8 space-y-6 text-left fade-up fade-delay-2"
-          >
-            <input
-              type="text"
-              name="name"
-              placeholder={t.name}
-              className="w-full border rounded-md px-4 py-3"
-            />
-
-            <input
-              type="email"
-              name="email"
-              placeholder={t.email}
-              className="w-full border rounded-md px-4 py-3"
-            />
-
-            <textarea
-              name="message"
-              rows="6"
-              required
-              placeholder={t.message}
-              className="w-full border rounded-md px-4 py-3"
-            ></textarea>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-800 text-white py-3 rounded-md font-semibold hover:bg-blue-900 transition"
-            >
-              {loading ? t.sending : t.button}
-            </button>
-
-            <p className="text-sm text-gray-500 text-center mt-2">
-              🔒 {t.privacy}
+            <p className="text-gray-700 mb-10 leading-relaxed fade-up fade-delay-1">
+              {t.intro}
             </p>
-          </form>
-        </>
-      ) : (
-        <>
-          <h2 className="text-3xl font-bold text-blue-900 mb-6 fade-up">
-            {t.successTitle}
-          </h2>
 
-          <p className="text-lg text-gray-700 mb-6 fade-up fade-delay-1">
-            {t.successMessage}
-          </p>
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white/95 backdrop-blur shadow-xl rounded-2xl p-8 space-y-6 text-left border border-blue-100 fade-up fade-delay-2"
+            >
+              <input
+                type="text"
+                name="name"
+                placeholder={t.name}
+                className="w-full border rounded-md px-4 py-3"
+              />
 
-          <p className="italic text-gray-600 mb-6 fade-up fade-delay-2">
-            {t.scripture}
-          </p>
+              <input
+                type="email"
+                name="email"
+                placeholder={t.email}
+                className="w-full border rounded-md px-4 py-3"
+              />
 
-          <p className="text-gray-700 leading-relaxed fade-up fade-delay-3">
-            {t.prayer}
-          </p>
-        </>
-      )}
-    </section>
+              <textarea
+                name="message"
+                rows="6"
+                required
+                placeholder={t.message}
+                className="w-full border rounded-md px-4 py-3"
+              ></textarea>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-800 text-white py-3 rounded-md font-semibold hover:bg-blue-900 transition"
+              >
+                {loading ? t.sending : t.button}
+              </button>
+
+              <p className="text-sm text-gray-500 text-center mt-2">
+                🔒 {t.privacy}
+              </p>
+            </form>
+          </>
+        ) : (
+          <>
+            <h2 className="text-3xl font-bold text-blue-900 mb-6 fade-up">
+              {t.successTitle}
+            </h2>
+
+            <p className="text-lg text-gray-700 mb-6 fade-up fade-delay-1">
+              {t.successMessage}
+            </p>
+
+            <p className="italic text-gray-600 mb-6 fade-up fade-delay-2">
+              {t.scripture}
+            </p>
+
+            <p className="text-gray-700 leading-relaxed fade-up fade-delay-3">
+              {t.prayer}
+            </p>
+          </>
+        )}
+      </section>
+    </div>
   );
 }

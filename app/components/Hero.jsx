@@ -1,25 +1,40 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { Button } from "../../components/ui/button";
 
 export default function Hero({ lang = "en" }) {
+  /* ================= PARALLAX BACKGROUND ================= */
+  const { scrollY } = useScroll();
+  const bgY = useTransform(scrollY, [0, 400], ["0%", "10%"]);
+
+  /* ================= SUPPORT HANDLER ================= */
+  const handleSupportClick = () => {
+    window.dispatchEvent(new Event("donation:open"));
+  };
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-blue-950 to-blue-900 text-white pt-32">
-      {/* Background image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-30"
-        style={{ backgroundImage: "url('/images/hero-bible-light.jpg')" }}
-      />
+      {/* PARALLAX BACKGROUND IMAGE */}
+      <motion.div
+        aria-hidden="true"
+        style={{ y: bgY }}
+        className="absolute inset-0 pointer-events-none"
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-30"
+          style={{ backgroundImage: "url('/images/hero-bible-light.jpg')" }}
+        />
+      </motion.div>
 
-      {/* Content */}
+      {/* CONTENT */}
       <div className="relative mx-auto max-w-5xl px-5 py-20 text-center">
         {/* HEADLINE */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight"
         >
           {lang === "es" ? "Preparados para Vivir," : "Prepared to Live,"}
@@ -30,9 +45,9 @@ export default function Hero({ lang = "en" }) {
 
         {/* SUBTEXT */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
           className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-blue-100"
         >
           {lang === "es"
@@ -44,18 +59,18 @@ export default function Hero({ lang = "en" }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-5"
         >
-          {/* SUPPORT — CLICKABLE */}
-          <Link href={`/${lang}#support`}>
-            <Button
-              size="lg"
-              className="animate-soft-pulse rounded-2xl bg-yellow-400 px-10 py-6 text-lg font-semibold text-blue-900 shadow-xl hover:bg-yellow-300 transition"
-            >
-              {lang === "es" ? "Apoyar la Misión" : "Support the Mission"}
-            </Button>
-          </Link>
+          {/* SUPPORT — GLOBAL MODAL */}
+          <Button
+            size="lg"
+            type="button"
+            onClick={handleSupportClick}
+            className="animate-soft-pulse rounded-2xl bg-yellow-400 px-10 py-6 text-lg font-semibold text-blue-900 shadow-xl hover:bg-yellow-300 transition"
+          >
+            {lang === "es" ? "Apoyar la Misión" : "Support the Mission"}
+          </Button>
 
           {/* SUBSCRIBE */}
           <Link
@@ -72,7 +87,7 @@ export default function Hero({ lang = "en" }) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.8 }}
           className="mt-12 text-sm italic text-blue-200"
         >
           {lang === "es"

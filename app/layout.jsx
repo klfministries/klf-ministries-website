@@ -1,5 +1,4 @@
 import "./globals.css";
-import Analytics from "./components/Analytics";
 
 export const metadata = {
   title: "KLF Ministries & Publications",
@@ -10,8 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <Analytics />
+      <body className="antialiased">
         {children}
       </body>
     </html>

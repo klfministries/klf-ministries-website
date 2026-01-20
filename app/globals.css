@@ -2,13 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========================= */
 /* ===== GLOBAL POLISH ===== */
+/* ========================= */
 body {
   font-family: system-ui, sans-serif;
   background-color: #f9fafb;
 }
 
+/* ========================= */
 /* ===== CARDS ===== */
+/* ========================= */
 .card {
   @apply bg-white rounded-xl shadow transition transform duration-300 ease-out;
 }
@@ -17,7 +21,9 @@ body {
   @apply -translate-y-1 shadow-lg;
 }
 
+/* ========================= */
 /* ===== BUTTONS ===== */
+/* ========================= */
 .btn-primary {
   @apply bg-blue-900 text-white px-6 py-3 rounded font-medium transition duration-300 ease-out;
 }
@@ -26,12 +32,27 @@ body {
   @apply bg-blue-800;
 }
 
-/* ===== FADE-IN ===== */
+/* ========================= */
+/* ===== FADE / MOTION ===== */
+/* ========================= */
+
+/* Gentle fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .fade-in {
   animation: fadeIn 0.8s ease-out both;
 }
 
-/* Gentle fade-up animation */
+/* Gentle fade-up */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -59,18 +80,24 @@ body {
   animation-delay: 0.45s;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+/* ================================= */
+/* ===== ACCESSIBILITY SAFETY ===== */
+/* ================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-/* ===== SOFT PULSE (SUPPORT THE MISSION) ===== */
+/* ========================================= */
+/* ===== SOFT PULSE (SUPPORT CTA) ===== */
+/* ========================================= */
 @keyframes soft-pulse {
   0%,
   100% {
@@ -85,10 +112,9 @@ body {
   animation: soft-pulse 2.8s ease-in-out infinite;
 }
 
-/* ================================================= */
-/* ===== LOGO GLOW (ON LOAD – SUBTLE & PREMIUM) ===== */
-/* ================================================= */
-
+/* ========================================= */
+/* ===== LOGO GLOW (SUBTLE, ON LOAD) ===== */
+/* ========================================= */
 @keyframes logoGlow {
   0% {
     filter: drop-shadow(0 0 0 rgba(250, 204, 21, 0));
@@ -105,13 +131,14 @@ body {
   animation: logoGlow 2.5s ease-out 1;
 }
 
-/* ================================================= */
-/* ===== HEADER NAV — LIVING WORD EFFECT ========= */
-/* ================================================= */
+/* ========================================= */
+/* ===== HEADER NAV — ANIMATED UNDERLINE ===== */
+/* ========================================= */
 
 .nav-link {
   position: relative;
-  font-size: 15px; /* slightly larger for elegance */
+  font-size: 15px;
+  padding-bottom: 4px;
   transition: color 0.25s ease, transform 0.25s ease;
 }
 
@@ -127,12 +154,24 @@ body {
   border-radius: 2px;
 }
 
+/* Hover effect */
 .nav-link:hover {
   color: #1e3a8a;
   transform: translateY(-2px);
 }
 
 .nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* ✅ ACTIVE NAV LINK (PAGE OR SCROLLSPY) */
+.nav-link-active {
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.nav-link-active::after {
   width: 100%;
   left: 0;
 }
