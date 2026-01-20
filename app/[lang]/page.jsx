@@ -48,9 +48,10 @@ function FeaturedDevotional({ lang }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % devotionals[lang].length);
-    }, 7000);
+    const timer = setInterval(
+      () => setIndex((i) => (i + 1) % devotionals[lang].length),
+      7000
+    );
     return () => clearInterval(timer);
   }, [lang]);
 
@@ -128,9 +129,10 @@ function RotatingTestimonies({ lang }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % testimonies[lang].length);
-    }, 7000);
+    const timer = setInterval(
+      () => setIndex((i) => (i + 1) % testimonies[lang].length),
+      7000
+    );
     return () => clearInterval(timer);
   }, [lang]);
 

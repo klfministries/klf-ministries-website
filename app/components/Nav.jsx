@@ -39,18 +39,41 @@ export default function Nav({ lang = "en" }) {
           : "bg-white h-20"
       }`}
     >
-      <div className="mx-auto max-w-7xl px-6 h-full flex items-center justify-between">
+      <div className="relative mx-auto max-w-7xl px-6 h-full flex items-center justify-between">
         {/* LOGO */}
-        <Link href={base} aria-label="Home">
-          <Image
-            src="/images/klf-logo.png"
-            alt="KLF Ministries"
-            width={scrolled ? 48 : 72}
-            height={scrolled ? 48 : 72}
-            className="transition-all duration-300"
-            priority
-          />
-        </Link>
+        <div className="relative flex items-center">
+          <Link href={base} aria-label="Home">
+            <Image
+              src="/images/klf-logo.png"
+              alt="KLF Ministries"
+              width={scrolled ? 48 : 72}
+              height={scrolled ? 48 : 72}
+              className="transition-all duration-300"
+              priority
+            />
+          </Link>
+
+          {/* 👉 HOME INDICATOR (DESKTOP ONLY) */}
+          <div className="hidden lg:flex absolute -left-24 top-1/2 -translate-y-1/2 items-center gap-2 pointer-events-none">
+            {/* Home text (normal font) */}
+            <span className="text-sm font-medium text-black">
+              Home
+            </span>
+
+            {/* Moving arrow */}
+            <motion.span
+              className="text-xl text-black"
+              animate={{ x: [0, 8, 0] }}
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              →
+            </motion.span>
+          </div>
+        </div>
 
         {/* DESKTOP NAV */}
         <nav className="hidden lg:flex items-center gap-2">

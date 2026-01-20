@@ -23,15 +23,20 @@ export default function MobileSubscribeBar({ lang }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Hide on subscribe page or if dismissed
   if (dismissed || pathname.includes("/subscribe")) return null;
 
   return (
     <div
-      className={`fixed bottom-0 inset-x-0 z-40 sm:hidden transition-opacity duration-500 ${
-        show ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
+      className={`
+        fixed inset-x-0 
+        bottom-20 sm:bottom-0 
+        z-40 sm:hidden 
+        transition-opacity duration-500
+        ${show ? "opacity-100" : "opacity-0 pointer-events-none"}
+      `}
     >
-      <div className="mx-4 mb-4 bg-blue-900 text-white rounded-xl shadow-lg flex items-center justify-between px-4 py-3 animate-pulse">
+      <div className="mx-4 bg-blue-900 text-white rounded-xl shadow-lg flex items-center justify-between px-4 py-3">
         <span className="text-sm font-medium">
           {lang === "es"
             ? "Recibe el devocional semanal"
@@ -41,10 +46,11 @@ export default function MobileSubscribeBar({ lang }) {
         <div className="flex items-center gap-3">
           <Link
             href={`/${lang}/subscribe`}
-            className="bg-yellow-400 text-blue-900 px-4 py-2 rounded font-semibold text-sm"
+            className="bg-yellow-400 text-blue-900 px-4 py-2 rounded font-semibold text-sm hover:bg-yellow-300 transition"
           >
-            Subscribe
+            {lang === "es" ? "Suscribirse" : "Subscribe"}
           </Link>
+
           <button
             onClick={() => {
               localStorage.setItem("subscribeDismissed", "true");
