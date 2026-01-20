@@ -1,5 +1,7 @@
 import "../globals.css";
 import Nav from "../components/Nav";
+import Link from "next/link";
+import Image from "next/image";
 
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "es" }];
@@ -31,63 +33,83 @@ export default function LangLayout({ children, params }) {
   const lang = params.lang === "es" ? "es" : "en";
 
   /**
-   * 🚨 KEY FIX:
-   * Detect admin routes and DO NOT render public layout
+   * 🚨 ADMIN ROUTE SAFETY
+   * Do NOT render public layout for admin pages
    */
   const isAdminRoute =
     children?.props?.segment === "admin" ||
     children?.props?.segment?.startsWith("admin");
 
   if (isAdminRoute) {
-    // ADMIN PAGES — NO HEADER / NO NAV / NO FOOTER
     return (
       <html lang={lang}>
-        <body className="bg-gray-100 min-h-screen">
-          {children}
-        </body>
+        <body className="bg-gray-100 min-h-screen">{children}</body>
       </html>
     );
   }
 
-  // 🌍 PUBLIC SITE
   return (
     <html lang={lang}>
       <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen">
         {/* HEADER */}
-        <header className="text-center py-10 border-b bg-white">
-          <img
-            src="/klf-logo.png"
-            alt="KLF Ministries Logo"
-            className="mx-auto mb-4 w-32"
-          />
+        <header className="border-b bg-white">
+          <div className="max-w-7xl mx-auto px-6 py-6 text-center">
+            <Image
+              src="/images/klf-logo.svg"
+              alt="KLF Ministries"
+              width={120}
+              height={120}
+              className="mx-auto mb-4"
+              priority
+            />
 
-          <h1 className="text-3xl font-bold text-blue-900">
-            KLF Ministries & Publications
-          </h1>
+            <h1 className="text-3xl font-bold text-blue-900">
+              KLF Ministries & Publications
+            </h1>
 
-          <p className="italic text-gray-600 mt-1">
-            “God uses rescued people to rescue people”
-          </p>
+            <p className="italic text-gray-600 mt-1">
+              “God uses rescued people to rescue people”
+            </p>
+          </div>
 
           <Nav lang={lang} />
         </header>
 
         {/* PAGE CONTENT */}
-        <main className="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
-          {children}
-        </main>
+        <main className="flex-grow w-full">{children}</main>
 
         {/* FOOTER */}
-        <footer className="bg-gray-100 text-center text-sm text-gray-600 py-10 border-t">
-          © {new Date().getFullYear()} KLF Ministries. All rights reserved.
+        <footer className="bg-gray-100 border-t">
+          <div className="max-w-7xl mx-auto px-6 py-10 text-center space-y-4">
+            {/* FOOTER LINKS */}
+            <div className="flex justify-center gap-6 text-sm flex-wrap">
+              <Link
+                href={`/${lang}/privacy-policy`}
+                className="hover:text-blue-900 underline underline-offset-4"
+              >
+                {lang === "es" ? "Política de Privacidad" : "Privacy Policy"}
+              </Link>
+
+              <Link
+                href={`/${lang}/terms-of-service`}
+                className="hover:text-blue-900 underline underline-offset-4"
+              >
+                {lang === "es" ? "Términos de Servicio" : "Terms of Service"}
+              </Link>
+            </div>
+
+            <p className="text-xs text-gray-500">
+              © {new Date().getFullYear()} KLF Ministries. All rights reserved.
+            </p>
+          </div>
         </footer>
 
-        {/* WHATSAPP */}
+        {/* WHATSAPP FLOATING BUTTON */}
         <a
           href="https://wa.me/18768700508"
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-green-700 transition"
+          className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-green-700 transition z-50"
         >
           WhatsApp
         </a>

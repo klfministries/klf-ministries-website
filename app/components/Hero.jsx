@@ -1,0 +1,85 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { Button } from "../../components/ui/button";
+
+export default function Hero({ lang = "en" }) {
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-b from-blue-950 to-blue-900 text-white pt-32">
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-30"
+        style={{ backgroundImage: "url('/images/hero-bible-light.jpg')" }}
+      />
+
+      {/* Content */}
+      <div className="relative mx-auto max-w-5xl px-5 py-20 text-center">
+        {/* HEADLINE */}
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight"
+        >
+          {lang === "es" ? "Preparados para Vivir," : "Prepared to Live,"}
+          <span className="block text-blue-200 mt-2">
+            {lang === "es" ? "Listos para Su Regreso" : "Ready for His Return"}
+          </span>
+        </motion.h1>
+
+        {/* SUBTEXT */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-blue-100"
+        >
+          {lang === "es"
+            ? "Un ministerio cristiano que ayuda al pueblo de Dios a vivir fielmente, crecer espiritualmente y prepararse para el pronto regreso de Cristo."
+            : "A Christ-centered ministry helping God’s people live faithfully, grow spiritually, and prepare for Christ’s soon return."}
+        </motion.p>
+
+        {/* CTA BUTTONS */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-5"
+        >
+          {/* SUPPORT — CLICKABLE */}
+          <Link href={`/${lang}#support`}>
+            <Button
+              size="lg"
+              className="animate-soft-pulse rounded-2xl bg-yellow-400 px-10 py-6 text-lg font-semibold text-blue-900 shadow-xl hover:bg-yellow-300 transition"
+            >
+              {lang === "es" ? "Apoyar la Misión" : "Support the Mission"}
+            </Button>
+          </Link>
+
+          {/* SUBSCRIBE */}
+          <Link
+            href={`/${lang}/subscribe`}
+            className="rounded-2xl bg-white px-10 py-6 text-lg font-semibold text-blue-900 shadow-lg hover:bg-blue-50 transition"
+          >
+            {lang === "es"
+              ? "Suscribirse a Devocionales"
+              : "Subscribe for Devotionals"}
+          </Link>
+        </motion.div>
+
+        {/* FOOTNOTE */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="mt-12 text-sm italic text-blue-200"
+        >
+          {lang === "es"
+            ? "“Dios usa a los rescatados para rescatar a otros.” — Mateo 10:8"
+            : "“God uses rescued people to rescue others.” — Matthew 10:8"}
+        </motion.p>
+      </div>
+    </section>
+  );
+}

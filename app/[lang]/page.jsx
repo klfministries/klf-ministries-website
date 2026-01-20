@@ -1,50 +1,29 @@
 "use client";
 
+import Hero from "../components/Hero";
+import MobileSubscribeBar from "../components/MobileSubscribeBar";
+import Link from "next/link";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const PAYPAL_EMAIL = "klfministries7@gmail.com";
-const PAYPAL_MONTHLY_URL =
+const PAYPAL_MONTHLY_PLAN =
   "https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-35B24923MR782421ANFUQJKA";
 
-// Simple conversion rate (can be adjusted anytime)
-const USD_TO_JMD = 155;
+const AMOUNTS = [10, 25, 50, 100, 200, 500, 1000];
 
-/* ================= FEATURED DEVOTIONAL ROTATOR ================= */
+/* ================= FEATURED DEVOTIONAL ================= */
 function FeaturedDevotional({ lang }) {
   const devotionals = {
     en: [
-      {
-        verse: "Matthew 25:21",
-        text:
-          "Faithfulness is proven in unseen moments. God rewards obedience more than recognition.",
-      },
-      {
-        verse: "Luke 19:13",
-        text:
-          "Prepared people live differently. Christ calls us to active, faithful service.",
-      },
-      {
-        verse: "Matthew 10:8",
-        text:
-          "God uses rescued people to rescue others. Your testimony has purpose.",
-      },
+      { verse: "Matthew 25:21", text: "Faithfulness is proven in unseen moments. God rewards obedience more than recognition." },
+      { verse: "Luke 19:13", text: "Prepared people live differently. Christ calls us to active, faithful service." },
+      { verse: "Matthew 10:8", text: "God uses rescued people to rescue others. Your testimony has purpose." },
     ],
     es: [
-      {
-        verse: "Mateo 25:21",
-        text:
-          "La fidelidad se demuestra en lo secreto. Dios recompensa la obediencia.",
-      },
-      {
-        verse: "Lucas 19:13",
-        text:
-          "Las personas preparadas viven diferente. Cristo llama a servir fielmente.",
-      },
-      {
-        verse: "Mateo 10:8",
-        text:
-          "Dios usa a los rescatados para rescatar a otros. Tu testimonio tiene propósito.",
-      },
+      { verse: "Mateo 25:21", text: "La fidelidad se demuestra en lo secreto. Dios recompensa la obediencia." },
+      { verse: "Lucas 19:13", text: "Las personas preparadas viven diferente. Cristo llama a servir fielmente." },
+      { verse: "Mateo 10:8", text: "Dios usa a los rescatados para rescatar a otros. Tu testimonio tiene propósito." },
     ],
   };
 
@@ -52,236 +31,175 @@ function FeaturedDevotional({ lang }) {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % devotionals[lang].length);
+      setIndex((i) => (i + 1) % devotionals[lang].length);
     }, 7000);
     return () => clearInterval(timer);
   }, [lang]);
 
   return (
-    <div className="max-w-3xl mx-auto text-center card p-8">
-      <h2 className="text-2xl font-bold mb-3">
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="max-w-3xl mx-auto bg-white rounded-2xl shadow p-10 text-center"
+    >
+      <h2 className="text-3xl font-bold text-blue-900 mb-2">
         {lang === "es" ? "Devocional Destacado" : "Featured Devotional"}
       </h2>
 
-      <p className="italic text-gray-700 mb-4">
+      <div className="w-16 h-1 bg-yellow-400 mx-auto my-4 rounded" />
+
+      <p className="italic text-gray-600 mb-4">
         {devotionals[lang][index].verse}
       </p>
 
-      <p className="text-gray-700 mb-6">
+      <p className="text-gray-700 mb-6 leading-relaxed">
         {devotionals[lang][index].text}
       </p>
 
-      <a href={`/${lang}/devotionals`} className="text-blue-700 underline">
-        {lang === "es" ? "Leer más devocionales" : "Read more devotionals"}
-      </a>
-    </div>
+      <Link
+        href={`/${lang}/devotionals`}
+        className="inline-block font-medium text-blue-800 hover:underline"
+      >
+        {lang === "es" ? "Leer más devocionales →" : "Read more devotionals →"}
+      </Link>
+    </motion.div>
   );
 }
 
 /* ================= HOME PAGE ================= */
 export default function Home({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
+
   const [showDonate, setShowDonate] = useState(false);
-  const [currency, setCurrency] = useState("USD");
-  const [customAmount, setCustomAmount] = useState("");
   const [isMonthly, setIsMonthly] = useState(false);
+  const [currency, setCurrency] = useState("USD");
+  const [amount, setAmount] = useState("");
 
-  const suggestedUSD = [10, 25, 50, 100, 200, 500, 1000];
+  const paypalLink = isMonthly
+    ? PAYPAL_MONTHLY_PLAN
+    : `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=${currency}${amount ? `&amount=${amount}` : ""}`;
 
-  const convertAmount = (amt) =>
-    currency === "USD" ? amt : Math.round(amt * USD_TO_JMD);
+  const mailtoLink = `mailto:${PAYPAL_EMAIL}?subject=Bank Details Request&body=
+Donation Type: ${isMonthly ? "Monthly" : "One-Time"}
+Currency: ${currency}
+Amount: ${amount || "Not specified"}
+Please send me your bank details.`;
 
   return (
     <>
-      {/* ================= HERO ================= */}
-      <section className="max-w-5xl mx-auto text-center py-20 px-6">
-        <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-4">
-          {lang === "es"
-            ? "Preparados para Vivir, Listos para Su Regreso"
-            : "Prepared to Live, Ready for His Return"}
-        </h1>
+      <Hero lang={lang} />
+      <div className="pt-24" />
 
-        <p className="text-lg text-gray-700 max-w-3xl mx-auto mb-8">
-          {lang === "es"
-            ? "Un ministerio cristiano dedicado a predicar, enseñar y equipar al pueblo de Dios para una vida fiel."
-            : "A Christian ministry dedicated to preaching, teaching, and equipping God’s people for faithful living."}
-        </p>
-
-        <div className="flex justify-center gap-4 flex-wrap">
-          <button onClick={() => setShowDonate(true)} className="btn-primary">
-            {lang === "es" ? "Apoyar el Ministerio" : "Support the Mission"}
-          </button>
-
-          <a
-            href={`/${lang}/devotionals`}
-            className="px-5 py-3 rounded border border-blue-900 text-blue-900 hover:bg-blue-50"
-          >
-            {lang === "es" ? "Palabra de Hoy" : "Today’s Word"}
-          </a>
-        </div>
-      </section>
-
-      {/* ================= FEATURED DEVOTIONAL ================= */}
-      <section className="bg-white py-16 px-6">
+      {/* FEATURED DEVOTIONAL */}
+      <section className="bg-gray-50 py-28 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
 
-      {/* ================= TESTIMONIALS + CTA ================= */}
-      <section className="bg-white py-20 px-6 text-center">
-        <h2 className="text-2xl font-bold mb-8">
+      {/* TESTIMONIES — RESTORED */}
+      <section className="bg-white py-28 px-6 text-center">
+        <h2 className="text-3xl font-bold mb-10">
           {lang === "es" ? "Testimonios" : "Testimonies"}
         </h2>
 
-        <blockquote className="italic text-gray-700 mb-6">
-          “This ministry reminded me that faithfulness in small things still
-          matters to God.”
-          <div className="mt-2 font-medium">— Listener</div>
-        </blockquote>
+        <motion.blockquote
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-2xl mx-auto bg-gray-50 rounded-2xl shadow p-8 italic text-gray-700"
+        >
+          “This ministry reminded me that faithfulness in small things still matters to God.”
+          <div className="mt-4 font-medium text-blue-900">— Listener</div>
+        </motion.blockquote>
 
-        <a
+        <Link
           href={`/${lang}/testimonials`}
-          className="inline-block px-6 py-3 border border-blue-900 text-blue-900 rounded hover:bg-blue-50"
+          className="inline-block mt-8 px-8 py-3 rounded-xl border border-blue-900 text-blue-900 font-medium hover:bg-blue-50 transition"
         >
           {lang === "es" ? "Enviar un Testimonio" : "Submit a Testimony"}
-        </a>
+        </Link>
       </section>
 
-      {/* ================= SUPPORT CTA ================= */}
-      <section className="bg-blue-900 text-white py-20 px-6 text-center">
-        <h2 className="text-3xl font-bold mb-4">
-          {lang === "es" ? "Apoye la Misión" : "Support the Mission"}
+      {/* SUPPORT */}
+      <section
+        id="support"
+        className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-28 px-6 text-center"
+      >
+        <h2 className="text-4xl font-bold mb-6">
+          {lang === "es" ? "Apoye la Obra" : "Support the Mission"}
         </h2>
-
-        <p className="max-w-2xl mx-auto mb-8">
-          {lang === "es"
-            ? "Su generosidad ayuda a compartir recursos cristianos fieles y centrados en Cristo."
-            : "Your generosity helps share faithful, Christ-centered resources with others."}
-        </p>
 
         <button
           onClick={() => setShowDonate(true)}
-          className="bg-white text-blue-900 px-6 py-3 rounded font-medium"
+          className="bg-white text-blue-900 px-10 py-4 rounded-2xl font-semibold text-lg hover:scale-105 transition"
         >
           {lang === "es" ? "Dar Ahora" : "Give Now"}
         </button>
       </section>
 
-      {/* ================= DONATION MODAL ================= */}
+      {/* DONATION MODAL */}
       {showDonate && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6 relative">
+          <div className="bg-white rounded-2xl max-w-md w-full p-8 relative">
             <button
               onClick={() => setShowDonate(false)}
-              className="absolute top-3 right-3 text-gray-500"
+              className="absolute top-4 right-4 text-gray-500"
             >
               ✕
             </button>
 
-            <h2 className="text-xl font-bold mb-4 text-center">
-              {lang === "es" ? "Apoyar el Ministerio" : "Support the Ministry"}
+            <h2 className="text-2xl font-bold mb-6 text-center">
+              Support the Ministry
             </h2>
 
-            {/* MONTHLY TOGGLE */}
             <div className="flex justify-center gap-3 mb-4">
-              <button
-                onClick={() => setIsMonthly(false)}
-                className={`px-4 py-1 rounded border ${
-                  !isMonthly ? "bg-blue-900 text-white" : "bg-gray-100"
-                }`}
-              >
-                One-Time
-              </button>
-              <button
-                onClick={() => setIsMonthly(true)}
-                className={`px-4 py-1 rounded border ${
-                  isMonthly ? "bg-blue-900 text-white" : "bg-gray-100"
-                }`}
-              >
-                Monthly
-              </button>
+              <button onClick={() => setIsMonthly(false)} className={`px-4 py-2 rounded ${!isMonthly ? "bg-blue-900 text-white" : "bg-gray-100"}`}>One-Time</button>
+              <button onClick={() => setIsMonthly(true)} className={`px-4 py-2 rounded ${isMonthly ? "bg-blue-900 text-white" : "bg-gray-100"}`}>Monthly</button>
             </div>
 
-            {/* CURRENCY TOGGLE */}
-            <div className="flex justify-center gap-2 mb-4">
-              {["USD", "JMD"].map((cur) => (
-                <button
-                  key={cur}
-                  onClick={() => setCurrency(cur)}
-                  className={`px-4 py-1 rounded border ${
-                    currency === cur
-                      ? "bg-blue-900 text-white"
-                      : "bg-gray-100"
-                  }`}
-                >
-                  {cur}
-                </button>
-              ))}
-            </div>
-
-            {/* MONTHLY LINK */}
-            {isMonthly ? (
-              <a
-                href={PAYPAL_MONTHLY_URL}
-                target="_blank"
-                className="btn-primary block text-center mb-4"
-              >
-                {lang === "es"
-                  ? "Comenzar Donación Mensual"
-                  : "Start Monthly Support"}
-              </a>
-            ) : (
+            {!isMonthly && (
               <>
-                {/* SUGGESTED AMOUNTS */}
-                <div className="grid grid-cols-3 gap-2 mb-4">
-                  {suggestedUSD.map((amt) => (
-                    <a
+                <div className="grid grid-cols-3 gap-3 mb-4">
+                  {AMOUNTS.map((amt) => (
+                    <button
                       key={amt}
-                      href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${convertAmount(
-                        amt
-                      )}&currency_code=${currency}`}
-                      target="_blank"
-                      className="border rounded py-2 text-center hover:bg-gray-100"
+                      onClick={() => setAmount(amt)}
+                      className={`border rounded-lg py-2 ${amount == amt ? "bg-blue-900 text-white" : "bg-white"}`}
                     >
-                      {currency} {convertAmount(amt)}
-                    </a>
+                      {currency} {amt}
+                    </button>
                   ))}
                 </div>
 
-                {/* CUSTOM AMOUNT */}
                 <input
                   type="number"
-                  placeholder={
-                    lang === "es" ? "Monto personalizado" : "Custom amount"
-                  }
-                  value={customAmount}
-                  onChange={(e) => setCustomAmount(e.target.value)}
-                  className="w-full border rounded px-3 py-2 mb-4"
+                  placeholder="Custom amount"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full border rounded-lg px-4 py-3 mb-6"
                 />
-
-                <a
-                  href={`https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&amount=${customAmount}&currency_code=${currency}`}
-                  target="_blank"
-                  className="btn-primary block text-center mb-4"
-                >
-                  {lang === "es" ? "Donar por PayPal" : "Donate via PayPal"}
-                </a>
               </>
             )}
 
-            {/* BANK TRANSFER */}
-            <div className="border-t pt-4 text-sm text-center">
-              <a
-                href={`mailto:${PAYPAL_EMAIL}?subject=Bank%20Transfer%20Request`}
-                className="text-blue-700 underline"
-              >
-                {lang === "es"
-                  ? "Solicitar detalles bancarios"
-                  : "Request bank details"}
-              </a>
-            </div>
+            <a
+              href={paypalLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center bg-blue-900 text-white py-4 rounded-xl font-semibold"
+            >
+              Donate via PayPal
+            </a>
+
+            <a href={mailtoLink} className="block mt-4 text-sm text-blue-700 underline text-center">
+              Request bank details
+            </a>
           </div>
         </div>
       )}
+
+      <MobileSubscribeBar lang={lang} />
     </>
   );
 }
