@@ -50,17 +50,32 @@ export default function Nav({ lang = "en" }) {
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 h-full flex items-center justify-between">
-        {/* LOGO */}
-        <Link href={base} aria-label="Home" className="flex items-center gap-2">
-          <Image
-            src="/images/klf-logo.png"
-            alt="KLF Ministries"
-            width={scrolled ? 48 : 64}
-            height={scrolled ? 48 : 64}
-            className="transition-all duration-300"
-            priority
-          />
-        </Link>
+        {/* HOME LABEL + MOVING ARROW + LOGO */}
+        <div className="flex items-center gap-3 relative">
+          {/* FIXED HOME TEXT */}
+          <span className="text-sm font-medium text-black">Home</span>
+
+          {/* MOVING ARROW (ONLY THIS MOVES) */}
+          <motion.span
+            animate={{ x: [0, 10, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="text-2xl text-black"
+          >
+            ➜
+          </motion.span>
+
+          {/* LOGO */}
+          <Link href={base} aria-label="Home" className="flex items-center gap-2">
+            <Image
+              src="/images/klf-logo.png"
+              alt="KLF Ministries"
+              width={scrolled ? 48 : 64}
+              height={scrolled ? 48 : 64}
+              className="transition-all duration-300"
+              priority
+            />
+          </Link>
+        </div>
 
         {/* DESKTOP NAV */}
         <nav className="hidden lg:flex items-center gap-2">
@@ -102,7 +117,7 @@ export default function Nav({ lang = "en" }) {
         </button>
       </div>
 
-      {/* MOBILE MENU — FULL RESTORED NAV */}
+      {/* MOBILE MENU */}
       {open && (
         <div className="lg:hidden bg-white border-t px-6 py-6 space-y-4 shadow-md">
           {links.map(([path, label]) => (
@@ -116,7 +131,6 @@ export default function Nav({ lang = "en" }) {
             </Link>
           ))}
 
-          {/* SUPPORT BUTTON */}
           <button
             onClick={handleSupportClick}
             className="block w-full mt-4 rounded-xl bg-yellow-400 px-5 py-3 text-center font-semibold text-blue-900"
@@ -124,7 +138,6 @@ export default function Nav({ lang = "en" }) {
             {lang === "es" ? "Apoyar" : "Support"}
           </button>
 
-          {/* LANGUAGE SWITCH */}
           <Link
             href={switchedPath}
             onClick={() => setOpen(false)}

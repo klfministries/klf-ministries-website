@@ -1,11 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function PrayerRequest({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [bgIndex, setBgIndex] = useState(0);
+
+  const backgrounds = [
+    "/images/prayer-bg-1.jpg",
+    "/images/prayer-bg-2.jpg",
+    "/images/prayer-bg-3.jpg",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBgIndex((i) => (i + 1) % backgrounds.length);
+    }, 9000); // change every 9 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const content = {
     en: {
@@ -70,15 +85,33 @@ export default function PrayerRequest({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100">
-      <section className="max-w-3xl mx-auto py-20 px-6 text-center fade-up">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* BACKGROUND SLIDESHOW */}
+      <div className="absolute inset-0 -z-10">
+        {backgrounds.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            alt="Prayer background"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ${
+              i === bgIndex ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-black/60" />
+      </div>
+
+      {/* CONTENT CARD */}
+      <section className="relative max-w-3xl w-full mx-auto py-20 px-6 text-center fade-up">
         {!submitted ? (
           <>
-            <h1 className="text-3xl font-bold text-blue-900 mb-6 fade-up">
+            <h1 className="text-3xl font-bold text-white mb-6 fade-up">
               {t.title}
             </h1>
 
-            <p className="text-gray-700 mb-10 leading-relaxed fade-up fade-delay-1">
+            <p className="text-gray-100 mb-10 leading-relaxed fade-up fade-delay-1">
               {t.intro}
             </p>
 
@@ -123,19 +156,19 @@ export default function PrayerRequest({ params }) {
           </>
         ) : (
           <>
-            <h2 className="text-3xl font-bold text-blue-900 mb-6 fade-up">
+            <h2 className="text-3xl font-bold text-white mb-6 fade-up">
               {t.successTitle}
             </h2>
 
-            <p className="text-lg text-gray-700 mb-6 fade-up fade-delay-1">
+            <p className="text-lg text-gray-100 mb-6 fade-up fade-delay-1">
               {t.successMessage}
             </p>
 
-            <p className="italic text-gray-600 mb-6 fade-up fade-delay-2">
+            <p className="italic text-gray-200 mb-6 fade-up fade-delay-2">
               {t.scripture}
             </p>
 
-            <p className="text-gray-700 leading-relaxed fade-up fade-delay-3">
+            <p className="text-gray-100 leading-relaxed fade-up fade-delay-3">
               {t.prayer}
             </p>
           </>

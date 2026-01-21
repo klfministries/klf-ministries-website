@@ -165,7 +165,7 @@ body {
   left: 0;
 }
 
-/* ✅ ACTIVE NAV LINK (PAGE OR SCROLLSPY) */
+/* ✅ ACTIVE NAV LINK */
 .nav-link-active {
   color: #1e3a8a;
   font-weight: 600;
@@ -174,4 +174,31 @@ body {
 .nav-link-active::after {
   width: 100%;
   left: 0;
+}
+
+/* ========================================= */
+/* ===== PRAYER PAGE BACKGROUND HELPERS ===== */
+/* ========================================= */
+
+/* Full-page prayer background container */
+.prayer-bg {
+  position: relative;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Dark overlay for readability */
+.prayer-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 0;
+}
+
+/* Prayer content stays above background */
+.prayer-content {
+  position: relative;
+  z-index: 1;
 }
