@@ -51,8 +51,7 @@ export default function LangLayout({ children, params }) {
 
   return (
     <html lang={lang}>
-      {/* 🔴 IMPORTANT: Push content below fixed navbar */}
-      <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen pt-24">
+      <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen">
         {/* GLOBAL UI */}
         <ScrollProgress />
         <Analytics />
@@ -61,16 +60,18 @@ export default function LangLayout({ children, params }) {
         {/* FIXED NAVBAR */}
         <Nav lang={lang} />
 
-        {/* HEADER — NOW NEVER COVERED */}
-        <header className="bg-white border-b shadow-sm relative z-10">
-          <div className="max-w-7xl mx-auto px-6 pt-2 pb-3 text-center">
-            {/* GOLD LOGO */}
+        {/* 🔴 SPACER TO PUSH CONTENT BELOW FIXED NAV */}
+        <div className="h-24" />
+
+        {/* HEADER — GOLD LOGO ALWAYS VISIBLE */}
+        <header className="bg-white border-b shadow-sm">
+          <div className="max-w-7xl mx-auto px-6 pt-4 pb-4 text-center">
             <Image
               src="/images/klf-logo-gold.png"
               alt="KLF Ministries"
-              width={120}
-              height={120}
-              className="mx-auto mb-1 w-20 sm:w-24 md:w-32 h-auto"
+              width={140}
+              height={140}
+              className="mx-auto mb-2 w-24 sm:w-28 md:w-32 h-auto"
               priority
             />
 
