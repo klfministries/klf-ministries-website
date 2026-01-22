@@ -37,10 +37,6 @@ export async function generateMetadata({ params }) {
 export default function LangLayout({ children, params }) {
   const lang = params.lang === "es" ? "es" : "en";
 
-  /**
-   * 🚨 ADMIN ROUTE SAFETY
-   * Admin pages bypass public UI
-   */
   const isAdminRoute =
     children?.props?.segment === "admin" ||
     children?.props?.segment?.startsWith("admin");
@@ -55,21 +51,26 @@ export default function LangLayout({ children, params }) {
 
   return (
     <html lang={lang}>
-      <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen">
-        {/* GLOBAL UI — SAFE LOCATION */}
+      {/* 🔴 PUSH PAGE DOWN BY NAVBAR HEIGHT */}
+      <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen pt-20">
+        {/* GLOBAL UI */}
         <ScrollProgress />
         <Analytics />
         <DonationModal />
 
-        {/* HEADER */}
-        <header className="border-b bg-white">
-          <div className="max-w-7xl mx-auto px-6 py-6 text-center">
+        {/* FIXED NAVBAR FIRST */}
+        <Nav lang={lang} />
+
+        {/* HEADER — NOW SAFELY BELOW NAVBAR */}
+        <header className="bg-white border-b shadow-sm">
+          <div className="max-w-7xl mx-auto px-6 pt-2 pb-2 text-center">
+            {/* LOGO — FULLY VISIBLE */}
             <Image
-              src="/images/klf-logo.svg"
+              src="/images/klf-logo-gold.png"
               alt="KLF Ministries"
-              width={120}
-              height={120}
-              className="mx-auto mb-4"
+              width={90}
+              height={90}
+              className="mx-auto mb-1 w-20 sm:w-24 md:w-32 h-auto"
               priority
             />
 
@@ -81,8 +82,6 @@ export default function LangLayout({ children, params }) {
               “God uses rescued people to rescue people”
             </p>
           </div>
-
-          <Nav lang={lang} />
         </header>
 
         {/* PAGE CONTENT */}

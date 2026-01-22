@@ -191,15 +191,15 @@ export default function Home({ params }) {
   return (
     <>
       <Hero lang={lang} />
-      <div className="pt-12" />
+      <div className="pt-10" />
 
-      {/* FEATURED DEVOTIONAL */}
-      <section className="bg-gray-50 py-28 px-6">
+      {/* FEATURED DEVOTIONAL — STANDARD SPACING */}
+      <section className="bg-gray-50 py-24 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
 
-      {/* TESTIMONIES */}
-      <section className="relative overflow-hidden py-32 px-6 text-center bg-gradient-to-b from-white via-blue-50 to-white">
+      {/* TESTIMONIES — STANDARD SPACING */}
+      <section className="relative overflow-hidden py-24 px-6 text-center bg-gradient-to-b from-white via-blue-50 to-white">
         <div
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(30,58,138,0.08),transparent_60%)]"
@@ -207,10 +207,10 @@ export default function Home({ params }) {
         <RotatingTestimonies lang={lang} />
       </section>
 
-      {/* SUPPORT THE MISSION */}
+      {/* SUPPORT THE MISSION — SMALLER CTA SECTION */}
       <section
         id="support"
-        className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-14 px-6 text-center"
+        className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20 px-6 text-center"
       >
         <h2 className="text-3xl font-bold mb-4">
           {lang === "es" ? "Apoye la Obra" : "Support the Mission"}

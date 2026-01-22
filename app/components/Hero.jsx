@@ -15,27 +15,31 @@ export default function Hero({ lang = "en" }) {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-blue-950 to-blue-900 text-white pt-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-blue-950 to-blue-900 text-white pt-10 pb-24">
       {/* PARALLAX BACKGROUND IMAGE */}
       <motion.div
         aria-hidden="true"
         style={{ y: bgY }}
         className="absolute inset-0 pointer-events-none"
       >
+        {/* BACKGROUND IMAGE */}
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-30"
+          className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('/images/hero-bible-light.jpg')" }}
         />
+
+        {/* SUBTLE DARK OVERLAY FOR READABILITY */}
+        <div className="absolute inset-0 bg-black/40" />
       </motion.div>
 
       {/* CONTENT */}
-      <div className="relative mx-auto max-w-5xl px-5 py-20 text-center">
+      <div className="relative mx-auto max-w-5xl px-5 py-24 text-center">
         {/* HEADLINE */}
         <motion.h1
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight"
+          className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight text-white"
         >
           {lang === "es" ? "Preparados para Vivir," : "Prepared to Live,"}
           <span className="block text-blue-200 mt-2">
@@ -48,7 +52,7 @@ export default function Hero({ lang = "en" }) {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-blue-100"
+          className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-blue-50"
         >
           {lang === "es"
             ? "Un ministerio cristiano que ayuda al pueblo de Dios a vivir fielmente, crecer espiritualmente y prepararse para el pronto regreso de Cristo."

@@ -52,10 +52,8 @@ export default function Nav({ lang = "en" }) {
       <div className="mx-auto max-w-7xl px-6 h-full flex items-center justify-between">
         {/* HOME LABEL + MOVING ARROW + LOGO */}
         <div className="flex items-center gap-3 relative">
-          {/* FIXED HOME TEXT */}
           <span className="text-sm font-medium text-black">Home</span>
 
-          {/* MOVING ARROW (ONLY THIS MOVES) */}
           <motion.span
             animate={{ x: [0, 10, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
@@ -64,7 +62,6 @@ export default function Nav({ lang = "en" }) {
             ➜
           </motion.span>
 
-          {/* LOGO */}
           <Link href={base} aria-label="Home" className="flex items-center gap-2">
             <Image
               src="/images/klf-logo.png"
@@ -78,16 +75,26 @@ export default function Nav({ lang = "en" }) {
         </div>
 
         {/* DESKTOP NAV */}
-        <nav className="hidden lg:flex items-center gap-2">
-          {links.map(([path, label]) => (
-            <Link
-              key={path}
-              href={`${base}/${path}`}
-              className="px-4 py-2 text-gray-700 hover:text-blue-900 font-medium"
-            >
-              {label}
-            </Link>
-          ))}
+        <nav className="hidden lg:flex items-center gap-4">
+          {links.map(([path, label]) => {
+            const href = `${base}/${path}`;
+            const isActive =
+              pathname === href || pathname.startsWith(href + "/");
+
+            return (
+              <Link
+                key={path}
+                href={href}
+                className={`px-4 py-2 font-medium transition ${
+                  isActive
+                    ? "text-blue-900 font-semibold underline underline-offset-4"
+                    : "text-gray-700 hover:text-blue-900"
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
 
           {/* SUPPORT BUTTON */}
           <button
@@ -101,7 +108,7 @@ export default function Nav({ lang = "en" }) {
           {/* LANGUAGE */}
           <Link
             href={switchedPath}
-            className="ml-3 text-xs text-gray-500 hover:text-blue-900"
+            className="ml-3 text-xs text-gray-500 hover:text-blue-900 transition"
           >
             {lang === "en" ? "ES 🇪🇸" : "EN 🇺🇸"}
           </Link>
@@ -120,16 +127,26 @@ export default function Nav({ lang = "en" }) {
       {/* MOBILE MENU */}
       {open && (
         <div className="lg:hidden bg-white border-t px-6 py-6 space-y-4 shadow-md">
-          {links.map(([path, label]) => (
-            <Link
-              key={path}
-              href={`${base}/${path}`}
-              onClick={() => setOpen(false)}
-              className="block text-gray-800 text-lg font-medium py-2 border-b"
-            >
-              {label}
-            </Link>
-          ))}
+          {links.map(([path, label]) => {
+            const href = `${base}/${path}`;
+            const isActive =
+              pathname === href || pathname.startsWith(href + "/");
+
+            return (
+              <Link
+                key={path}
+                href={href}
+                onClick={() => setOpen(false)}
+                className={`block text-lg font-medium py-3 border-b transition ${
+                  isActive
+                    ? "text-blue-900 font-semibold"
+                    : "text-gray-800 hover:text-blue-900"
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
 
           <button
             onClick={handleSupportClick}
@@ -141,7 +158,7 @@ export default function Nav({ lang = "en" }) {
           <Link
             href={switchedPath}
             onClick={() => setOpen(false)}
-            className="block text-center text-sm text-gray-600 mt-3"
+            className="block text-center text-sm text-gray-600 mt-3 hover:text-blue-900 transition"
           >
             {lang === "en" ? "Español 🇪🇸" : "English 🇺🇸"}
           </Link>
