@@ -51,34 +51,34 @@ export default function LangLayout({ children, params }) {
 
   return (
     <html lang={lang}>
-      {/* 🔴 PUSH PAGE DOWN BY NAVBAR HEIGHT */}
-      <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen pt-20">
+      {/* 🔴 IMPORTANT: Push content below fixed navbar */}
+      <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen pt-24">
         {/* GLOBAL UI */}
         <ScrollProgress />
         <Analytics />
         <DonationModal />
 
-        {/* FIXED NAVBAR FIRST */}
+        {/* FIXED NAVBAR */}
         <Nav lang={lang} />
 
-        {/* HEADER — NOW SAFELY BELOW NAVBAR */}
-        <header className="bg-white border-b shadow-sm">
-          <div className="max-w-7xl mx-auto px-6 pt-2 pb-2 text-center">
-            {/* LOGO — FULLY VISIBLE */}
+        {/* HEADER — NOW NEVER COVERED */}
+        <header className="bg-white border-b shadow-sm relative z-10">
+          <div className="max-w-7xl mx-auto px-6 pt-2 pb-3 text-center">
+            {/* GOLD LOGO */}
             <Image
               src="/images/klf-logo-gold.png"
               alt="KLF Ministries"
-              width={90}
-              height={90}
+              width={120}
+              height={120}
               className="mx-auto mb-1 w-20 sm:w-24 md:w-32 h-auto"
               priority
             />
 
-            <h1 className="text-3xl font-bold text-blue-900">
+            <h1 className="text-2xl sm:text-3xl font-bold text-blue-900">
               KLF Ministries & Publications
             </h1>
 
-            <p className="italic text-gray-600 mt-1">
+            <p className="italic text-gray-600 mt-1 text-sm sm:text-base">
               “God uses rescued people to rescue people”
             </p>
           </div>
