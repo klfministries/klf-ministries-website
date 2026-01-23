@@ -2,8 +2,9 @@ export default function About({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
 
   return (
-    <section className="max-w-6xl mx-auto py-20 px-6 grid md:grid-cols-2 gap-12 items-start">
-      {/* LEFT COLUMN: MAIN IMAGE + NEW GALLERY */}
+    // 🌍 IMPORTANT: No bg-white here — let global layout background show
+    <section className="max-w-6xl mx-auto py-20 px-6 grid md:grid-cols-2 gap-12 items-start bg-transparent">
+      {/* LEFT COLUMN: MAIN IMAGE + GALLERY */}
       <div className="space-y-8">
         {/* MAIN AUTHOR IMAGE */}
         <img
@@ -12,12 +13,12 @@ export default function About({ params }) {
           className="rounded-2xl shadow-xl w-full object-cover"
         />
 
-        {/* POLISHED GALLERY TITLE */}
+        {/* GALLERY TITLE */}
         <h3 className="text-sm uppercase tracking-wide font-semibold text-gray-500 mt-6">
           In Ministry and Life
         </h3>
 
-        {/* NEW IMAGES GALLERY — POLISHED LAYOUT */}
+        {/* IMAGES GALLERY */}
         <div className="grid grid-cols-2 gap-6">
           <img
             src="/images/about-1a.jpeg"
@@ -39,7 +40,7 @@ export default function About({ params }) {
         </div>
       </div>
 
-      {/* ABOUT CONTENT — UNCHANGED */}
+      {/* RIGHT COLUMN: ABOUT CONTENT */}
       <div>
         <h1 className="text-4xl font-bold mb-8 text-blue-900">
           {lang === "es"
@@ -47,6 +48,7 @@ export default function About({ params }) {
             : "About KLF Ministries and Publications"}
         </h1>
 
+        {/* TEXT BLOCK — keep on cream background */}
         <section className="space-y-6 text-gray-700 leading-relaxed text-lg">
           {lang === "es" ? (
             <>

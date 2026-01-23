@@ -27,7 +27,7 @@ export default function Books({ params }) {
       price: "USD 18.99",
       format: lang === "es" ? "Tapa blanda (Paperback)" : "Paperback",
       image: "/books/stewardship-5ts.jpg",
-      mockup: "/books/stewardship-5ts-mockup.jpg", // optional
+      mockup: "/books/stewardship-5ts-mockup.jpg",
       emailLink:
         "mailto:klfministries7@gmail.com?subject=Book Order Request&body=Hello,%0A%0AI would like to purchase the book 'Stewardship: The 5 Ts'.%0A%0APlease send me the bank payment details and shipping information.%0A%0AThank you.",
       amazonLink: "https://www.amazon.com/dp/9769769010",
@@ -35,12 +35,13 @@ export default function Books({ params }) {
   ];
 
   return (
-    <section className="max-w-6xl mx-auto py-16 md:py-20 px-4 sm:px-6">
-      <h1 className="text-3xl font-bold text-center mb-4">
+    // 🌍 IMPORTANT: No bg-* here → global layout background shows
+    <section className="max-w-6xl mx-auto py-16 md:py-20 px-4 sm:px-6 bg-transparent">
+      <h1 className="text-3xl font-bold text-center mb-4 text-blue-900">
         {lang === "es" ? "Libros" : "Books"}
       </h1>
 
-      <p className="text-center mb-10 max-w-2xl mx-auto">
+      <p className="text-center mb-10 max-w-2xl mx-auto text-gray-700">
         {lang === "es"
           ? "Recursos escritos para el crecimiento espiritual."
           : "Written resources for spiritual growth."}
@@ -49,6 +50,7 @@ export default function Books({ params }) {
       {/* Responsive Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-12 justify-center">
         {books.map((book) => (
+          // 🧱 CARD — Keep bg-white (this is correct)
           <div
             key={book.id}
             className="bg-white border border-gray-200 rounded-xl shadow-lg p-6 text-center max-w-sm mx-auto relative"
@@ -74,7 +76,7 @@ export default function Books({ params }) {
               />
             )}
 
-            <h2 className="text-xl font-semibold mb-1">
+            <h2 className="text-xl font-semibold mb-1 text-blue-900">
               {book.title}
             </h2>
 
@@ -83,7 +85,7 @@ export default function Books({ params }) {
               {book.subtitle}
             </p>
 
-            {/* Description (left-aligned for readability) */}
+            {/* Description */}
             <p className="text-sm text-gray-600 text-left mb-4 leading-relaxed">
               {book.description}
             </p>
@@ -112,7 +114,7 @@ export default function Books({ params }) {
                 href={book.amazonLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-black font-semibold"
+                className="block bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-black font-semibold transition"
               >
                 {lang === "es" ? "Comprar en Amazon" : "Buy on Amazon"}
               </a>
@@ -120,7 +122,7 @@ export default function Books({ params }) {
               {/* Secondary Button: Bank Payment */}
               <a
                 href={book.emailLink}
-                className="block bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 font-semibold"
+                className="block bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 font-semibold transition"
               >
                 {lang === "es"
                   ? "Solicitar pago bancario"

@@ -100,7 +100,6 @@ export default function Devotionals({ params }) {
   };
 
   const list = devotionals[lang];
-
   const mostRead = list.filter((d) => d.featured);
 
   const filtered = list.filter((d) =>
@@ -110,9 +109,11 @@ export default function Devotionals({ params }) {
   );
 
   return (
-    <>
+    // 🌍 ROOT WRAPPER — LET GLOBAL CREAM SHOW
+    <div className="bg-transparent">
+
       {/* ================= HEADER + SEARCH ================= */}
-      <section className="max-w-4xl mx-auto pt-32 pb-12 px-6 text-center">
+      <section className="max-w-4xl mx-auto pt-32 pb-12 px-6 text-center bg-transparent">
         <h1 className="text-3xl font-bold text-blue-900 mb-4">
           {lang === "es" ? "Devocionales" : "Devotionals"}
         </h1>
@@ -138,14 +139,17 @@ export default function Devotionals({ params }) {
 
       {/* ================= MOST READ ================= */}
       {!query && (
-        <section className="max-w-4xl mx-auto px-6 pb-20">
+        <section className="max-w-4xl mx-auto px-6 pb-20 bg-transparent">
           <h2 className="text-xl font-bold mb-6 text-center">
             {lang === "es" ? "Más Leídos" : "Most Read"}
           </h2>
 
           <div className="grid gap-6 sm:grid-cols-2">
             {mostRead.map((d, i) => (
-              <div key={i} className="card p-6 border-l-4 border-yellow-400">
+              <div
+                key={i}
+                className="bg-white p-6 rounded-xl shadow border-l-4 border-yellow-400"
+              >
                 <h3 className="font-semibold mb-1">{d.title}</h3>
                 <p className="italic text-gray-600 text-sm mb-2">
                   {d.verse}
@@ -158,7 +162,7 @@ export default function Devotionals({ params }) {
       )}
 
       {/* ================= SEARCH RESULTS ================= */}
-      <section className="max-w-4xl mx-auto px-6 pb-20">
+      <section className="max-w-4xl mx-auto px-6 pb-20 bg-transparent">
         {filtered.length === 0 ? (
           <p className="text-center text-gray-500 italic">
             {lang === "es"
@@ -168,7 +172,10 @@ export default function Devotionals({ params }) {
         ) : (
           <div className="space-y-8">
             {filtered.map((d, i) => (
-              <div key={i} className="card p-6">
+              <div
+                key={i}
+                className="bg-white p-6 rounded-xl shadow"
+              >
                 <h2 className="text-xl font-semibold mb-2">
                   {highlight(d.title, query)}
                 </h2>
@@ -185,7 +192,7 @@ export default function Devotionals({ params }) {
       </section>
 
       {/* ================= ARCHIVE CTA ================= */}
-      <section className="bg-gray-50 py-20 px-6 text-center">
+      <section className="bg-transparent py-20 px-6 text-center">
         <h2 className="text-2xl font-bold mb-4">
           {lang === "es"
             ? "Archivo Completo de Devocionales"
@@ -208,6 +215,6 @@ export default function Devotionals({ params }) {
             : "View Full Archive"}
         </a>
       </section>
-    </>
+    </div>
   );
 }

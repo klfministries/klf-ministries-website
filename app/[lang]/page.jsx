@@ -64,9 +64,8 @@ function FeaturedDevotional({ lang }) {
       className="max-w-5xl mx-auto bg-white rounded-2xl shadow p-10"
     >
       <div className="grid md:grid-cols-2 gap-10 items-center">
-
         {/* LEFT — IMAGE */}
-        <div className="rounded-xl overflow-hidden shadow-md">
+        <div className="rounded-xl overflow-hidden shadow-lg">
           <img
             src="/images/devotional-placeholder.jpg"
             alt="Open Bible devotional"
@@ -210,13 +209,13 @@ export default function Home({ params }) {
       <Hero lang={lang} />
       <div className="pt-10" />
 
-      {/* FEATURED DEVOTIONAL — WITH IMAGE */}
-      <section className="bg-gray-50 py-24 px-6">
+      {/* FEATURED DEVOTIONAL */}
+      <section className="bg-transparent py-24 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
 
       {/* TESTIMONIES */}
-      <section className="relative overflow-hidden py-24 px-6 text-center bg-gradient-to-b from-white via-blue-50 to-white">
+      <section className="relative overflow-hidden py-24 px-6 text-center bg-transparent">
         <div
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(30,58,138,0.08),transparent_60%)]"

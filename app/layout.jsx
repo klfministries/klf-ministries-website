@@ -9,7 +9,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      {/* 🌟 THIS IS THE ONLY BODY IN THE APP */}
+      <body className="antialiased min-h-screen bg-[#f7f4ee] text-gray-900">
         {children}
       </body>
     </html>
