@@ -7,6 +7,7 @@ export default function PrayerRequest({ params }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [bgIndex, setBgIndex] = useState(0);
+  const [error, setError] = useState(null);
 
   const backgrounds = [
     "/images/prayer-bg-1.jpg",
@@ -17,7 +18,7 @@ export default function PrayerRequest({ params }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setBgIndex((i) => (i + 1) % backgrounds.length);
-    }, 9000); // change every 9 seconds
+    }, 9000);
 
     return () => clearInterval(interval);
   }, []);
@@ -41,6 +42,9 @@ export default function PrayerRequest({ params }) {
         "Your prayer request is confidential. It will only be seen by our ministry team and will never be shared publicly without your permission.",
       scripture:
         "“Cast all your anxiety on Him because He cares for you.” — 1 Peter 5:7",
+      error:
+        "There was an error sending your request. Please try again in a moment.",
+      back: "Return to Home",
     },
     es: {
       title: "Enviar una Petición de Oración",
@@ -60,28 +64,57 @@ export default function PrayerRequest({ params }) {
         "Su petición de oración es confidencial. Solo será vista por el equipo del ministerio y no se compartirá públicamente sin su permiso.",
       scripture:
         "“Echando toda vuestra ansiedad sobre Él, porque Él tiene cuidado de vosotros.” — 1 Pedro 5:7",
+      error:
+        "Hubo un error al enviar su petición. Por favor intente nuevamente.",
+      back: "Volver al Inicio",
     },
   };
 
   const t = content[lang];
 
+  // 🔴 Your ACTIVE deployed Apps Script Web App URL
+  const EXEC_URL =
+    "https://script.google.com/macros/s/AKfycbxyeSxfqgK2hkuz7qePggLXOMBS9TEnkYGfM2xe-Q7jbGefU_TR1YxUQ8c0RDRi0-QE/exec";
+
+  // ✅ FINAL, CORS-SAFE SUBMIT HANDLER
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     const form = e.target;
-    const data = new FormData(form);
 
-    await fetch("https://formspree.io/f/xlgggdll", {
-      method: "POST",
-      body: data,
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    // Honeypot spam protection
+    if (form.website.value) {
+      setLoading(false);
+      return;
+    }
+
+    const payload = {
+      name: form.name.value || "",
+      email: form.email.value || "",
+      message: form.message.value || "",
+      language: lang,
+    };
+
+    try {
+      // 🔴 CRITICAL FIX: no-cors mode, no headers, no response reading
+      await fetch(EXEC_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(payload),
+      });
+
+      // If we reach here, the request was sent successfully
+      setSubmitted(true);
+      form.reset();
+
+    } catch (err) {
+      console.error("Network error:", err);
+      setError(t.error);
+    }
 
     setLoading(false);
-    setSubmitted(true);
   }
 
   return (
@@ -98,39 +131,43 @@ export default function PrayerRequest({ params }) {
             }`}
           />
         ))}
-
-        {/* Dark overlay for readability */}
         <div className="absolute inset-0 bg-black/60" />
       </div>
 
-      {/* CONTENT CARD */}
-      <section className="relative max-w-3xl w-full mx-auto py-20 px-6 text-center fade-up">
+      <section className="relative max-w-3xl w-full mx-auto py-20 px-6 text-center">
         {!submitted ? (
           <>
-            <h1 className="text-3xl font-bold text-white mb-6 fade-up">
+            <h1 className="text-3xl font-bold text-white mb-6">
               {t.title}
             </h1>
 
-            <p className="text-gray-100 mb-10 leading-relaxed fade-up fade-delay-1">
+            <p className="text-gray-100 mb-10 leading-relaxed">
               {t.intro}
             </p>
 
             <form
               onSubmit={handleSubmit}
-              className="bg-white/95 backdrop-blur shadow-xl rounded-2xl p-8 space-y-6 text-left border border-blue-100 fade-up fade-delay-2"
+              className="bg-white/95 backdrop-blur shadow-xl rounded-2xl p-8 space-y-6 text-left border border-blue-100"
             >
               <input
                 type="text"
                 name="name"
                 placeholder={t.name}
-                className="w-full border rounded-md px-4 py-3"
+                className="w-full border border-gray-300 rounded-md px-4 py-3"
               />
 
               <input
                 type="email"
                 name="email"
                 placeholder={t.email}
-                className="w-full border rounded-md px-4 py-3"
+                className="w-full border border-gray-300 rounded-md px-4 py-3"
+              />
+
+              {/* Honeypot field */}
+              <input
+                type="text"
+                name="website"
+                className="hidden"
               />
 
               <textarea
@@ -138,13 +175,19 @@ export default function PrayerRequest({ params }) {
                 rows="6"
                 required
                 placeholder={t.message}
-                className="w-full border rounded-md px-4 py-3"
+                className="w-full border border-gray-300 rounded-md px-4 py-3"
               ></textarea>
+
+              {error && (
+                <p className="text-sm text-red-600 text-center">
+                  {error}
+                </p>
+              )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-800 text-white py-3 rounded-md font-semibold hover:bg-blue-900 transition"
+                className="w-full bg-blue-800 text-white py-3 rounded-md font-semibold hover:bg-blue-900 transition disabled:opacity-60"
               >
                 {loading ? t.sending : t.button}
               </button>
@@ -156,21 +199,28 @@ export default function PrayerRequest({ params }) {
           </>
         ) : (
           <>
-            <h2 className="text-3xl font-bold text-white mb-6 fade-up">
+            <h2 className="text-3xl font-bold text-white mb-6">
               {t.successTitle}
             </h2>
 
-            <p className="text-lg text-gray-100 mb-6 fade-up fade-delay-1">
+            <p className="text-lg text-gray-100 mb-6">
               {t.successMessage}
             </p>
 
-            <p className="italic text-gray-200 mb-6 fade-up fade-delay-2">
+            <p className="italic text-gray-200 mb-6">
               {t.scripture}
             </p>
 
-            <p className="text-gray-100 leading-relaxed fade-up fade-delay-3">
+            <p className="text-gray-100 leading-relaxed mb-8">
               {t.prayer}
             </p>
+
+            <a
+              href={`/${lang}`}
+              className="inline-block text-blue-300 underline hover:text-blue-200"
+            >
+              {t.back}
+            </a>
           </>
         )}
       </section>
