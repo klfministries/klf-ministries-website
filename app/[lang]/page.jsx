@@ -61,10 +61,10 @@ function FeaturedDevotional({ lang }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="max-w-5xl mx-auto bg-white rounded-2xl shadow p-10"
+      className="max-w-5xl mx-auto bg-white rounded-3xl shadow-lg p-10"
     >
       <div className="grid md:grid-cols-2 gap-10 items-center">
-        {/* LEFT — IMAGE */}
+        {/* IMAGE */}
         <div className="rounded-xl overflow-hidden shadow-lg">
           <img
             src="/images/devotional-placeholder.jpg"
@@ -73,7 +73,7 @@ function FeaturedDevotional({ lang }) {
           />
         </div>
 
-        {/* RIGHT — TEXT */}
+        {/* TEXT */}
         <div className="text-center md:text-left">
           <h2 className="text-3xl font-bold text-blue-900 mb-2">
             {lang === "es" ? "Devocional Destacado" : "Featured Devotional"}
@@ -206,27 +206,27 @@ export default function Home({ params }) {
 
   return (
     <>
+      {/* HERO */}
       <Hero lang={lang} />
-      <div className="pt-10" />
 
-      {/* FEATURED DEVOTIONAL */}
-      <section className="bg-transparent py-24 px-6">
+      {/* ================= FEATURED DEVOTIONAL SECTION ================= */}
+      <section className="bg-[#f7f4ee] py-28 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
 
-      {/* TESTIMONIES */}
-      <section className="relative overflow-hidden py-24 px-6 text-center bg-transparent">
+      {/* ================= TESTIMONIES SECTION ================= */}
+      <section className="relative overflow-hidden py-28 px-6 text-center bg-[#f1f5f9]">
         <div
           aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(30,58,138,0.08),transparent_60%)]"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(30,58,138,0.06),transparent_65%)]"
         />
         <RotatingTestimonies lang={lang} />
       </section>
 
-      {/* SUPPORT THE MISSION */}
+      {/* ================= SUPPORT THE MISSION ================= */}
       <section
         id="support"
-        className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20 px-6 text-center"
+        className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-28 px-6 text-center"
       >
         <h2 className="text-3xl font-bold mb-4">
           {lang === "es" ? "Apoye la Obra" : "Support the Mission"}
@@ -238,7 +238,7 @@ export default function Home({ params }) {
             : "Your support helps share hope, prayer, and God’s Word around the world."}
         </p>
 
-        <p className="italic text-blue-200 max-w-2xl mx-auto mb-8">
+        <p className="italic text-blue-200 max-w-2xl mx-auto mb-10">
           {lang === "es"
             ? "“Cada uno dé como propuso en su corazón: no con tristeza ni por necesidad, porque Dios ama al dador alegre.” — 2 Corintios 9:7"
             : "“Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.” — 2 Corinthians 9:7"}
@@ -247,7 +247,7 @@ export default function Home({ params }) {
         <button
           type="button"
           onClick={() => window.dispatchEvent(new Event("donation:open"))}
-          className="bg-white text-blue-900 px-10 py-4 rounded-2xl font-semibold hover:scale-105 transition"
+          className="bg-white text-blue-900 px-12 py-4 rounded-2xl font-semibold hover:scale-105 transition"
         >
           {lang === "es" ? "Dar Ahora" : "Give Now"}
         </button>

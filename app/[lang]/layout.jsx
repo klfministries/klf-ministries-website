@@ -38,79 +38,81 @@ export default function LangLayout({ children, params }) {
   const lang = params.lang === "es" ? "es" : "en";
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent">
-      {/* GLOBAL UI */}
-      <ScrollProgress />
-      <Analytics />
-      <DonationModal />
+    <html lang={lang}>
+      <body className="min-h-screen flex flex-col bg-transparent text-gray-900">
+        {/* GLOBAL UI */}
+        <ScrollProgress />
+        <Analytics />
+        <DonationModal />
 
-      {/* NAV */}
-      <Nav lang={lang} />
+        {/* NAV */}
+        <Nav lang={lang} />
 
-      {/* Spacer for fixed nav */}
-      <div className="h-24" />
+        {/* Spacer for fixed nav */}
+        <div className="h-24" />
 
-      {/* HEADER */}
-      <header className="bg-white border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 pt-4 pb-4 text-center">
-          <Image
-            src="/images/klf-logo-gold.png"
-            alt="KLF Ministries"
-            width={140}
-            height={140}
-            className="mx-auto mb-2 w-24 sm:w-28 md:w-32 h-auto"
-            priority
-          />
+        {/* HEADER */}
+        <header className="bg-white border-b shadow-sm">
+          <div className="max-w-7xl mx-auto px-6 pt-4 pb-4 text-center">
+            <Image
+              src="/images/klf-logo-gold.png"
+              alt="KLF Ministries"
+              width={140}
+              height={140}
+              className="mx-auto mb-2 w-24 sm:w-28 md:w-32 h-auto"
+              priority
+            />
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-blue-900">
-            KLF Ministries & Publications
-          </h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-blue-900">
+              KLF Ministries & Publications
+            </h1>
 
-          <p className="italic text-gray-600 mt-1 text-sm sm:text-base">
-            “God uses rescued people to rescue people”
-          </p>
-        </div>
-      </header>
-
-      {/* MAIN — MUST STAY TRANSPARENT */}
-      <main className="flex-grow w-full bg-transparent">
-        {children}
-      </main>
-
-      {/* FOOTER */}
-      <footer className="bg-white border-t">
-        <div className="max-w-7xl mx-auto px-6 py-10 text-center space-y-4">
-          <div className="flex justify-center gap-6 text-sm flex-wrap">
-            <Link
-              href={`/${lang}/privacy-policy`}
-              className="hover:text-blue-900 underline underline-offset-4"
-            >
-              {lang === "es" ? "Política de Privacidad" : "Privacy Policy"}
-            </Link>
-
-            <Link
-              href={`/${lang}/terms-of-service`}
-              className="hover:text-blue-900 underline underline-offset-4"
-            >
-              {lang === "es" ? "Términos de Servicio" : "Terms of Service"}
-            </Link>
+            <p className="italic text-gray-600 mt-1 text-sm sm:text-base">
+              “God uses rescued people to rescue people”
+            </p>
           </div>
+        </header>
 
-          <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} KLF Ministries. All rights reserved.
-          </p>
-        </div>
-      </footer>
+        {/* MAIN — MUST STAY TRANSPARENT */}
+        <main className="flex-grow w-full bg-transparent">
+          {children}
+        </main>
 
-      {/* WHATSAPP FLOAT */}
-      <a
-        href="https://wa.me/18768700508"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-green-700 transition z-50"
-      >
-        WhatsApp
-      </a>
-    </div>
+        {/* FOOTER */}
+        <footer className="bg-white border-t">
+          <div className="max-w-7xl mx-auto px-6 py-10 text-center space-y-4">
+            <div className="flex justify-center gap-6 text-sm flex-wrap">
+              <Link
+                href={`/${lang}/privacy-policy`}
+                className="hover:text-blue-900 underline underline-offset-4"
+              >
+                {lang === "es" ? "Política de Privacidad" : "Privacy Policy"}
+              </Link>
+
+              <Link
+                href={`/${lang}/terms-of-service`}
+                className="hover:text-blue-900 underline underline-offset-4"
+              >
+                {lang === "es" ? "Términos de Servicio" : "Terms of Service"}
+              </Link>
+            </div>
+
+            <p className="text-xs text-gray-500">
+              © {new Date().getFullYear()} KLF Ministries. All rights reserved.
+            </p>
+          </div>
+        </footer>
+
+        {/* WHATSAPP FLOAT */}
+        <a
+          href="https://wa.me/18768700508"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-green-700 transition z-50"
+        >
+          WhatsApp
+        </a>
+      </body>
+    </html>
   );
 }
