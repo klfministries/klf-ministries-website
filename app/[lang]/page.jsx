@@ -61,28 +61,45 @@ function FeaturedDevotional({ lang }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="max-w-3xl mx-auto bg-white rounded-2xl shadow p-10 text-center"
+      className="max-w-5xl mx-auto bg-white rounded-2xl shadow p-10"
     >
-      <h2 className="text-3xl font-bold text-blue-900 mb-2">
-        {lang === "es" ? "Devocional Destacado" : "Featured Devotional"}
-      </h2>
+      <div className="grid md:grid-cols-2 gap-10 items-center">
 
-      <div className="w-16 h-1 bg-yellow-400 mx-auto my-4 rounded" />
+        {/* LEFT — IMAGE */}
+        <div className="rounded-xl overflow-hidden shadow-md">
+          <img
+            src="/images/devotional-placeholder.jpg"
+            alt="Open Bible devotional"
+            className="w-full h-64 object-cover"
+          />
+        </div>
 
-      <p className="italic text-gray-600 mb-4">
-        {devotionals[lang][index].verse}
-      </p>
+        {/* RIGHT — TEXT */}
+        <div className="text-center md:text-left">
+          <h2 className="text-3xl font-bold text-blue-900 mb-2">
+            {lang === "es" ? "Devocional Destacado" : "Featured Devotional"}
+          </h2>
 
-      <p className="text-gray-700 mb-6 leading-relaxed">
-        {devotionals[lang][index].text}
-      </p>
+          <div className="w-16 h-1 bg-yellow-400 mx-auto md:mx-0 my-4 rounded" />
 
-      <Link
-        href={`/${lang}/devotionals`}
-        className="inline-block font-medium text-blue-800 hover:underline"
-      >
-        {lang === "es" ? "Leer más devocionales →" : "Read more devotionals →"}
-      </Link>
+          <p className="italic text-gray-600 mb-4">
+            {devotionals[lang][index].verse}
+          </p>
+
+          <p className="text-gray-700 mb-6 leading-relaxed">
+            {devotionals[lang][index].text}
+          </p>
+
+          <Link
+            href={`/${lang}/devotionals`}
+            className="inline-block font-medium text-blue-800 hover:underline"
+          >
+            {lang === "es"
+              ? "Leer más devocionales →"
+              : "Read more devotionals →"}
+          </Link>
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -193,12 +210,12 @@ export default function Home({ params }) {
       <Hero lang={lang} />
       <div className="pt-10" />
 
-      {/* FEATURED DEVOTIONAL — STANDARD SPACING */}
+      {/* FEATURED DEVOTIONAL — WITH IMAGE */}
       <section className="bg-gray-50 py-24 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
 
-      {/* TESTIMONIES — STANDARD SPACING */}
+      {/* TESTIMONIES */}
       <section className="relative overflow-hidden py-24 px-6 text-center bg-gradient-to-b from-white via-blue-50 to-white">
         <div
           aria-hidden
@@ -207,7 +224,7 @@ export default function Home({ params }) {
         <RotatingTestimonies lang={lang} />
       </section>
 
-      {/* SUPPORT THE MISSION — SMALLER CTA SECTION */}
+      {/* SUPPORT THE MISSION */}
       <section
         id="support"
         className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-20 px-6 text-center"
