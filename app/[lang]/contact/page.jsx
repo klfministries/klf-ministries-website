@@ -2,32 +2,62 @@ export default function Contact({ params }) {
   const lang = params?.lang === "es" ? "es" : "en";
 
   return (
-    <section className="max-w-3xl mx-auto text-center py-20 px-6">
-      <h1 className="text-3xl font-bold text-blue-900 mb-8">
+    <section className="bg-gray-50 max-w-3xl mx-auto text-center py-20 px-6">
+      <h1 className="text-3xl font-bold text-blue-900 mb-2">
         {lang === "es" ? "Contacto" : "Contact"}
       </h1>
 
-      <div className="space-y-5 text-lg">
+      <p className="text-gray-600 mb-10">
+        {lang === "es"
+          ? "Nos encantaría saber de usted."
+          : "We would love to hear from you."}
+      </p>
+
+      {/* Card Container */}
+      <div
+        className="
+          bg-white 
+          shadow-sm 
+          rounded-xl 
+          p-10 
+          max-w-md 
+          mx-auto 
+          space-y-6 
+          text-lg
+          transition 
+          duration-300 
+          hover:shadow-xl 
+          hover:-translate-y-1
+        "
+      >
         {/* EMAIL */}
-        <p>
-          📧{" "}
+        <div className="flex items-center justify-center gap-3">
+          <span className="text-blue-700 text-xl">📧</span>
           <a
             href="mailto:klfministries7@gmail.com"
-            className="text-blue-700 underline"
+            className="text-blue-700 underline hover:text-blue-900"
           >
             klfministries7@gmail.com
           </a>
-        </p>
+        </div>
 
-        {/* PHONE */}
-        <p>📞 +1 (876) 870-0508</p>
+        {/* PHONE (CLICKABLE) */}
+        <div className="flex items-center justify-center gap-3">
+          <span className="text-xl">📞</span>
+          <a
+            href="tel:+18768700508"
+            className="hover:underline"
+          >
+            +1 (876) 870-0508
+          </a>
+        </div>
 
         {/* INSTAGRAM */}
         <a
           href="https://instagram.com/YOUR_INSTAGRAM"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 text-pink-600 hover:underline"
+          className="flex items-center justify-center gap-3 text-pink-600 hover:underline"
         >
           {/* Instagram SVG Icon */}
           <svg
