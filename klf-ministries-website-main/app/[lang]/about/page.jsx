@@ -3,7 +3,7 @@ export default function About({ params }) {
 
   return (
     <section className="max-w-6xl mx-auto py-20 px-6 grid md:grid-cols-2 gap-12 items-start">
-      {/* LEFT COLUMN: BOTH IMAGES */}
+      {/* LEFT COLUMN: MAIN IMAGE + NEW GALLERY */}
       <div className="space-y-8">
         {/* MAIN AUTHOR IMAGE */}
         <img
@@ -12,12 +12,31 @@ export default function About({ params }) {
           className="rounded-2xl shadow-xl w-full object-cover"
         />
 
-        {/* SECOND IMAGE — SMALLER, UNDER THE FIRST */}
-        <img
-          src="/images/about-family.jpg"
-          alt="Pastor Kiwayne Ferron and wife"
-          className="rounded-xl shadow-lg w-3/4 mx-auto object-cover"
-        />
+        {/* POLISHED GALLERY TITLE */}
+        <h3 className="text-sm uppercase tracking-wide font-semibold text-gray-500 mt-6">
+          In Ministry and Life
+        </h3>
+
+        {/* NEW IMAGES GALLERY — POLISHED LAYOUT */}
+        <div className="grid grid-cols-2 gap-6">
+          <img
+            src="/images/about-1a.jpeg"
+            alt="Pastor Kiwayne Ferron and wife"
+            className="rounded-xl shadow-md w-full object-cover max-h-[500px]"
+          />
+
+          <img
+            src="/images/about-2a.jpeg"
+            alt="Pastor Kiwayne Ferron and wife"
+            className="rounded-xl shadow-md w-full object-cover max-h-[500px]"
+          />
+
+          <img
+            src="/images/about-3a.jpeg"
+            alt="Pastor Kiwayne Ferron and wife"
+            className="rounded-xl shadow-md w-full object-cover max-h-[520px] col-span-2"
+          />
+        </div>
       </div>
 
       {/* ABOUT CONTENT — UNCHANGED */}
