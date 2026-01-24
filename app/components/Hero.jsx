@@ -15,7 +15,7 @@ export default function Hero({ lang = "en" }) {
   };
 
   return (
-    <section className="relative overflow-hidden text-white">
+    <section className="relative overflow-hidden text-white min-h-[85vh] flex items-center">
       {/* PARALLAX BACKGROUND IMAGE */}
       <motion.div
         aria-hidden="true"
@@ -25,7 +25,7 @@ export default function Hero({ lang = "en" }) {
         {/* BACKGROUND IMAGE */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/images/hero-bible-light.jpg')" }}
+          style={{ backgroundImage: "url('/hero.jpg')" }}   // MUST match /public/hero.jpg
         />
 
         {/* SOFT DARK OVERLAY */}
@@ -33,7 +33,7 @@ export default function Hero({ lang = "en" }) {
       </motion.div>
 
       {/* CONTENT */}
-      <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-32 text-center">
+      <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-24 text-center w-full">
 
         {/* HEADLINE */}
         <motion.h1
@@ -92,7 +92,7 @@ export default function Hero({ lang = "en" }) {
             gap-5
           "
         >
-          {/* PRIMARY CTA — SEEKERS */}
+          {/* PRIMARY CTA */}
           <Link
             href={`/${lang}/devotionals`}
             className="
@@ -117,7 +117,7 @@ export default function Hero({ lang = "en" }) {
               : "Read Today’s Devotional"}
           </Link>
 
-          {/* SECONDARY CTA — PARTNERS */}
+          {/* SECONDARY CTA */}
           <Button
             size="lg"
             type="button"
@@ -144,7 +144,7 @@ export default function Hero({ lang = "en" }) {
           </Button>
         </motion.div>
 
-        {/* TERTIARY CTA — DE-EMPHASIZED */}
+        {/* TERTIARY CTA */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

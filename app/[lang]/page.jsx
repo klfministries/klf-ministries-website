@@ -67,8 +67,8 @@ function FeaturedDevotional({ lang }) {
         {/* IMAGE */}
         <div className="rounded-xl overflow-hidden shadow-lg">
           <img
-            src="/images/devotional-placeholder.jpg"
-            alt="Open Bible devotional"
+            src="/dev2.jpg"
+            alt="Person praying with Bible"
             className="w-full h-64 object-cover"
           />
         </div>
@@ -209,12 +209,99 @@ export default function Home({ params }) {
       {/* HERO */}
       <Hero lang={lang} />
 
-      {/* ================= FEATURED DEVOTIONAL SECTION ================= */}
+      {/* ================= FEATURED DEVOTIONAL ================= */}
       <section className="bg-[#f7f4ee] py-28 px-6">
         <FeaturedDevotional lang={lang} />
       </section>
 
-      {/* ================= TESTIMONIES SECTION ================= */}
+      {/* ================= LATEST DEVOTIONALS GRID (WITH EXCERPTS) ================= */}
+      <section className="py-28 px-6 bg-[#f7f9fc]">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12 text-blue-900">
+            {lang === "es" ? "Últimos Devocionales" : "Latest Devotionals"}
+          </h2>
+
+          <div className="grid gap-8 md:grid-cols-3">
+            {[
+              {
+                title: lang === "es" ? "Caminando en la Luz" : "Walking in the Light",
+                excerpt: lang === "es"
+                  ? "Dios llama a sus hijos a caminar fielmente, aun cuando el camino no es claro."
+                  : "God calls His children to walk faithfully, even when the path is not clear.",
+                image: "/dev1.jpg",
+              },
+              {
+                title: lang === "es" ? "El Poder de la Oración" : "The Power of Prayer",
+                excerpt: lang === "es"
+                  ? "La oración conecta el corazón humano con el poder infinito de Dios."
+                  : "Prayer connects the human heart with the infinite power of God.",
+                image: "/dev2.jpg",
+              },
+              {
+                title: lang === "es" ? "Esperanza en Cristo" : "Hope in Christ",
+                excerpt: lang === "es"
+                  ? "En medio de la incertidumbre, Cristo sigue siendo nuestra esperanza segura."
+                  : "In the midst of uncertainty, Christ remains our sure hope.",
+                image: "/dev3.jpg",
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition flex flex-col"
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-48 object-cover"
+                />
+
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-lg font-semibold mb-3 text-blue-900">
+                    {item.title}
+                  </h3>
+
+                  {/* EXCERPT */}
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">
+                    {item.excerpt}
+                  </p>
+
+                  <Link
+                    href={`/${lang}/devotionals`}
+                    className="mt-auto text-blue-800 font-medium hover:underline"
+                  >
+                    {lang === "es" ? "Leer más →" : "Read More →"}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= OUR MISSION IMAGE SECTION ================= */}
+      <section className="py-28 px-6 bg-white">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-6 text-blue-900">
+            {lang === "es" ? "Nuestra Misión" : "Our Mission"}
+          </h2>
+
+          <p className="max-w-2xl mx-auto text-gray-700 mb-10">
+            {lang === "es"
+              ? "Proclamar el evangelio eterno y preparar un pueblo para la venida de Jesucristo."
+              : "Proclaiming the everlasting gospel and preparing a people for the coming of Jesus Christ."}
+          </p>
+
+          <div className="rounded-2xl overflow-hidden shadow-lg">
+            <img
+              src="/mission.jpg"
+              alt="Open Bible with cross"
+              className="w-full h-[360px] object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ================= TESTIMONIES ================= */}
       <section className="relative overflow-hidden py-28 px-6 text-center bg-[#f1f5f9]">
         <div
           aria-hidden

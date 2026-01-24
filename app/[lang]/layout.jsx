@@ -8,10 +8,12 @@ import DonationModal from "../components/DonationModal";
 import Link from "next/link";
 import Image from "next/image";
 
+/* ================= STATIC PARAMS ================= */
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "es" }];
 }
 
+/* ================= SEO METADATA ================= */
 export async function generateMetadata({ params }) {
   const lang = params.lang === "es" ? "es" : "en";
 
@@ -34,6 +36,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
+/* ================= LANG LAYOUT ================= */
 export default function LangLayout({ children, params }) {
   const lang = params.lang === "es" ? "es" : "en";
 
@@ -73,7 +76,7 @@ export default function LangLayout({ children, params }) {
           </div>
         </header>
 
-        {/* MAIN — MUST STAY TRANSPARENT */}
+        {/* MAIN CONTENT */}
         <main className="flex-grow w-full bg-transparent">
           {children}
         </main>
