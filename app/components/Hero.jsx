@@ -7,7 +7,7 @@ import { Button } from "../../components/ui/button";
 export default function Hero({ lang = "en" }) {
   /* ================= PARALLAX BACKGROUND ================= */
   const { scrollY } = useScroll();
-  const bgY = useTransform(scrollY, [0, 400], ["0%", "10%"]);
+  const bgY = useTransform(scrollY, [0, 400], ["0%", "12%"]);
 
   /* ================= SUPPORT HANDLER ================= */
   const handleSupportClick = () => {
@@ -15,7 +15,7 @@ export default function Hero({ lang = "en" }) {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-blue-950 to-blue-900 text-white pt-10 pb-28">
+    <section className="relative overflow-hidden text-white">
       {/* PARALLAX BACKGROUND IMAGE */}
       <motion.div
         aria-hidden="true"
@@ -28,45 +28,47 @@ export default function Hero({ lang = "en" }) {
           style={{ backgroundImage: "url('/images/hero-bible-light.jpg')" }}
         />
 
-        {/* OVERLAY FOR READABILITY */}
-        <div className="absolute inset-0 bg-black/50" />
+        {/* SOFT DARK OVERLAY */}
+        <div className="absolute inset-0 bg-black/55" />
       </motion.div>
 
       {/* CONTENT */}
-      <div className="relative mx-auto max-w-5xl px-5 py-16 md:py-24 text-center">
+      <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-32 text-center">
 
-        {/* HEADLINE — MOBILE OPTIMIZED */}
+        {/* HEADLINE */}
         <motion.h1
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="
-            text-2xl 
+            text-3xl 
             sm:text-4xl 
             md:text-6xl 
-            font-bold 
+            font-extrabold 
             leading-tight 
+            tracking-tight
             text-white
           "
         >
           {lang === "es" ? "Preparados para Vivir," : "Prepared to Live,"}
-          <span className="block text-yellow-300 mt-3">
+          <span className="block text-yellow-300 mt-4">
             {lang === "es" ? "Listos para Su Regreso" : "Ready for His Return"}
           </span>
         </motion.h1>
 
-        {/* SUBTEXT — MOBILE OPTIMIZED */}
+        {/* SUBTEXT */}
         <motion.p
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
+          transition={{ delay: 0.25, duration: 0.7 }}
           className="
             mx-auto 
-            mt-6 
-            max-w-2xl 
-            text-sm 
-            sm:text-base 
-            md:text-lg 
+            mt-8 
+            max-w-3xl 
+            text-base 
+            sm:text-lg 
+            md:text-xl 
+            leading-relaxed
             text-blue-50
           "
         >
@@ -75,22 +77,22 @@ export default function Hero({ lang = "en" }) {
             : "A Christ-centered ministry helping God’s people live faithfully, grow spiritually, and prepare for Christ’s soon return."}
         </motion.p>
 
-        {/* CTA BUTTONS — MOBILE STACKING IMPROVED */}
+        {/* CTA BUTTONS */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
+          transition={{ delay: 0.45, duration: 0.7 }}
           className="
-            mt-10 
+            mt-14 
             flex 
             flex-col 
             sm:flex-row 
             items-center 
             justify-center 
-            gap-4
+            gap-5
           "
         >
-          {/* PRIMARY CTA */}
+          {/* PRIMARY CTA — SEEKERS */}
           <Link
             href={`/${lang}/devotionals`}
             className="
@@ -98,13 +100,12 @@ export default function Hero({ lang = "en" }) {
               sm:w-auto
               rounded-2xl 
               bg-yellow-400 
-              px-10 
+              px-12 
               py-5 
-              text-base 
-              sm:text-lg 
-              font-semibold 
+              text-lg 
+              font-bold 
               text-blue-900 
-              shadow-xl 
+              shadow-2xl 
               hover:bg-yellow-300 
               hover:scale-105 
               transition 
@@ -116,7 +117,7 @@ export default function Hero({ lang = "en" }) {
               : "Read Today’s Devotional"}
           </Link>
 
-          {/* SECONDARY CTA */}
+          {/* SECONDARY CTA — PARTNERS */}
           <Button
             size="lg"
             type="button"
@@ -125,16 +126,15 @@ export default function Hero({ lang = "en" }) {
               w-full 
               sm:w-auto
               rounded-2xl 
-              border 
+              border-2 
               border-white 
               bg-transparent 
-              px-10 
+              px-12 
               py-5 
-              text-base 
-              sm:text-lg 
+              text-lg 
               font-semibold 
               text-white 
-              shadow-lg 
+              shadow-xl 
               hover:bg-white 
               hover:text-blue-900 
               transition
@@ -142,28 +142,28 @@ export default function Hero({ lang = "en" }) {
           >
             {lang === "es" ? "Apoyar la Misión" : "Support the Mission"}
           </Button>
+        </motion.div>
 
-          {/* TERTIARY CTA */}
+        {/* TERTIARY CTA — DE-EMPHASIZED */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="mt-6"
+        >
           <Link
             href={`/${lang}/subscribe`}
             className="
-              w-full 
-              sm:w-auto
-              rounded-2xl 
-              bg-white/90 
-              px-10 
-              py-5 
-              text-base 
-              sm:text-lg 
-              font-semibold 
-              text-blue-900 
-              shadow 
-              hover:bg-white 
+              text-sm 
+              sm:text-base 
+              text-blue-100 
+              underline 
+              hover:text-white 
               transition
             "
           >
             {lang === "es"
-              ? "Suscribirse a Devocionales"
+              ? "Suscribirse a Devocionales Semanales"
               : "Get Weekly Devotionals"}
           </Link>
         </motion.div>
@@ -172,8 +172,8 @@ export default function Hero({ lang = "en" }) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
-          className="mt-12 text-xs sm:text-sm italic text-blue-200"
+          transition={{ delay: 1 }}
+          className="mt-14 text-xs sm:text-sm italic text-blue-200"
         >
           {lang === "es"
             ? "“Dios usa a los rescatados para rescatar a otros.” — Mateo 10:8"
