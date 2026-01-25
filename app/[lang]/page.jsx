@@ -67,8 +67,8 @@ function FeaturedDevotional({ lang }) {
         {/* IMAGE */}
         <div className="rounded-xl overflow-hidden shadow-lg">
           <img
-            src="/dev2.jpg"
-            alt="Person praying with Bible"
+            src="/images/featured-devotional.jpg"
+            alt="Open Bible during morning devotion"
             className="w-full h-64 object-cover"
           />
         </div>

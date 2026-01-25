@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "bible-study-guide",
+    "title": "Bible Study Guide (PDF)",
+    "description": "A printable guide for personal and group Bible study.",
+    "date": "2026-01-20",
+    "file": "bible-study-guide.pdf"
+  },
+  {
+    "slug": "church-training-slides",
+    "title": "Church Training Slides (PPT)",
+    "description": "PowerPoint slides for leadership training.",
+    "date": "2026-01-18",
+    "file": "church-training-slides.pptx"
+  }
+]
