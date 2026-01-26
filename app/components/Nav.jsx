@@ -104,7 +104,7 @@ export default function Nav({ lang = "en" }) {
             );
           })}
 
-          {/* SIMPLE RESOURCES LINK */}
+          {/* RESOURCES */}
           <Link
             href={`${base}/resources`}
             className={`px-4 py-2 font-medium transition ${
@@ -168,7 +168,7 @@ export default function Nav({ lang = "en" }) {
             );
           })}
 
-          {/* MOBILE RESOURCES LINK */}
+          {/* RESOURCES (MOBILE) */}
           <Link
             href={`${base}/resources`}
             onClick={() => setOpen(false)}

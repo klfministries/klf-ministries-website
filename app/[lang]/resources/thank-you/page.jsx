@@ -1,12 +1,30 @@
 import fs from "fs";
 import path from "path";
 import Link from "next/link";
+import ClientSaver from "./ClientSaver";
 
-export default function ThankYouPage({ searchParams, params }) {
+// 🔹 Helper to log purchases on the server
+async function logPurchase(purchase) {
+  try {
+    await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/log-purchase`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(purchase),
+        cache: "no-store",
+      }
+    );
+  } catch (e) {
+    console.error("Failed to log purchase");
+  }
+}
+
+export default async function ThankYouPage({ searchParams, params }) {
   const { lang } = params;
 
-  const singleSlug = searchParams.item;      // for single purchase
-  const bundleSlugs = searchParams.items;    // for bundle purchase (comma-separated)
+  const singleSlug = searchParams.item;      // single purchase
+  const bundleSlugs = searchParams.items;    // bundle purchase (comma-separated)
 
   // Load downloads from public/downloads
   const downloadsDir = path.join(process.cwd(), "public", "downloads");
@@ -17,6 +35,7 @@ export default function ThankYouPage({ searchParams, params }) {
   }
 
   let unlockedFiles = [];
+  let purchasedSlugs = [];
 
   // ===== SINGLE ITEM MODE =====
   if (singleSlug) {
@@ -26,6 +45,15 @@ export default function ThankYouPage({ searchParams, params }) {
 
     if (matched) {
       unlockedFiles = [matched];
+      purchasedSlugs = [singleSlug];
+
+      // 🧾 Log single purchase
+      await logPurchase({
+        items: [singleSlug],
+        type: "single",
+        price: 5,
+        date: new Date().toISOString(),
+      });
     }
   }
 
@@ -37,7 +65,17 @@ export default function ThankYouPage({ searchParams, params }) {
       .map((slug) =>
         files.find((file) => file.startsWith(slug))
       )
-      .filter(Boolean); // remove missing files
+      .filter(Boolean);
+
+    purchasedSlugs = slugsArray;
+
+    // 🧾 Log bundle purchase
+    await logPurchase({
+      items: slugsArray,
+      type: "bundle",
+      price: 7,
+      date: new Date().toISOString(),
+    });
   }
 
   // ===== NOTHING FOUND =====
@@ -63,6 +101,9 @@ export default function ThankYouPage({ searchParams, params }) {
 
   return (
     <section className="max-w-4xl mx-auto px-6 py-20">
+      {/* Save purchases to My Downloads (client side) */}
+      <ClientSaver slugs={purchasedSlugs} />
+
       {/* Success Card */}
       <div className="bg-white border rounded-2xl shadow-lg p-10 text-center">
         {/* Check Icon */}
@@ -76,7 +117,7 @@ export default function ThankYouPage({ searchParams, params }) {
 
         <p className="text-gray-600 mb-8">
           Thank you for supporting KLF Ministries.  
-          Your payment has been received and your resource{unlockedFiles.length > 1 ? "s are" : " is"} now unlocked.
+          Your resource{unlockedFiles.length > 1 ? "s are" : " is"} now unlocked.
         </p>
 
         {/* ===== UNLOCKED FILES LIST ===== */}
@@ -117,9 +158,7 @@ export default function ThankYouPage({ searchParams, params }) {
 
         {/* Receipt & Contact */}
         <div className="mt-10 border-t pt-8 text-sm text-gray-600 space-y-3">
-          <p>
-            🧾 A receipt has been sent to your PayPal email address.
-          </p>
+          <p>🧾 A receipt has been sent to your PayPal email address.</p>
 
           <p>
             📩 Need help? Contact us at{" "}

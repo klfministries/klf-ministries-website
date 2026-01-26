@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 
 const PAYPAL_EMAIL = "klfministries7@gmail.com"; // your PayPal email
 
@@ -12,9 +13,26 @@ export default function ResourcesClient({
 }) {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("newest");
-  const [bundle, setBundle] = useState([]); // 🛒 selected bundle items
+  const [bundle, setBundle] = useState([]);
+  const [ownedSlugs, setOwnedSlugs] = useState([]); // 👤 owned downloads
 
-  // ================= FILTERING =================
+  /* ================= LOAD OWNED DOWNLOADS ================= */
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(
+        localStorage.getItem("myDownloads") || "[]"
+      );
+      // stored = array of slugs
+      setOwnedSlugs(stored);
+    } catch (e) {
+      setOwnedSlugs([]);
+    }
+  }, []);
+
+  const ownedCount = ownedSlugs.length;
+
+  /* ================= FILTERING ================= */
 
   const filtered = initialResources
     .filter((item) => {
@@ -44,7 +62,7 @@ export default function ResourcesClient({
       : `${base}${base.includes("?") ? "&" : "?"}category=${category}`;
   };
 
-  // ================= CATEGORIES =================
+  /* ================= CATEGORIES ================= */
 
   const detectedCategories = Array.from(
     new Set(
@@ -53,7 +71,7 @@ export default function ResourcesClient({
         .filter(
           (cat) =>
             Boolean(cat) &&
-            cat !== "downloads" // remove Downloads from category filter
+            cat !== "downloads"
         )
     )
   );
@@ -64,9 +82,8 @@ export default function ResourcesClient({
     new Set([...detectedCategories, ...extraCategories])
   );
 
-  // ================= PAYPAL LINKS =================
+  /* ================= PAYPAL LINKS ================= */
 
-  // Individual purchase
   const buildPaypalLink = (item) => {
     const amount = item.price;
     const description = encodeURIComponent(
@@ -83,52 +100,67 @@ export default function ResourcesClient({
     )}`;
   };
 
-  // Bundle purchase (3 for $7)
   const buildBundlePaypalLink = (items) => {
     const slugs = items.map((i) => i.slug).join(",");
 
     const baseUrl =
       typeof window !== "undefined" ? window.location.origin : "";
 
-    const returnUrl = `${baseUrl}/${lang}/resources/thank-you?bundle=3&items=${slugs}`;
+    const returnUrl = `${baseUrl}/${lang}/resources/thank-you?items=${slugs}`;
 
     return `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD&amount=7&item_name=3%20Resource%20Bundle&return=${encodeURIComponent(
       returnUrl
     )}`;
   };
 
-  // ================= BUNDLE LOGIC =================
+  /* ================= BUNDLE LOGIC ================= */
 
   const toggleBundle = (item) => {
     setBundle((prev) => {
       const exists = prev.find((x) => x.slug === item.slug);
 
-      // Remove if already selected
       if (exists) {
         return prev.filter((x) => x.slug !== item.slug);
       }
 
-      // Limit to 3
       if (prev.length >= 3) {
         alert("You can only select 3 items for the bundle.");
         return prev;
       }
 
-      // Add
       return [...prev, item];
     });
   };
 
-  // ================= RENDER =================
+  const isBundleFull = bundle.length >= 3;
+
+  /* ================= RENDER ================= */
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-12">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-2">Resources</h1>
+    <section className="max-w-6xl mx-auto px-4 py-12 pb-28">
+      {/* ===== HEADER WITH MY DOWNLOADS BADGE ===== */}
+      <div className="text-center mb-8 space-y-4">
+        <h1 className="text-3xl font-bold">Resources</h1>
+
         <p className="text-gray-600">
           Teaching materials for spiritual growth and discipleship.
         </p>
+
+        {/* 👤 My Downloads Button with Badge */}
+        <div className="flex justify-center">
+          <Link
+            href={`/${lang}/resources/my-downloads`}
+            className="relative inline-flex items-center gap-2 rounded-lg border border-blue-900 text-blue-900 px-5 py-2 text-sm font-semibold hover:bg-blue-900 hover:text-white transition"
+          >
+            👤 My Downloads
+
+            {ownedCount > 0 && (
+              <span className="ml-2 inline-flex items-center justify-center rounded-full bg-blue-900 text-white text-xs w-6 h-6">
+                {ownedCount}
+              </span>
+            )}
+          </Link>
+        </div>
       </div>
 
       {/* ===== Type Filters ===== */}
@@ -213,6 +245,7 @@ export default function ResourcesClient({
           {filtered.map((item) => {
             const paypalLink = buildPaypalLink(item);
             const inBundle = bundle.some((x) => x.slug === item.slug);
+            const isOwned = ownedSlugs.includes(item.slug); // 🔐 protection
 
             return (
               <div
@@ -240,6 +273,12 @@ export default function ResourcesClient({
                   <span className="text-xs font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
                     ${item.price} USD
                   </span>
+
+                  {isOwned && (
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800">
+                      Owned
+                    </span>
+                  )}
                 </div>
 
                 {/* Title */}
@@ -259,27 +298,45 @@ export default function ResourcesClient({
                   </p>
                 )}
 
-                {/* ===== ACTIONS ===== */}
-                {item.type === "download" && (
-                  <label className="flex items-center gap-2 text-sm mb-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={inBundle}
-                      onChange={() => toggleBundle(item)}
-                    />
-                    Add to bundle
-                  </label>
-                )}
+                {/* ===== IF ALREADY OWNED ===== */}
+                {isOwned ? (
+                  <p className="text-sm font-medium text-green-700">
+                    You already own this file
+                  </p>
+                ) : (
+                  <>
+                    {/* ===== BUNDLE CHECKBOX (DOWNLOADS ONLY) ===== */}
+                    {item.type === "download" && (
+                      <label className="flex items-center gap-2 text-sm mb-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={inBundle}
+                          disabled={!inBundle && isBundleFull}
+                          onChange={() => toggleBundle(item)}
+                        />
+                        Add to bundle
+                      </label>
+                    )}
 
-                {/* Single Purchase */}
-                <a
-                  href={paypalLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block rounded-lg bg-blue-900 text-white px-5 py-2 text-sm font-semibold hover:bg-blue-800 transition"
-                >
-                  Buy for ${item.price} →
-                </a>
+                    {/* ===== SINGLE PURCHASE BUTTON ===== */}
+                    {!inBundle && (
+                      <a
+                        href={paypalLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block rounded-lg bg-blue-900 text-white px-5 py-2 text-sm font-semibold hover:bg-blue-800 transition"
+                      >
+                        Buy for ${item.price} →
+                      </a>
+                    )}
+
+                    {inBundle && (
+                      <p className="text-sm text-green-700 font-medium">
+                        Included in bundle
+                      </p>
+                    )}
+                  </>
+                )}
               </div>
             );
           })}
@@ -296,13 +353,13 @@ export default function ResourcesClient({
           {bundle.length === 3 ? (
             <a
               href={buildBundlePaypalLink(bundle)}
-              className="rounded-lg bg-green-700 text-white px-6 py-3 font-semibold text-center"
+              className="rounded-lg bg-green-700 text-white px-6 py-3 font-semibold text-center hover:bg-green-600 transition"
             >
               Buy Bundle for $7 →
             </a>
           ) : (
             <p className="text-sm text-gray-500">
-              Select {3 - bundle.length} more to continue
+              Select {3 - bundle.length} more to unlock bundle price
             </p>
           )}
         </div>
