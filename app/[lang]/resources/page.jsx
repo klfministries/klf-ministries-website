@@ -5,12 +5,17 @@ import ResourcesClient from "./ResourcesClient";
 
 /* ---------- Load all resources on the server ---------- */
 function getAllResources() {
-  const baseDir = path.join(process.cwd(), "app", "[lang]", "resources");
-
   const results = [];
 
   /* ===== Articles ===== */
-  const articlesDir = path.join(baseDir, "articles");
+  const articlesDir = path.join(
+    process.cwd(),
+    "app",
+    "[lang]",
+    "resources",
+    "articles"
+  );
+
   if (fs.existsSync(articlesDir)) {
     const files = fs.readdirSync(articlesDir).filter((f) => f.endsWith(".md"));
 
@@ -23,16 +28,24 @@ function getAllResources() {
       results.push({
         type: "article",
         slug,
-        title: data.title,
+        title: data.title || slug.replace(/-/g, " "),
         description: data.description || "",
         date: data.date || "",
         category: data.category || "general",
+        price: 3, // USD
       });
     }
   }
 
   /* ===== Lesson Studies ===== */
-  const lessonsDir = path.join(baseDir, "lesson-studies");
+  const lessonsDir = path.join(
+    process.cwd(),
+    "app",
+    "[lang]",
+    "resources",
+    "lesson-studies"
+  );
+
   if (fs.existsSync(lessonsDir)) {
     const files = fs.readdirSync(lessonsDir).filter((f) => f.endsWith(".md"));
 
@@ -45,16 +58,18 @@ function getAllResources() {
       results.push({
         type: "lesson",
         slug,
-        title: data.title,
+        title: data.title || slug.replace(/-/g, " "),
         description: data.description || "",
         date: data.date || "",
         category: data.category || "general",
+        price: 3, // USD
       });
     }
   }
 
-  /* ===== Downloads ===== */
-  const downloadsDir = path.join(baseDir, "downloads");
+  /* ===== Downloads (from PUBLIC folder) ===== */
+  const downloadsDir = path.join(process.cwd(), "public", "downloads");
+
   if (fs.existsSync(downloadsDir)) {
     const files = fs.readdirSync(downloadsDir);
 
@@ -69,9 +84,10 @@ function getAllResources() {
           slug,
           file,
           title: slug.replace(/-/g, " "),
-          description: "Downloadable resource",
+          description: "Premium downloadable resource",
           date: "",
           category: "downloads",
+          price: 5, // USD
         });
       }
     }
@@ -96,15 +112,14 @@ export default function ResourcesPage({ searchParams, params }) {
   const allResources = getAllResources();
 
   // Filter by type
-  let filtered = type === "all"
-    ? allResources
-    : allResources.filter((item) => item.type === type);
+  let filtered =
+    type === "all"
+      ? allResources
+      : allResources.filter((item) => item.type === type);
 
   // Filter by category
   if (category !== "all") {
-    filtered = filtered.filter(
-      (item) => item.category === category
-    );
+    filtered = filtered.filter((item) => item.category === category);
   }
 
   return (
