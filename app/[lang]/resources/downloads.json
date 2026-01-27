@@ -58,5 +58,25 @@
     "type": "lesson",
     "isPremium": true,
     "price": 12
+  },
+  {
+    "slug": "getting-your-prayers-answered",
+    "title": "Getting Your Prayers Answered (PPT)",
+    "description": "A practical Bible study on the nature of prayer, conditions for answered prayer, hindrances, and the power of communion with God.",
+    "date": "2026-01-27",
+    "file": "getting-your-prayers-answered.pptx",
+    "type": "lesson",
+    "isPremium": false,
+    "price": 0
+  },
+  {
+    "slug": "teach-me-how-to-pray",
+    "title": "Teach Me How To Pray (PPT)",
+    "description": "A Christ-centered study on how Jesus taught prayer, the A.C.T.S model, supplication, and developing a meaningful prayer life.",
+    "date": "2026-01-27",
+    "file": "teach-me-how-to-pray.pptx",
+    "type": "lesson",
+    "isPremium": true,
+    "price": 5
   }
 ]
