@@ -54,7 +54,7 @@ export async function generateMetadata({ params }) {
       siteName: "KLF Ministries",
       images: [
         {
-          url: "/og-image.png",
+          url: `${baseUrl}/og-image.png`,   // 🔴 FORCE ABSOLUTE URL
           width: 1200,
           height: 1200,
           alt: "KLF Ministries",
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title: seo[lang].title,
       description: seo[lang].description,
-      images: ["/og-image.png"],
+      images: [`${baseUrl}/og-image.png`], // 🔴 FORCE ABSOLUTE URL
     },
   };
 }
