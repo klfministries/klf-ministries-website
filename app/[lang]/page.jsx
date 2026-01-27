@@ -5,6 +5,7 @@ import MobileSubscribeBar from "../components/MobileSubscribeBar";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import YouTubeLatest from "../components/YouTubeLatest"; // 🔴 ADD THIS
 
 /* ================= FEATURED DEVOTIONAL ================= */
 function FeaturedDevotional({ lang }) {
@@ -214,7 +215,7 @@ export default function Home({ params }) {
         <FeaturedDevotional lang={lang} />
       </section>
 
-      {/* ================= LATEST DEVOTIONALS GRID (WITH EXCERPTS) ================= */}
+      {/* ================= LATEST DEVOTIONALS GRID ================= */}
       <section className="py-28 px-6 bg-[#f7f9fc]">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12 text-blue-900">
@@ -260,7 +261,6 @@ export default function Home({ params }) {
                     {item.title}
                   </h3>
 
-                  {/* EXCERPT */}
                   <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">
                     {item.excerpt}
                   </p>
@@ -278,7 +278,7 @@ export default function Home({ params }) {
         </div>
       </section>
 
-      {/* ================= OUR MISSION IMAGE SECTION ================= */}
+      {/* ================= OUR MISSION ================= */}
       <section className="py-28 px-6 bg-white">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6 text-blue-900">
@@ -299,6 +299,11 @@ export default function Home({ params }) {
             />
           </div>
         </div>
+      </section>
+
+      {/* ================= LATEST YOUTUBE VIDEOS ================= */}
+      <section className="py-28 px-6 bg-[#f7f4ee]">
+        <YouTubeLatest />
       </section>
 
       {/* ================= TESTIMONIES ================= */}
