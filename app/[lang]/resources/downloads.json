@@ -6,6 +6,7 @@
     "date": "2026-01-20",
     "file": "bible-study-guide.pdf",
     "type": "lesson",
+    "category": "discipleship",
     "isPremium": false,
     "price": 0
   },
@@ -16,6 +17,7 @@
     "date": "2026-01-18",
     "file": "church-training-slides.pptx",
     "type": "lesson",
+    "category": "leadership",
     "isPremium": false,
     "price": 0
   },
@@ -26,6 +28,7 @@
     "date": "2026-01-26",
     "file": "how-to-study-bible-prophecy.pdf",
     "type": "article",
+    "category": "prophecy",
     "isPremium": true,
     "price": 5
   },
@@ -36,6 +39,7 @@
     "date": "2026-01-27",
     "file": "faith-and-works.pptx",
     "type": "lesson",
+    "category": "discipleship",
     "isPremium": true,
     "price": 12
   },
@@ -46,6 +50,7 @@
     "date": "2026-01-27",
     "file": "his-life-for-mine.pptx",
     "type": "lesson",
+    "category": "typology",
     "isPremium": true,
     "price": 12
   },
@@ -56,6 +61,7 @@
     "date": "2026-01-27",
     "file": "christs-priestly-ministry-inauguration.pptx",
     "type": "lesson",
+    "category": "typology",
     "isPremium": true,
     "price": 12
   },
@@ -66,6 +72,7 @@
     "date": "2026-01-27",
     "file": "getting-your-prayers-answered.pptx",
     "type": "lesson",
+    "category": "discipleship",
     "isPremium": false,
     "price": 0
   },
@@ -76,6 +83,7 @@
     "date": "2026-01-27",
     "file": "teach-me-how-to-pray.pptx",
     "type": "lesson",
+    "category": "discipleship",
     "isPremium": true,
     "price": 5
   },

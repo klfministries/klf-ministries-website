@@ -25,11 +25,28 @@ export default function ResourcesClient({
     }
   }, []);
 
+  /* ================= NORMALIZE CATEGORY ================= */
+  const getCategory = (item) => {
+    if (item.category) return item.category; // new system
+    if (item.type === "article") return "article";
+    return "lesson";
+  };
+
   /* ================= FILTERING ================= */
   const filtered = initialResources
     .filter((item) => {
+      // 🔎 Search filter
       const text = `${item.title} ${item.description}`.toLowerCase();
-      return text.includes(query.toLowerCase());
+      const matchesQuery = text.includes(query.toLowerCase());
+
+      // 🧭 Category filter
+      const category = getCategory(item);
+      const matchesCategory =
+        !currentCategory || currentCategory === "all"
+          ? true
+          : category === currentCategory;
+
+      return matchesQuery && matchesCategory;
     })
     .sort((a, b) => {
       if (!a.date || !b.date) return 0;
@@ -38,12 +55,13 @@ export default function ResourcesClient({
         : new Date(a.date) - new Date(b.date);
     });
 
-  /* ================= CATEGORY + TYPE LINKS ================= */
+  /* ================= TYPE LINKS ================= */
   const makeTypeHref = (type) =>
     type === "all"
       ? `/${lang}/resources`
       : `/${lang}/resources?type=${type}`;
 
+  /* ================= CATEGORY LINKS ================= */
   const makeCategoryHref = (category) => {
     const base =
       currentType === "all"
@@ -55,7 +73,7 @@ export default function ResourcesClient({
       : `${base}${base.includes("?") ? "&" : "?"}category=${category}`;
   };
 
-  /* ================= PAYPAL LINK (DYNAMIC PRICE) ================= */
+  /* ================= PAYPAL LINK ================= */
   const buildPaypalLink = (item) => {
     const description = encodeURIComponent(`${item.title} (${item.type})`);
 
@@ -157,6 +175,7 @@ export default function ResourcesClient({
         {filtered.map((item) => {
           const isPaidItem = item.isPremium === true;
           const isOwned = ownedSlugs.includes(item.slug);
+          const category = getCategory(item);
 
           const viewHref = `/${lang}/resources/${item.slug}`;
           const paypalLink = isPaidItem ? buildPaypalLink(item) : null;
@@ -171,6 +190,12 @@ export default function ResourcesClient({
                 <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
                   {item.type}
                 </span>
+
+                {category === "prophecy" && (
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800">
+                    Prophecy
+                  </span>
+                )}
 
                 {isPaidItem ? (
                   isOwned ? (
@@ -201,7 +226,6 @@ export default function ResourcesClient({
 
               {/* ===== ACTIONS ===== */}
               {!isPaidItem ? (
-                // FREE ITEM
                 <Link
                   href={viewHref}
                   className="inline-block rounded-lg bg-green-700 text-white px-5 py-2 text-sm font-semibold hover:bg-green-600 transition"
@@ -209,7 +233,6 @@ export default function ResourcesClient({
                   View Resource →
                 </Link>
               ) : isOwned ? (
-                // PAID BUT ALREADY OWNED
                 <Link
                   href={viewHref}
                   className="inline-block rounded-lg bg-green-700 text-white px-5 py-2 text-sm font-semibold hover:bg-green-600 transition"
@@ -217,7 +240,6 @@ export default function ResourcesClient({
                   Download →
                 </Link>
               ) : (
-                // PAID AND NOT OWNED
                 <a
                   href={paypalLink}
                   target="_blank"
@@ -231,6 +253,13 @@ export default function ResourcesClient({
           );
         })}
       </div>
+
+      {/* EMPTY STATE */}
+      {filtered.length === 0 && (
+        <p className="text-center text-gray-500 mt-12">
+          No resources found in this category.
+        </p>
+      )}
     </section>
   );
 }
