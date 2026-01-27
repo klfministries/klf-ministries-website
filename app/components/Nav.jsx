@@ -6,9 +6,14 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-export default function Nav({ lang = "en" }) {
+export default function Nav() {
   const pathname = usePathname();
+
+  // Derive lang from URL
+  const segments = pathname.split("/").filter(Boolean);
+  const lang = segments[0] || "en";
   const base = `/${lang}`;
+
   const switchLang = lang === "en" ? "es" : "en";
   const switchedPath = pathname.replace(`/${lang}`, `/${switchLang}`);
 
@@ -28,7 +33,6 @@ export default function Nav({ lang = "en" }) {
     setOpen(false);
   };
 
-  // Highlight Resources when inside /resources
   const isInResources = pathname.startsWith(`${base}/resources`);
 
   const links = [

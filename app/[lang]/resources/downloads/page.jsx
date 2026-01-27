@@ -19,23 +19,22 @@ function getAllDownloads() {
 
     for (const file of files) {
       const ext = path.extname(file).toLowerCase();
+      const slug = file.replace(ext, "");
 
       if ([".pdf", ".ppt", ".pptx", ".docx", ".zip"].includes(ext)) {
-        const slug = file.replace(ext, "");
-
-        // 💰 Pricing rules
-        const isPremium = [".pdf", ".ppt", ".pptx"].includes(ext);
-        const price = isPremium ? 5 : 3;
+        // 🔐 Only THIS file is paid
+        const isPaid = slug === "how-to-study-bible-prophecy";
 
         results.push({
           file,
           slug,
           title: slug.replace(/-/g, " "),
-          description: isPremium
-            ? "Premium teaching resource"
-            : "Downloadable resource",
+          description: isPaid
+            ? "Premium prophecy study resource"
+            : "Free teaching resource",
           ext,
-          price,
+          price: isPaid ? 5 : 0,
+          isPaid,
         });
       }
     }
@@ -49,7 +48,6 @@ export default function DownloadsPage({ params }) {
   const { lang } = params;
   const downloads = getAllDownloads();
 
-  // ✅ Your real PayPal donation base (from DonationModal)
   const PAYPAL_EMAIL = "klfministries7@gmail.com";
 
   return (
@@ -58,7 +56,7 @@ export default function DownloadsPage({ params }) {
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold mb-2">Downloads</h1>
         <p className="text-gray-600">
-          Premium PDF & PowerPoint resources to support the ministry.
+          Free and premium teaching resources for the ministry.
         </p>
       </div>
 
@@ -85,13 +83,12 @@ export default function DownloadsPage({ params }) {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {downloads.map((item) => {
-            // 🧾 Build PayPal payment link (same system as your DonationModal)
             const returnUrl =
               typeof window !== "undefined"
                 ? `${window.location.origin}/${lang}/resources/downloads?payment=success`
                 : "";
 
-            const paypalLink = `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD&amount=${item.price}&item_name=${encodeURIComponent(
+            const paypalLink = `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD&amount=5&item_name=${encodeURIComponent(
               item.title
             )}&return=${encodeURIComponent(returnUrl)}`;
 
@@ -103,12 +100,12 @@ export default function DownloadsPage({ params }) {
                 {/* Price Badge */}
                 <span
                   className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4 ${
-                    item.price === 5
+                    item.isPaid
                       ? "bg-yellow-100 text-yellow-800"
                       : "bg-green-100 text-green-800"
                   }`}
                 >
-                  ${item.price} USD
+                  {item.isPaid ? "$5 USD" : "FREE"}
                 </span>
 
                 <h3 className="text-lg font-semibold mb-2 capitalize">
@@ -119,23 +116,46 @@ export default function DownloadsPage({ params }) {
                   {item.description}
                 </p>
 
-                {/* Pay Button */}
-                <a
-                  href={paypalLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full text-center bg-blue-900 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-800 transition"
-                >
-                  Pay ${item.price} via PayPal
-                </a>
+                {/* ===== FREE FILE ===== */}
+                {!item.isPaid ? (
+                  <div className="flex flex-col gap-3">
+                    {/* View in browser */}
+                    <Link
+                      href={`/${lang}/resources/view/${item.slug}`}
+                      className="block w-full text-center bg-green-700 text-white px-4 py-3 rounded-lg font-semibold hover:bg-green-600 transition"
+                    >
+                      View Online →
+                    </Link>
 
-                <p className="text-xs text-gray-500 mt-3">
-                  After payment, please email your PayPal receipt to{" "}
-                  <span className="font-medium">
-                    klfministries7@gmail.com
-                  </span>{" "}
-                  to receive your download.
-                </p>
+                    {/* Direct download */}
+                    <a
+                      href={`/downloads/${item.file}`}
+                      className="block w-full text-center border border-green-700 text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition"
+                    >
+                      Download PDF →
+                    </a>
+                  </div>
+                ) : (
+                  /* ===== PAID FILE (PROPHECY ONLY) ===== */
+                  <>
+                    <a
+                      href={paypalLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full text-center bg-blue-900 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-800 transition"
+                    >
+                      Buy for $5 via PayPal
+                    </a>
+
+                    <p className="text-xs text-gray-500 mt-3">
+                      After payment, please email your PayPal receipt to{" "}
+                      <span className="font-medium">
+                        klfministries7@gmail.com
+                      </span>{" "}
+                      to receive your download.
+                    </p>
+                  </>
+                )}
               </div>
             );
           })}

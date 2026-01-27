@@ -7,6 +7,7 @@ import ScrollProgress from "../components/ScrollProgress";
 import DonationModal from "../components/DonationModal";
 import Link from "next/link";
 import Image from "next/image";
+import WhatsAppFloat from "../components/WhatsAppFloat";
 
 /* ================= STATIC PARAMS ================= */
 export async function generateStaticParams() {
@@ -106,15 +107,8 @@ export default function LangLayout({ children, params }) {
           </div>
         </footer>
 
-        {/* WHATSAPP FLOAT */}
-        <a
-          href="https://wa.me/18768700508"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-green-700 transition z-50"
-        >
-          WhatsApp
-        </a>
+        {/* ===== WHATSAPP FLOAT (CLIENT COMPONENT) ===== */}
+        <WhatsAppFloat />
       </body>
     </html>
   );

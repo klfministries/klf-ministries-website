@@ -2,12 +2,13 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import ResourcesClient from "./ResourcesClient";
+import downloads from "./downloads.json";
 
 /* ---------- Load all resources on the server ---------- */
 function getAllResources() {
   const results = [];
 
-  /* ===== Articles ===== */
+  /* ===== Articles (.md) ===== */
   const articlesDir = path.join(
     process.cwd(),
     "app",
@@ -32,12 +33,12 @@ function getAllResources() {
         description: data.description || "",
         date: data.date || "",
         category: data.category || "general",
-        price: 3, // USD
+        price: 3,
       });
     }
   }
 
-  /* ===== Lesson Studies ===== */
+  /* ===== Lesson Studies (.md) ===== */
   const lessonsDir = path.join(
     process.cwd(),
     "app",
@@ -62,35 +63,24 @@ function getAllResources() {
         description: data.description || "",
         date: data.date || "",
         category: data.category || "general",
-        price: 3, // USD
+        price: 3,
       });
     }
   }
 
-  /* ===== Downloads (from PUBLIC folder) ===== */
-  const downloadsDir = path.join(process.cwd(), "public", "downloads");
-
-  if (fs.existsSync(downloadsDir)) {
-    const files = fs.readdirSync(downloadsDir);
-
-    for (const file of files) {
-      const ext = path.extname(file).toLowerCase();
-
-      if ([".pdf", ".ppt", ".pptx"].includes(ext)) {
-        const slug = file.replace(ext, "");
-
-        results.push({
-          type: "download",
-          slug,
-          file,
-          title: slug.replace(/-/g, " "),
-          description: "Premium downloadable resource",
-          date: "",
-          category: "downloads",
-          price: 5, // USD
-        });
-      }
-    }
+  /* ===== Downloads (from downloads.json) ===== */
+  for (const item of downloads) {
+    results.push({
+      type: "download",
+      slug: item.slug,
+      file: item.file,
+      title: item.title,
+      description: item.description,
+      date: item.date || "",
+      category: "downloads",
+      price: item.price || 5,
+      isPremium: item.isPremium,
+    });
   }
 
   /* ===== Sort newest first ===== */

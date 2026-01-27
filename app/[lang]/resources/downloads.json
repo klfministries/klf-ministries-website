@@ -4,13 +4,30 @@
     "title": "Bible Study Guide (PDF)",
     "description": "A printable guide for personal and group Bible study.",
     "date": "2026-01-20",
-    "file": "bible-study-guide.pdf"
+    "file": "bible-study-guide.pdf",
+    "type": "lesson",
+    "isPremium": true,
+    "price": 5
   },
   {
     "slug": "church-training-slides",
     "title": "Church Training Slides (PPT)",
     "description": "PowerPoint slides for leadership training.",
     "date": "2026-01-18",
-    "file": "church-training-slides.pptx"
+    "file": "church-training-slides.pptx",
+    "type": "lesson",
+    "isPremium": true,
+    "price": 5
+  },
+  {
+    "slug": "how-to-study-bible-prophecy",
+    "title": "How to Study Bible Prophecy (PDF)",
+    "description": "A Seventh-day Adventist guide to historicist prophetic interpretation and spiritual application.",
+    "date": "2026-01-26",
+    "file": "how-to-study-bible-prophecy.pdf",
+    "type": "article",
+    "isPremium": true,
+    "price": 5
   }
 ]
+

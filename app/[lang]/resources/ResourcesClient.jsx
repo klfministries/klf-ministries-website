@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const PAYPAL_EMAIL = "klfministries7@gmail.com"; // your PayPal email
+const PAYPAL_EMAIL = "klfministries7@gmail.com";
+
+// 🔐 ONLY THIS ONE IS PAID
+const PAID_SLUG = "how-to-study-bible-prophecy";
 
 export default function ResourcesClient({
   lang,
@@ -13,27 +16,19 @@ export default function ResourcesClient({
 }) {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("newest");
-  const [bundle, setBundle] = useState([]);
-  const [ownedSlugs, setOwnedSlugs] = useState([]); // 👤 owned downloads
+  const [ownedSlugs, setOwnedSlugs] = useState([]);
 
-  /* ================= LOAD OWNED DOWNLOADS ================= */
-
+  /* ================= LOAD MY DOWNLOADS ================= */
   useEffect(() => {
     try {
-      const stored = JSON.parse(
-        localStorage.getItem("myDownloads") || "[]"
-      );
-      // stored = array of slugs
+      const stored = JSON.parse(localStorage.getItem("myDownloads") || "[]");
       setOwnedSlugs(stored);
-    } catch (e) {
+    } catch {
       setOwnedSlugs([]);
     }
   }, []);
 
-  const ownedCount = ownedSlugs.length;
-
   /* ================= FILTERING ================= */
-
   const filtered = initialResources
     .filter((item) => {
       const text = `${item.title} ${item.description}`.toLowerCase();
@@ -46,6 +41,7 @@ export default function ResourcesClient({
         : new Date(a.date) - new Date(b.date);
     });
 
+  /* ================= CATEGORY + TYPE LINKS ================= */
   const makeTypeHref = (type) =>
     type === "all"
       ? `/${lang}/resources`
@@ -62,160 +58,84 @@ export default function ResourcesClient({
       : `${base}${base.includes("?") ? "&" : "?"}category=${category}`;
   };
 
-  /* ================= CATEGORIES ================= */
-
-  const detectedCategories = Array.from(
-    new Set(
-      initialResources
-        .map((item) => item.category)
-        .filter(
-          (cat) =>
-            Boolean(cat) &&
-            cat !== "downloads"
-        )
-    )
-  );
-
-  const extraCategories = ["typology", "stewardship"];
-
-  const finalCategories = Array.from(
-    new Set([...detectedCategories, ...extraCategories])
-  );
-
-  /* ================= PAYPAL LINKS ================= */
-
+  /* ================= PAYPAL LINK (ONLY FOR PAID ONE) ================= */
   const buildPaypalLink = (item) => {
-    const amount = item.price;
-    const description = encodeURIComponent(
-      `${item.title} (${item.type})`
-    );
+    const description = encodeURIComponent(`${item.title} (${item.type})`);
 
     const baseUrl =
       typeof window !== "undefined" ? window.location.origin : "";
 
     const returnUrl = `${baseUrl}/${lang}/resources/thank-you?item=${item.slug}`;
 
-    return `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD&amount=${amount}&item_name=${description}&return=${encodeURIComponent(
+    return `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD&amount=5&item_name=${description}&return=${encodeURIComponent(
       returnUrl
     )}`;
   };
-
-  const buildBundlePaypalLink = (items) => {
-    const slugs = items.map((i) => i.slug).join(",");
-
-    const baseUrl =
-      typeof window !== "undefined" ? window.location.origin : "";
-
-    const returnUrl = `${baseUrl}/${lang}/resources/thank-you?items=${slugs}`;
-
-    return `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD&amount=7&item_name=3%20Resource%20Bundle&return=${encodeURIComponent(
-      returnUrl
-    )}`;
-  };
-
-  /* ================= BUNDLE LOGIC ================= */
-
-  const toggleBundle = (item) => {
-    setBundle((prev) => {
-      const exists = prev.find((x) => x.slug === item.slug);
-
-      if (exists) {
-        return prev.filter((x) => x.slug !== item.slug);
-      }
-
-      if (prev.length >= 3) {
-        alert("You can only select 3 items for the bundle.");
-        return prev;
-      }
-
-      return [...prev, item];
-    });
-  };
-
-  const isBundleFull = bundle.length >= 3;
 
   /* ================= RENDER ================= */
-
   return (
     <section className="max-w-6xl mx-auto px-4 py-12 pb-28">
-      {/* ===== HEADER WITH MY DOWNLOADS BADGE ===== */}
-      <div className="text-center mb-8 space-y-4">
+      {/* ===== TOP BAR ===== */}
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Resources</h1>
 
-        <p className="text-gray-600">
-          Teaching materials for spiritual growth and discipleship.
-        </p>
-
-        {/* 👤 My Downloads Button with Badge */}
-        <div className="flex justify-center">
-          <Link
-            href={`/${lang}/resources/my-downloads`}
-            className="relative inline-flex items-center gap-2 rounded-lg border border-blue-900 text-blue-900 px-5 py-2 text-sm font-semibold hover:bg-blue-900 hover:text-white transition"
-          >
-            👤 My Downloads
-
-            {ownedCount > 0 && (
-              <span className="ml-2 inline-flex items-center justify-center rounded-full bg-blue-900 text-white text-xs w-6 h-6">
-                {ownedCount}
-              </span>
-            )}
-          </Link>
-        </div>
+        <Link
+          href={`/${lang}/resources/my-downloads`}
+          className="rounded-lg border px-4 py-2 text-sm font-semibold hover:bg-gray-100"
+        >
+          My Downloads
+        </Link>
       </div>
 
-      {/* ===== Type Filters ===== */}
-      <div className="flex gap-2 justify-center flex-wrap mb-6">
-        {[
-          { key: "all", label: "All" },
-          { key: "article", label: "Articles" },
-          { key: "lesson", label: "Lesson Studies" },
-          { key: "download", label: "Downloads" },
-        ].map((btn) => (
-          <a
-            key={btn.key}
-            href={makeTypeHref(btn.key)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-              currentType === btn.key
-                ? "bg-blue-600 text-white"
+      <p className="text-gray-600 mb-8">
+        Teaching materials for spiritual growth and discipleship.
+      </p>
+
+      {/* ===== TYPE FILTER ===== */}
+      <div className="flex flex-wrap gap-3 mb-6">
+        {["all", "article", "lesson", "download"].map((type) => (
+          <Link
+            key={type}
+            href={makeTypeHref(type)}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${
+              currentType === type
+                ? "bg-blue-900 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            {btn.label}
-          </a>
+            {type === "all"
+              ? "All"
+              : type === "article"
+              ? "Articles"
+              : type === "lesson"
+              ? "Lesson Studies"
+              : "Downloads"}
+          </Link>
         ))}
       </div>
 
-      {/* ===== Category Filters ===== */}
-      {finalCategories.length > 0 && (
-        <div className="flex gap-2 justify-center flex-wrap mb-8">
-          <a
-            href={makeCategoryHref("all")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-              currentCategory === "all"
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            All Categories
-          </a>
-
-          {finalCategories.map((cat) => (
-            <a
+      {/* ===== CATEGORY FILTER ===== */}
+      <div className="flex flex-wrap gap-3 mb-10">
+        {["all", "prophecy", "discipleship", "typology", "stewardship"].map(
+          (cat) => (
+            <Link
               key={cat}
               href={makeCategoryHref(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium capitalize transition ${
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${
                 currentCategory === cat
-                  ? "bg-gray-900 text-white"
+                  ? "bg-black text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
-              {cat}
-            </a>
-          ))}
-        </div>
-      )}
+              {cat === "all"
+                ? "All Categories"
+                : cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </Link>
+          )
+        )}
+      </div>
 
-      {/* ===== Search + Sort ===== */}
+      {/* ===== SEARCH + SORT ===== */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between mb-10">
         <input
           type="text"
@@ -228,142 +148,92 @@ export default function ResourcesClient({
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border rounded-lg text-sm"
         >
           <option value="newest">Newest first</option>
           <option value="oldest">Oldest first</option>
         </select>
       </div>
 
-      {/* ===== Cards Grid ===== */}
-      {filtered.length === 0 ? (
-        <p className="text-center text-gray-500">
-          No resources match your filters.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filtered.map((item) => {
-            const paypalLink = buildPaypalLink(item);
-            const inBundle = bundle.some((x) => x.slug === item.slug);
-            const isOwned = ownedSlugs.includes(item.slug); // 🔐 protection
+      {/* ===== CARDS GRID ===== */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {filtered.map((item) => {
+          const isPaidItem = item.slug === PAID_SLUG;
+          const isOwned = ownedSlugs.includes(item.slug);
 
-            return (
-              <div
-                key={`${item.type}-${item.slug}`}
-                className="border rounded-xl p-6 shadow-sm hover:shadow-md transition"
-              >
-                {/* Badges */}
-                <div className="flex gap-2 mb-4 flex-wrap">
-                  <span
-                    className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                      item.type === "article"
-                        ? "bg-blue-100 text-blue-700"
-                        : item.type === "lesson"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-purple-100 text-purple-700"
-                    }`}
-                  >
-                    {item.type === "article"
-                      ? "Article"
-                      : item.type === "lesson"
-                      ? "Lesson Study"
-                      : "Download"}
-                  </span>
+          const viewHref = `/${lang}/resources/${item.slug}`;
+          const paypalLink = isPaidItem ? buildPaypalLink(item) : null;
 
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
-                    ${item.price} USD
-                  </span>
+          return (
+            <div
+              key={`${item.type}-${item.slug}`}
+              className="border rounded-xl p-6 shadow-sm hover:shadow-md transition"
+            >
+              {/* Badges */}
+              <div className="flex gap-2 mb-4 flex-wrap">
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
+                  {item.type}
+                </span>
 
-                  {isOwned && (
-                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800">
-                      Owned
+                {isPaidItem ? (
+                  isOwned ? (
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                      Purchased
                     </span>
-                  )}
-                </div>
-
-                {/* Title */}
-                <h3 className="text-lg font-semibold mb-2">
-                  {item.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm text-gray-600 mb-4">
-                  {item.description}
-                </p>
-
-                {/* Date */}
-                {item.date && (
-                  <p className="text-xs text-gray-400 mb-3">
-                    {item.date}
-                  </p>
-                )}
-
-                {/* ===== IF ALREADY OWNED ===== */}
-                {isOwned ? (
-                  <p className="text-sm font-medium text-green-700">
-                    You already own this file
-                  </p>
+                  ) : (
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
+                      $5 USD
+                    </span>
+                  )
                 ) : (
-                  <>
-                    {/* ===== BUNDLE CHECKBOX (DOWNLOADS ONLY) ===== */}
-                    {item.type === "download" && (
-                      <label className="flex items-center gap-2 text-sm mb-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={inBundle}
-                          disabled={!inBundle && isBundleFull}
-                          onChange={() => toggleBundle(item)}
-                        />
-                        Add to bundle
-                      </label>
-                    )}
-
-                    {/* ===== SINGLE PURCHASE BUTTON ===== */}
-                    {!inBundle && (
-                      <a
-                        href={paypalLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block rounded-lg bg-blue-900 text-white px-5 py-2 text-sm font-semibold hover:bg-blue-800 transition"
-                      >
-                        Buy for ${item.price} →
-                      </a>
-                    )}
-
-                    {inBundle && (
-                      <p className="text-sm text-green-700 font-medium">
-                        Included in bundle
-                      </p>
-                    )}
-                  </>
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                    FREE
+                  </span>
                 )}
               </div>
-            );
-          })}
-        </div>
-      )}
 
-      {/* ===== FIXED BUNDLE BAR ===== */}
-      {bundle.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between z-50">
-          <p className="font-medium">
-            Bundle selected: {bundle.length} / 3
-          </p>
+              <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
 
-          {bundle.length === 3 ? (
-            <a
-              href={buildBundlePaypalLink(bundle)}
-              className="rounded-lg bg-green-700 text-white px-6 py-3 font-semibold text-center hover:bg-green-600 transition"
-            >
-              Buy Bundle for $7 →
-            </a>
-          ) : (
-            <p className="text-sm text-gray-500">
-              Select {3 - bundle.length} more to unlock bundle price
-            </p>
-          )}
-        </div>
-      )}
+              <p className="text-sm text-gray-600 mb-4">
+                {item.description}
+              </p>
+
+              {item.date && (
+                <p className="text-xs text-gray-400 mb-3">{item.date}</p>
+              )}
+
+              {/* ===== ACTIONS ===== */}
+              {!isPaidItem ? (
+                // FREE ITEM
+                <Link
+                  href={viewHref}
+                  className="inline-block rounded-lg bg-green-700 text-white px-5 py-2 text-sm font-semibold hover:bg-green-600 transition"
+                >
+                  View Resource →
+                </Link>
+              ) : isOwned ? (
+                // PAID BUT ALREADY OWNED
+                <Link
+                  href={viewHref}
+                  className="inline-block rounded-lg bg-green-700 text-white px-5 py-2 text-sm font-semibold hover:bg-green-600 transition"
+                >
+                  Download →
+                </Link>
+              ) : (
+                // PAID AND NOT OWNED
+                <a
+                  href={paypalLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block rounded-lg bg-blue-900 text-white px-5 py-2 text-sm font-semibold hover:bg-blue-800 transition"
+                >
+                  Buy for $5 →
+                </a>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }
