@@ -78,5 +78,16 @@
     "type": "lesson",
     "isPremium": true,
     "price": 5
+  },
+  {
+    "slug": "the-time-of-the-end-and-the-end-of-time",
+    "title": "The Time of the End and the End of Time (PPT)",
+    "description": "A prophetic study on Daniel, Revelation, and the final events leading to the close of probation and the second coming of Christ.",
+    "date": "2026-01-27",
+    "file": "the-time-of-the-end-and-the-end-of-time.pptx",
+    "type": "lesson",
+    "category": "prophecy",
+    "isPremium": true,
+    "price": 12
   }
 ]
