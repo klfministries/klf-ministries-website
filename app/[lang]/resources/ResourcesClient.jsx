@@ -31,23 +31,29 @@ export default function ResourcesClient({
     return "discipleship"; // safe default
   };
 
-  /* ================= FILTERING ================= */
+  /* ================= FILTERING (FIXED) ================= */
   const filtered = initialResources
     .filter((item) => {
       // 🔎 Search filter
       const text = `${item.title} ${item.description}`.toLowerCase();
       const matchesQuery = text.includes(query.toLowerCase());
 
-      // 🧭 Type filter
+      // 🧭 TYPE filter (robust + supports "download")
       const matchesType =
-        !currentType || currentType === "all"
+        currentType === undefined ||
+        currentType === "" ||
+        currentType === "all"
           ? true
-          : item.type === currentType;
+          : currentType === "download"
+            ? !!item.file
+            : item.type === currentType;
 
-      // 🧭 Category filter
+      // 🧭 CATEGORY filter (robust)
       const category = getCategory(item);
       const matchesCategory =
-        !currentCategory || currentCategory === "all"
+        currentCategory === undefined ||
+        currentCategory === "" ||
+        currentCategory === "all"
           ? true
           : category === currentCategory;
 
@@ -69,7 +75,9 @@ export default function ResourcesClient({
   /* ================= CATEGORY LINKS ================= */
   const makeCategoryHref = (category) => {
     const base =
-      !currentType || currentType === "all"
+      currentType === undefined ||
+      currentType === "" ||
+      currentType === "all"
         ? `/${lang}/resources`
         : `/${lang}/resources?type=${currentType}`;
 
@@ -118,7 +126,8 @@ export default function ResourcesClient({
             key={type}
             href={makeTypeHref(type)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentType === type || (!currentType && type === "all")
+              currentType === type ||
+              (!currentType && type === "all")
                 ? "bg-blue-900 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
@@ -148,7 +157,8 @@ export default function ResourcesClient({
             key={cat}
             href={makeCategoryHref(cat)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentCategory === cat || (!currentCategory && cat === "all")
+              currentCategory === cat ||
+              (!currentCategory && cat === "all")
                 ? "bg-black text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
