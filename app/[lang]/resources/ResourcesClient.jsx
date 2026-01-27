@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
 const PAYPAL_EMAIL = "klfministries7@gmail.com";
+const PAGE_SIZE = 6; // how many cards per page
 
 export default function ResourcesClient({
   lang,
@@ -14,6 +15,7 @@ export default function ResourcesClient({
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("newest");
   const [ownedSlugs, setOwnedSlugs] = useState([]);
+  const [page, setPage] = useState(1);
 
   /* ================= LOAD MY DOWNLOADS ================= */
   useEffect(() => {
@@ -25,46 +27,92 @@ export default function ResourcesClient({
     }
   }, []);
 
+  /* ================= RESET PAGE WHEN FILTERS CHANGE ================= */
+  useEffect(() => {
+    setPage(1);
+  }, [query, currentType, currentCategory, sort]);
+
   /* ================= NORMALIZE CATEGORY ================= */
   const getCategory = (item) => {
     if (item.category) return item.category;
-    return "discipleship"; // safe default
+    return "discipleship";
   };
 
-  /* ================= FILTERING (FIXED) ================= */
-  const filtered = initialResources
-    .filter((item) => {
-      // 🔎 Search filter
-      const text = `${item.title} ${item.description}`.toLowerCase();
-      const matchesQuery = text.includes(query.toLowerCase());
+  /* ================= BASE FILTER (no pagination yet) ================= */
+  const baseFiltered = useMemo(() => {
+    return initialResources
+      .filter((item) => {
+        // 🔎 Search
+        const text = `${item.title} ${item.description}`.toLowerCase();
+        const matchesQuery = text.includes(query.toLowerCase());
 
-      // 🧭 TYPE filter (robust + supports "download")
-      const matchesType =
-        currentType === undefined ||
-        currentType === "" ||
-        currentType === "all"
-          ? true
-          : currentType === "download"
-            ? !!item.file
-            : item.type === currentType;
+        // 🧭 Type
+        const matchesType =
+          currentType === undefined ||
+          currentType === "" ||
+          currentType === "all"
+            ? true
+            : currentType === "download"
+              ? !!item.file
+              : item.type === currentType;
 
-      // 🧭 CATEGORY filter (robust)
-      const category = getCategory(item);
-      const matchesCategory =
-        currentCategory === undefined ||
-        currentCategory === "" ||
-        currentCategory === "all"
-          ? true
-          : category === currentCategory;
+        // 🧭 Category
+        const category = getCategory(item);
+        const matchesCategory =
+          currentCategory === undefined ||
+          currentCategory === "" ||
+          currentCategory === "all"
+            ? true
+            : category === currentCategory;
 
-      return matchesQuery && matchesType && matchesCategory;
-    })
-    .sort((a, b) => {
-      if (!a.date || !b.date) return 0;
-      return sort === "newest"
-        ? new Date(b.date) - new Date(a.date)
-        : new Date(a.date) - new Date(b.date);
+        return matchesQuery && matchesType && matchesCategory;
+      })
+      .sort((a, b) => {
+        if (!a.date || !b.date) return 0;
+        return sort === "newest"
+          ? new Date(b.date) - new Date(a.date)
+          : new Date(a.date) - new Date(b.date);
+      });
+  }, [initialResources, query, currentType, currentCategory, sort]);
+
+  /* ================= PAGINATION ================= */
+  const totalPages = Math.ceil(baseFiltered.length / PAGE_SIZE);
+
+  const paginated = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    return baseFiltered.slice(start, end);
+  }, [baseFiltered, page]);
+
+  /* ================= COUNTS FOR FILTERS ================= */
+  const counts = useMemo(() => {
+    const result = {
+      all: initialResources.length,
+      article: 0,
+      lesson: 0,
+      download: 0,
+      prophecy: 0,
+      discipleship: 0,
+      typology: 0,
+      stewardship: 0,
+      leadership: 0,
+    };
+
+    initialResources.forEach((item) => {
+      // type counts
+      if (item.type === "article") result.article++;
+      if (item.type === "lesson") result.lesson++;
+      if (item.file) result.download++;
+
+      // category counts
+      const cat = getCategory(item);
+      if (result[cat] !== undefined) {
+        result[cat]++;
+      }
     });
+
+    return result;
+  }, [initialResources]);
 
   /* ================= TYPE LINKS ================= */
   const makeTypeHref = (type) =>
@@ -119,53 +167,50 @@ export default function ResourcesClient({
         Teaching materials for spiritual growth and discipleship.
       </p>
 
-      {/* ===== TYPE FILTER ===== */}
+      {/* ===== TYPE FILTER (WITH COUNTS) ===== */}
       <div className="flex flex-wrap gap-3 mb-6">
-        {["all", "article", "lesson", "download"].map((type) => (
+        {[
+          { key: "all", label: "All", count: counts.all },
+          { key: "article", label: "Articles", count: counts.article },
+          { key: "lesson", label: "Lesson Studies", count: counts.lesson },
+          { key: "download", label: "Downloads", count: counts.download },
+        ].map((t) => (
           <Link
-            key={type}
-            href={makeTypeHref(type)}
+            key={t.key}
+            href={makeTypeHref(t.key)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentType === type ||
-              (!currentType && type === "all")
+              currentType === t.key ||
+              (!currentType && t.key === "all")
                 ? "bg-blue-900 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            {type === "all"
-              ? "All"
-              : type === "article"
-              ? "Articles"
-              : type === "lesson"
-              ? "Lesson Studies"
-              : "Downloads"}
+            {t.label} ({t.count})
           </Link>
         ))}
       </div>
 
-      {/* ===== CATEGORY FILTER ===== */}
+      {/* ===== CATEGORY FILTER (WITH COUNTS) ===== */}
       <div className="flex flex-wrap gap-3 mb-10">
         {[
-          "all",
-          "prophecy",
-          "discipleship",
-          "typology",
-          "stewardship",
-          "leadership",
-        ].map((cat) => (
+          { key: "all", label: "All Categories", count: counts.all },
+          { key: "prophecy", label: "Prophecy", count: counts.prophecy },
+          { key: "discipleship", label: "Discipleship", count: counts.discipleship },
+          { key: "typology", label: "Typology", count: counts.typology },
+          { key: "stewardship", label: "Stewardship", count: counts.stewardship },
+          { key: "leadership", label: "Leadership", count: counts.leadership },
+        ].map((c) => (
           <Link
-            key={cat}
-            href={makeCategoryHref(cat)}
+            key={c.key}
+            href={makeCategoryHref(c.key)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentCategory === cat ||
-              (!currentCategory && cat === "all")
+              currentCategory === c.key ||
+              (!currentCategory && c.key === "all")
                 ? "bg-black text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            {cat === "all"
-              ? "All Categories"
-              : cat.charAt(0).toUpperCase() + cat.slice(1)}
+            {c.label} ({c.count})
           </Link>
         ))}
       </div>
@@ -192,7 +237,7 @@ export default function ResourcesClient({
 
       {/* ===== CARDS GRID ===== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filtered.map((item) => {
+        {paginated.map((item) => {
           const isPaidItem = item.isPremium === true;
           const isOwned = ownedSlugs.includes(item.slug);
           const category = getCategory(item);
@@ -205,19 +250,16 @@ export default function ResourcesClient({
               key={`${item.type}-${item.slug}`}
               className="border rounded-xl p-6 shadow-sm hover:shadow-md transition"
             >
-              {/* ===== BADGES ===== */}
+              {/* BADGES */}
               <div className="flex gap-2 mb-4 flex-wrap">
-                {/* Type badge */}
                 <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
                   {item.type}
                 </span>
 
-                {/* Category badge */}
                 <span className="text-xs font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800">
                   {category.charAt(0).toUpperCase() + category.slice(1)}
                 </span>
 
-                {/* Price badge */}
                 {isPaidItem ? (
                   isOwned ? (
                     <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
@@ -245,7 +287,6 @@ export default function ResourcesClient({
                 <p className="text-xs text-gray-400 mb-3">{item.date}</p>
               )}
 
-              {/* ===== ACTIONS ===== */}
               {!isPaidItem ? (
                 <Link
                   href={viewHref}
@@ -275,8 +316,41 @@ export default function ResourcesClient({
         })}
       </div>
 
+      {/* ===== PAGINATION CONTROLS ===== */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-6 mt-12">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            className={`px-4 py-2 rounded-lg border ${
+              page === 1
+                ? "text-gray-400 border-gray-200"
+                : "text-gray-700 border-gray-300 hover:bg-gray-100"
+            }`}
+          >
+            ← Previous
+          </button>
+
+          <span className="text-sm text-gray-600">
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            className={`px-4 py-2 rounded-lg border ${
+              page === totalPages
+                ? "text-gray-400 border-gray-200"
+                : "text-gray-700 border-gray-300 hover:bg-gray-100"
+            }`}
+          >
+            Next →
+          </button>
+        </div>
+      )}
+
       {/* ===== EMPTY STATE ===== */}
-      {filtered.length === 0 && (
+      {baseFiltered.length === 0 && (
         <p className="text-center text-gray-500 mt-12">
           No resources found in this category.
         </p>
