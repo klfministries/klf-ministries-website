@@ -22,6 +22,7 @@ export default function ResourceViewPage({ params }) {
   if (downloadItem) {
     const isPaid = downloadItem.isPremium === true;
     const isPdf = downloadItem.file.toLowerCase().endsWith(".pdf");
+    const category = downloadItem.category;
 
     return (
       <section className="max-w-4xl mx-auto px-6 py-20">
@@ -31,9 +32,18 @@ export default function ResourceViewPage({ params }) {
           <span>{downloadItem.title}</span>
         </nav>
 
-        <h1 className="text-3xl font-bold mb-4">
+        <h1 className="text-3xl font-bold mb-3">
           {downloadItem.title}
         </h1>
+
+        {/* ===== CATEGORY BADGE ===== */}
+        {category && (
+          <div className="mb-4">
+            <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+        )}
 
         <p className="text-gray-600 mb-6">
           {downloadItem.description}
@@ -121,6 +131,16 @@ export default function ResourceViewPage({ params }) {
         </nav>
 
         <h1>{data.title}</h1>
+
+        {/* ===== CATEGORY BADGE FOR ARTICLES ===== */}
+        {data.category && (
+          <div className="mb-4">
+            <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+              {data.category.charAt(0).toUpperCase() + data.category.slice(1)}
+            </span>
+          </div>
+        )}
+
         {data.date && (
           <p className="text-sm text-gray-400">{data.date}</p>
         )}
@@ -157,6 +177,16 @@ export default function ResourceViewPage({ params }) {
         </nav>
 
         <h1>{data.title}</h1>
+
+        {/* ===== CATEGORY BADGE FOR LESSON STUDIES ===== */}
+        {data.category && (
+          <div className="mb-4">
+            <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+              {data.category.charAt(0).toUpperCase() + data.category.slice(1)}
+            </span>
+          </div>
+        )}
+
         {data.date && (
           <p className="text-sm text-gray-400">{data.date}</p>
         )}
