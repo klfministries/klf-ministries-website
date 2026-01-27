@@ -27,9 +27,8 @@ export default function ResourcesClient({
 
   /* ================= NORMALIZE CATEGORY ================= */
   const getCategory = (item) => {
-    if (item.category) return item.category; // new system
-    if (item.type === "article") return "article";
-    return "lesson";
+    if (item.category) return item.category;
+    return "discipleship"; // safe default
   };
 
   /* ================= FILTERING ================= */
@@ -131,23 +130,28 @@ export default function ResourcesClient({
 
       {/* ===== CATEGORY FILTER ===== */}
       <div className="flex flex-wrap gap-3 mb-10">
-        {["all", "prophecy", "discipleship", "typology", "stewardship"].map(
-          (cat) => (
-            <Link
-              key={cat}
-              href={makeCategoryHref(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                currentCategory === cat
-                  ? "bg-black text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              {cat === "all"
-                ? "All Categories"
-                : cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </Link>
-          )
-        )}
+        {[
+          "all",
+          "prophecy",
+          "discipleship",
+          "typology",
+          "stewardship",
+          "leadership",
+        ].map((cat) => (
+          <Link
+            key={cat}
+            href={makeCategoryHref(cat)}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${
+              currentCategory === cat
+                ? "bg-black text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            {cat === "all"
+              ? "All Categories"
+              : cat.charAt(0).toUpperCase() + cat.slice(1)}
+          </Link>
+        ))}
       </div>
 
       {/* ===== SEARCH + SORT ===== */}
@@ -185,18 +189,19 @@ export default function ResourcesClient({
               key={`${item.type}-${item.slug}`}
               className="border rounded-xl p-6 shadow-sm hover:shadow-md transition"
             >
-              {/* Badges */}
+              {/* ===== BADGES ===== */}
               <div className="flex gap-2 mb-4 flex-wrap">
+                {/* Type badge */}
                 <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
                   {item.type}
                 </span>
 
-                {category === "prophecy" && (
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800">
-                    Prophecy
-                  </span>
-                )}
+                {/* Category badge */}
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800">
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </span>
 
+                {/* Price badge */}
                 {isPaidItem ? (
                   isOwned ? (
                     <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
@@ -254,7 +259,7 @@ export default function ResourcesClient({
         })}
       </div>
 
-      {/* EMPTY STATE */}
+      {/* ===== EMPTY STATE ===== */}
       {filtered.length === 0 && (
         <p className="text-center text-gray-500 mt-12">
           No resources found in this category.
