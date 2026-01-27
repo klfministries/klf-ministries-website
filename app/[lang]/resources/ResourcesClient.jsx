@@ -5,9 +5,6 @@ import Link from "next/link";
 
 const PAYPAL_EMAIL = "klfministries7@gmail.com";
 
-// 🔐 ONLY THIS ONE IS PAID
-const PAID_SLUG = "how-to-study-bible-prophecy";
-
 export default function ResourcesClient({
   lang,
   initialResources,
@@ -58,7 +55,7 @@ export default function ResourcesClient({
       : `${base}${base.includes("?") ? "&" : "?"}category=${category}`;
   };
 
-  /* ================= PAYPAL LINK (ONLY FOR PAID ONE) ================= */
+  /* ================= PAYPAL LINK (DYNAMIC PRICE) ================= */
   const buildPaypalLink = (item) => {
     const description = encodeURIComponent(`${item.title} (${item.type})`);
 
@@ -67,7 +64,7 @@ export default function ResourcesClient({
 
     const returnUrl = `${baseUrl}/${lang}/resources/thank-you?item=${item.slug}`;
 
-    return `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD&amount=5&item_name=${description}&return=${encodeURIComponent(
+    return `https://www.paypal.com/donate/?business=${PAYPAL_EMAIL}&currency_code=USD&amount=${item.price}&item_name=${description}&return=${encodeURIComponent(
       returnUrl
     )}`;
   };
@@ -158,7 +155,7 @@ export default function ResourcesClient({
       {/* ===== CARDS GRID ===== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {filtered.map((item) => {
-          const isPaidItem = item.slug === PAID_SLUG;
+          const isPaidItem = item.isPremium === true;
           const isOwned = ownedSlugs.includes(item.slug);
 
           const viewHref = `/${lang}/resources/${item.slug}`;
@@ -182,7 +179,7 @@ export default function ResourcesClient({
                     </span>
                   ) : (
                     <span className="text-xs font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
-                      $5 USD
+                      ${item.price} USD
                     </span>
                   )
                 ) : (
@@ -227,7 +224,7 @@ export default function ResourcesClient({
                   rel="noopener noreferrer"
                   className="inline-block rounded-lg bg-blue-900 text-white px-5 py-2 text-sm font-semibold hover:bg-blue-800 transition"
                 >
-                  Buy for $5 →
+                  Buy for ${item.price} →
                 </a>
               )}
             </div>

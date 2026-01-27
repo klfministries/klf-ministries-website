@@ -6,8 +6,8 @@
     "date": "2026-01-20",
     "file": "bible-study-guide.pdf",
     "type": "lesson",
-    "isPremium": true,
-    "price": 5
+    "isPremium": false,
+    "price": 0
   },
   {
     "slug": "church-training-slides",
@@ -16,8 +16,8 @@
     "date": "2026-01-18",
     "file": "church-training-slides.pptx",
     "type": "lesson",
-    "isPremium": true,
-    "price": 5
+    "isPremium": false,
+    "price": 0
   },
   {
     "slug": "how-to-study-bible-prophecy",
@@ -28,6 +28,35 @@
     "type": "article",
     "isPremium": true,
     "price": 5
+  },
+  {
+    "slug": "faith-and-works",
+    "title": "Faith and Works (PPT)",
+    "description": "A Bible study on the relationship between faith, obedience, and Christian living from Hebrews 11 and James 2.",
+    "date": "2026-01-27",
+    "file": "faith-and-works.pptx",
+    "type": "lesson",
+    "isPremium": true,
+    "price": 12
+  },
+  {
+    "slug": "his-life-for-mine",
+    "title": "His Life for Mine (PPT)",
+    "description": "A Christ-centered study on the atonement, the divine-human nature of Christ, and the meaning of His sacrifice.",
+    "date": "2026-01-27",
+    "file": "his-life-for-mine.pptx",
+    "type": "lesson",
+    "isPremium": true,
+    "price": 12
+  },
+  {
+    "slug": "christs-priestly-ministry-inauguration",
+    "title": "Christ’s Priestly Ministry Inauguration (PPT)",
+    "description": "A detailed study on the heavenly sanctuary, Christ’s anointing, and His inauguration as High Priest.",
+    "date": "2026-01-27",
+    "file": "christs-priestly-ministry-inauguration.pptx",
+    "type": "lesson",
+    "isPremium": true,
+    "price": 12
   }
 ]
-

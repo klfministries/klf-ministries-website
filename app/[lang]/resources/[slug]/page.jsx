@@ -4,9 +4,6 @@ import matter from "gray-matter";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-// 🔐 Only this slug is paid
-const PAID_SLUG = "how-to-study-bible-prophecy";
-
 export default function ResourceViewPage({ params }) {
   const { lang, slug } = params;
 
@@ -23,7 +20,8 @@ export default function ResourceViewPage({ params }) {
   const downloadItem = downloads.find((d) => d.slug === slug);
 
   if (downloadItem) {
-    const isPaid = slug === PAID_SLUG;
+    const isPaid = downloadItem.isPremium === true;
+    const isPdf = downloadItem.file.toLowerCase().endsWith(".pdf");
 
     return (
       <section className="max-w-4xl mx-auto px-6 py-20">
@@ -33,14 +31,25 @@ export default function ResourceViewPage({ params }) {
           <span>{downloadItem.title}</span>
         </nav>
 
-        <h1 className="text-3xl font-bold mb-4">{downloadItem.title}</h1>
-        <p className="text-gray-600 mb-6">{downloadItem.description}</p>
+        <h1 className="text-3xl font-bold mb-4">
+          {downloadItem.title}
+        </h1>
+
+        <p className="text-gray-600 mb-6">
+          {downloadItem.description}
+        </p>
 
         {isPaid ? (
+          /* ================= PAID RESOURCE ================= */
           <div className="border rounded-xl p-8 bg-yellow-50 text-center">
-            <h2 className="text-xl font-semibold mb-4">
+            <h2 className="text-xl font-semibold mb-2">
               Premium Resource
             </h2>
+
+            <p className="mb-4 text-gray-700">
+              Price: <strong>${downloadItem.price} USD</strong>
+            </p>
+
             <p className="mb-6">
               Please purchase this resource from the Resources page.
             </p>
@@ -53,14 +62,28 @@ export default function ResourceViewPage({ params }) {
             </Link>
           </div>
         ) : (
+          /* ================= FREE RESOURCE ================= */
           <>
-            <div className="border rounded-xl overflow-hidden mb-6">
-              <iframe
-                src={`/downloads/${downloadItem.file}`}
-                className="w-full h-[80vh]"
-                title={downloadItem.title}
-              />
-            </div>
+            {isPdf ? (
+              // PREVIEW ONLY FOR PDF FILES
+              <div className="border rounded-xl overflow-hidden mb-6">
+                <iframe
+                  src={`/downloads/${downloadItem.file}`}
+                  className="w-full h-[80vh]"
+                  title={downloadItem.title}
+                />
+              </div>
+            ) : (
+              // NO PREVIEW FOR PPT / PPTX
+              <div className="border rounded-xl p-8 bg-gray-50 text-center mb-6">
+                <p className="text-gray-700 mb-4">
+                  This file is a PowerPoint presentation and cannot be previewed in the browser.
+                </p>
+                <p className="text-sm text-gray-500">
+                  Click the button below to download the file.
+                </p>
+              </div>
+            )}
 
             <a
               href={`/downloads/${downloadItem.file}`}
@@ -98,7 +121,9 @@ export default function ResourceViewPage({ params }) {
         </nav>
 
         <h1>{data.title}</h1>
-        {data.date && <p className="text-sm text-gray-400">{data.date}</p>}
+        {data.date && (
+          <p className="text-sm text-gray-400">{data.date}</p>
+        )}
 
         <article
           dangerouslySetInnerHTML={{
@@ -132,7 +157,9 @@ export default function ResourceViewPage({ params }) {
         </nav>
 
         <h1>{data.title}</h1>
-        {data.date && <p className="text-sm text-gray-400">{data.date}</p>}
+        {data.date && (
+          <p className="text-sm text-gray-400">{data.date}</p>
+        )}
 
         <article
           dangerouslySetInnerHTML={{
