@@ -34,10 +34,10 @@ export default function Speaking() {
             biblical depth, and a passion to see lives transformed by the grace of God.
           </p>
 
-          {/* TOPICS */}
+          {/* THEMES */}
           <div>
             <h3 className="text-lg font-semibold text-gray-800 mb-3">
-              Common Speaking Topics
+              Common Speaking Themes
             </h3>
             <ul className="grid sm:grid-cols-2 gap-2 text-gray-700 list-disc list-inside">
               <li>Evangelism & Revival</li>
@@ -46,6 +46,8 @@ export default function Speaking() {
               <li>Prophecy & End-Time Hope</li>
               <li>Prayer & Spiritual Growth</li>
               <li>Leadership in Ministry</li>
+              <li>Sanctuary</li>
+              <li>Stewardship</li>
             </ul>
           </div>
         </div>
