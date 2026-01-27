@@ -37,11 +37,8 @@ export default function ResourcesClient({
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (page > 1) {
-      params.set("page", String(page));
-    } else {
-      params.delete("page");
-    }
+    if (page > 1) params.set("page", String(page));
+    else params.delete("page");
 
     router.replace(`?${params.toString()}`, { scroll: false });
   }, [page]);
@@ -55,6 +52,27 @@ export default function ResourcesClient({
   const getCategory = (item) => {
     if (item.category) return item.category;
     return "discipleship";
+  };
+
+  /* ================= HIGHLIGHT FUNCTION ================= */
+  const highlight = (text) => {
+    if (!query) return text;
+
+    const regex = new RegExp(`(${query})`, "gi");
+    const parts = text.split(regex);
+
+    return parts.map((part, i) =>
+      part.toLowerCase() === query.toLowerCase() ? (
+        <mark
+          key={i}
+          className="bg-yellow-200 text-black px-1 rounded"
+        >
+          {part}
+        </mark>
+      ) : (
+        part
+      )
+    );
   };
 
   /* ================= BASE FILTER ================= */
@@ -87,10 +105,13 @@ export default function ResourcesClient({
       });
   }, [initialResources, query, currentType, currentCategory, sort]);
 
-  /* ================= FEATURED RESOURCES ================= */
-  const featuredResources = useMemo(() => {
-    return baseFiltered.filter((item) => item.featured === true).slice(0, 3);
-  }, [baseFiltered]);
+  /* ================= NEW RELEASES ================= */
+  const newReleases = useMemo(() => {
+    return [...initialResources]
+      .filter((item) => item.date)
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 3);
+  }, [initialResources]);
 
   /* ================= PAGINATION ================= */
   const totalPages = Math.ceil(baseFiltered.length / PAGE_SIZE);
@@ -100,34 +121,6 @@ export default function ResourcesClient({
     const end = start + PAGE_SIZE;
     return baseFiltered.slice(start, end);
   }, [baseFiltered, page]);
-
-  /* ================= COUNTS ================= */
-  const counts = useMemo(() => {
-    const result = {
-      all: initialResources.length,
-      article: 0,
-      lesson: 0,
-      download: 0,
-      prophecy: 0,
-      discipleship: 0,
-      typology: 0,
-      stewardship: 0,
-      leadership: 0,
-    };
-
-    initialResources.forEach((item) => {
-      if (item.type === "article") result.article++;
-      if (item.type === "lesson") result.lesson++;
-      if (item.file) result.download++;
-
-      const cat = getCategory(item);
-      if (result[cat] !== undefined) {
-        result[cat]++;
-      }
-    });
-
-    return result;
-  }, [initialResources]);
 
   /* ================= TYPE LINKS ================= */
   const makeTypeHref = (type) =>
@@ -164,9 +157,7 @@ export default function ResourcesClient({
   /* ================= PAGE NUMBERS ================= */
   const pageNumbers = useMemo(() => {
     const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i);
-    }
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
     return pages;
   }, [totalPages]);
 
@@ -189,24 +180,26 @@ export default function ResourcesClient({
         Teaching materials for spiritual growth and discipleship.
       </p>
 
-      {/* ===== FEATURED SECTION ===== */}
-      {featuredResources.length > 0 && (
+      {/* ===== NEW RELEASES SECTION ===== */}
+      {newReleases.length > 0 && (
         <div className="mb-14">
           <h2 className="text-2xl font-bold mb-6 text-blue-900">
-            Featured Resources
+            📚 New Releases
           </h2>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredResources.map((item) => (
+            {newReleases.map((item) => (
               <div
-                key={`featured-${item.slug}`}
-                className="border-2 border-yellow-400 rounded-xl p-6 shadow-md bg-yellow-50"
+                key={`new-${item.slug}`}
+                className="border-2 border-blue-900 rounded-xl p-6 shadow-md bg-blue-50"
               >
-                <span className="inline-block mb-3 text-xs font-bold text-yellow-800">
-                  ⭐ Featured
+                <span className="inline-block mb-3 text-xs font-bold text-blue-900">
+                  New
                 </span>
 
-                <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  {item.title}
+                </h3>
 
                 <p className="text-sm text-gray-700 mb-4">
                   {item.description}
@@ -223,52 +216,6 @@ export default function ResourcesClient({
           </div>
         </div>
       )}
-
-      {/* ===== TYPE FILTER ===== */}
-      <div className="flex flex-wrap gap-3 mb-6">
-        {[
-          { key: "all", label: "All", count: counts.all },
-          { key: "article", label: "Articles", count: counts.article },
-          { key: "lesson", label: "Lesson Studies", count: counts.lesson },
-          { key: "download", label: "Downloads", count: counts.download },
-        ].map((t) => (
-          <Link
-            key={t.key}
-            href={makeTypeHref(t.key)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentType === t.key || (!currentType && t.key === "all")
-                ? "bg-blue-900 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            {t.label} ({t.count})
-          </Link>
-        ))}
-      </div>
-
-      {/* ===== CATEGORY FILTER ===== */}
-      <div className="flex flex-wrap gap-3 mb-10">
-        {[
-          { key: "all", label: "All Categories", count: counts.all },
-          { key: "prophecy", label: "Prophecy", count: counts.prophecy },
-          { key: "discipleship", label: "Discipleship", count: counts.discipleship },
-          { key: "typology", label: "Typology", count: counts.typology },
-          { key: "stewardship", label: "Stewardship", count: counts.stewardship },
-          { key: "leadership", label: "Leadership", count: counts.leadership },
-        ].map((c) => (
-          <Link
-            key={c.key}
-            href={makeCategoryHref(c.key)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentCategory === c.key || (!currentCategory && c.key === "all")
-                ? "bg-black text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            {c.label} ({c.count})
-          </Link>
-        ))}
-      </div>
 
       {/* ===== SEARCH + SORT ===== */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between mb-10">
@@ -305,6 +252,7 @@ export default function ResourcesClient({
               key={`${item.type}-${item.slug}`}
               className="border rounded-xl p-6 shadow-sm hover:shadow-md transition"
             >
+              {/* ===== BADGES ===== */}
               <div className="flex gap-2 mb-4 flex-wrap">
                 <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
                   {item.type}
@@ -331,14 +279,18 @@ export default function ResourcesClient({
                 )}
               </div>
 
-              <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                {highlight(item.title)}
+              </h3>
 
               <p className="text-sm text-gray-600 mb-4">
-                {item.description}
+                {highlight(item.description)}
               </p>
 
               {item.date && (
-                <p className="text-xs text-gray-400 mb-3">{item.date}</p>
+                <p className="text-xs text-gray-400 mb-3">
+                  {item.date}
+                </p>
               )}
 
               {!isPaidItem ? (
@@ -373,14 +325,6 @@ export default function ResourcesClient({
       {/* ===== PAGE NUMBERS ===== */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 mt-12 flex-wrap">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="px-3 py-2 border rounded-lg text-sm disabled:text-gray-400"
-          >
-            ←
-          </button>
-
           {pageNumbers.map((p) => (
             <button
               key={p}
@@ -394,21 +338,13 @@ export default function ResourcesClient({
               {p}
             </button>
           ))}
-
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            className="px-3 py-2 border rounded-lg text-sm disabled:text-gray-400"
-          >
-            →
-          </button>
         </div>
       )}
 
       {/* ===== EMPTY STATE ===== */}
       {baseFiltered.length === 0 && (
         <p className="text-center text-gray-500 mt-12">
-          No resources found in this category.
+          No resources found for this search.
         </p>
       )}
     </section>
