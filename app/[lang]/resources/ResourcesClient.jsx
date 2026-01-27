@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const PAYPAL_EMAIL = "klfministries7@gmail.com";
-const PAGE_SIZE = 6; // how many cards per page
+const PAGE_SIZE = 6;
 
 export default function ResourcesClient({
   lang,
@@ -12,10 +13,15 @@ export default function ResourcesClient({
   currentType,
   currentCategory,
 }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const initialPage = parseInt(searchParams.get("page") || "1", 10);
+
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("newest");
   const [ownedSlugs, setOwnedSlugs] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(initialPage);
 
   /* ================= LOAD MY DOWNLOADS ================= */
   useEffect(() => {
@@ -26,6 +32,19 @@ export default function ResourcesClient({
       setOwnedSlugs([]);
     }
   }, []);
+
+  /* ================= SYNC PAGE TO URL ================= */
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (page > 1) {
+      params.set("page", String(page));
+    } else {
+      params.delete("page");
+    }
+
+    router.replace(`?${params.toString()}`, { scroll: false });
+  }, [page]);
 
   /* ================= RESET PAGE WHEN FILTERS CHANGE ================= */
   useEffect(() => {
@@ -38,30 +57,23 @@ export default function ResourcesClient({
     return "discipleship";
   };
 
-  /* ================= BASE FILTER (no pagination yet) ================= */
+  /* ================= BASE FILTER ================= */
   const baseFiltered = useMemo(() => {
     return initialResources
       .filter((item) => {
-        // 🔎 Search
         const text = `${item.title} ${item.description}`.toLowerCase();
         const matchesQuery = text.includes(query.toLowerCase());
 
-        // 🧭 Type
         const matchesType =
-          currentType === undefined ||
-          currentType === "" ||
-          currentType === "all"
+          !currentType || currentType === "all"
             ? true
             : currentType === "download"
               ? !!item.file
               : item.type === currentType;
 
-        // 🧭 Category
         const category = getCategory(item);
         const matchesCategory =
-          currentCategory === undefined ||
-          currentCategory === "" ||
-          currentCategory === "all"
+          !currentCategory || currentCategory === "all"
             ? true
             : category === currentCategory;
 
@@ -75,6 +87,11 @@ export default function ResourcesClient({
       });
   }, [initialResources, query, currentType, currentCategory, sort]);
 
+  /* ================= FEATURED RESOURCES ================= */
+  const featuredResources = useMemo(() => {
+    return baseFiltered.filter((item) => item.featured === true).slice(0, 3);
+  }, [baseFiltered]);
+
   /* ================= PAGINATION ================= */
   const totalPages = Math.ceil(baseFiltered.length / PAGE_SIZE);
 
@@ -84,7 +101,7 @@ export default function ResourcesClient({
     return baseFiltered.slice(start, end);
   }, [baseFiltered, page]);
 
-  /* ================= COUNTS FOR FILTERS ================= */
+  /* ================= COUNTS ================= */
   const counts = useMemo(() => {
     const result = {
       all: initialResources.length,
@@ -99,12 +116,10 @@ export default function ResourcesClient({
     };
 
     initialResources.forEach((item) => {
-      // type counts
       if (item.type === "article") result.article++;
       if (item.type === "lesson") result.lesson++;
       if (item.file) result.download++;
 
-      // category counts
       const cat = getCategory(item);
       if (result[cat] !== undefined) {
         result[cat]++;
@@ -123,9 +138,7 @@ export default function ResourcesClient({
   /* ================= CATEGORY LINKS ================= */
   const makeCategoryHref = (category) => {
     const base =
-      currentType === undefined ||
-      currentType === "" ||
-      currentType === "all"
+      !currentType || currentType === "all"
         ? `/${lang}/resources`
         : `/${lang}/resources?type=${currentType}`;
 
@@ -148,6 +161,15 @@ export default function ResourcesClient({
     )}`;
   };
 
+  /* ================= PAGE NUMBERS ================= */
+  const pageNumbers = useMemo(() => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }, [totalPages]);
+
   /* ================= RENDER ================= */
   return (
     <section className="max-w-6xl mx-auto px-4 py-12 pb-28">
@@ -167,7 +189,42 @@ export default function ResourcesClient({
         Teaching materials for spiritual growth and discipleship.
       </p>
 
-      {/* ===== TYPE FILTER (WITH COUNTS) ===== */}
+      {/* ===== FEATURED SECTION ===== */}
+      {featuredResources.length > 0 && (
+        <div className="mb-14">
+          <h2 className="text-2xl font-bold mb-6 text-blue-900">
+            Featured Resources
+          </h2>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredResources.map((item) => (
+              <div
+                key={`featured-${item.slug}`}
+                className="border-2 border-yellow-400 rounded-xl p-6 shadow-md bg-yellow-50"
+              >
+                <span className="inline-block mb-3 text-xs font-bold text-yellow-800">
+                  ⭐ Featured
+                </span>
+
+                <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+
+                <p className="text-sm text-gray-700 mb-4">
+                  {item.description}
+                </p>
+
+                <Link
+                  href={`/${lang}/resources/${item.slug}`}
+                  className="inline-block text-blue-900 font-semibold hover:underline"
+                >
+                  View Resource →
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ===== TYPE FILTER ===== */}
       <div className="flex flex-wrap gap-3 mb-6">
         {[
           { key: "all", label: "All", count: counts.all },
@@ -179,8 +236,7 @@ export default function ResourcesClient({
             key={t.key}
             href={makeTypeHref(t.key)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentType === t.key ||
-              (!currentType && t.key === "all")
+              currentType === t.key || (!currentType && t.key === "all")
                 ? "bg-blue-900 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
@@ -190,7 +246,7 @@ export default function ResourcesClient({
         ))}
       </div>
 
-      {/* ===== CATEGORY FILTER (WITH COUNTS) ===== */}
+      {/* ===== CATEGORY FILTER ===== */}
       <div className="flex flex-wrap gap-3 mb-10">
         {[
           { key: "all", label: "All Categories", count: counts.all },
@@ -204,8 +260,7 @@ export default function ResourcesClient({
             key={c.key}
             href={makeCategoryHref(c.key)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentCategory === c.key ||
-              (!currentCategory && c.key === "all")
+              currentCategory === c.key || (!currentCategory && c.key === "all")
                 ? "bg-black text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
@@ -250,7 +305,6 @@ export default function ResourcesClient({
               key={`${item.type}-${item.slug}`}
               className="border rounded-xl p-6 shadow-sm hover:shadow-md transition"
             >
-              {/* BADGES */}
               <div className="flex gap-2 mb-4 flex-wrap">
                 <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
                   {item.type}
@@ -316,35 +370,37 @@ export default function ResourcesClient({
         })}
       </div>
 
-      {/* ===== PAGINATION CONTROLS ===== */}
+      {/* ===== PAGE NUMBERS ===== */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-6 mt-12">
+        <div className="flex justify-center items-center gap-2 mt-12 flex-wrap">
           <button
             disabled={page === 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className={`px-4 py-2 rounded-lg border ${
-              page === 1
-                ? "text-gray-400 border-gray-200"
-                : "text-gray-700 border-gray-300 hover:bg-gray-100"
-            }`}
+            className="px-3 py-2 border rounded-lg text-sm disabled:text-gray-400"
           >
-            ← Previous
+            ←
           </button>
 
-          <span className="text-sm text-gray-600">
-            Page {page} of {totalPages}
-          </span>
+          {pageNumbers.map((p) => (
+            <button
+              key={p}
+              onClick={() => setPage(p)}
+              className={`px-3 py-2 border rounded-lg text-sm ${
+                p === page
+                  ? "bg-blue-900 text-white border-blue-900"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              {p}
+            </button>
+          ))}
 
           <button
             disabled={page === totalPages}
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            className={`px-4 py-2 rounded-lg border ${
-              page === totalPages
-                ? "text-gray-400 border-gray-200"
-                : "text-gray-700 border-gray-300 hover:bg-gray-100"
-            }`}
+            className="px-3 py-2 border rounded-lg text-sm disabled:text-gray-400"
           >
-            Next →
+            →
           </button>
         </div>
       )}
