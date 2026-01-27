@@ -5,7 +5,6 @@ import MobileSubscribeBar from "../components/MobileSubscribeBar";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import YouTubeLatest from "../components/YouTubeLatest"; // 🔴 ADD THIS
 
 /* ================= FEATURED DEVOTIONAL ================= */
 function FeaturedDevotional({ lang }) {
@@ -299,11 +298,6 @@ export default function Home({ params }) {
             />
           </div>
         </div>
-      </section>
-
-      {/* ================= LATEST YOUTUBE VIDEOS ================= */}
-      <section className="py-28 px-6 bg-[#f7f4ee]">
-        <YouTubeLatest />
       </section>
 
       {/* ================= TESTIMONIES ================= */}
