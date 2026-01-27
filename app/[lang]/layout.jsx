@@ -14,7 +14,7 @@ export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "es" }];
 }
 
-/* ================= SEO METADATA ================= */
+/* ================= SEO + SOCIAL METADATA ================= */
 export async function generateMetadata({ params }) {
   const lang = params.lang === "es" ? "es" : "en";
 
@@ -31,9 +31,44 @@ export async function generateMetadata({ params }) {
     },
   };
 
+  const baseUrl = "https://klfministries.org";
+
   return {
     title: seo[lang].title,
     description: seo[lang].description,
+
+    metadataBase: new URL(baseUrl),
+
+    // ===== FAVICON + SITE ICONS =====
+    icons: {
+      icon: "/favicon.png",
+      apple: "/favicon.png",
+    },
+
+    // ===== OPEN GRAPH (WhatsApp, Facebook, iMessage, etc.) =====
+    openGraph: {
+      type: "website",
+      url: `${baseUrl}/${lang}`,
+      title: seo[lang].title,
+      description: seo[lang].description,
+      siteName: "KLF Ministries",
+      images: [
+        {
+          url: "/og-image.png",
+          width: 1200,
+          height: 1200,
+          alt: "KLF Ministries",
+        },
+      ],
+    },
+
+    // ===== TWITTER / X =====
+    twitter: {
+      card: "summary_large_image",
+      title: seo[lang].title,
+      description: seo[lang].description,
+      images: ["/og-image.png"],
+    },
   };
 }
 
@@ -43,6 +78,22 @@ export default function LangLayout({ children, params }) {
 
   return (
     <html lang={lang}>
+      <head>
+        {/* ===== GOOGLE ORGANIZATION LOGO FOR SEARCH RESULTS ===== */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "KLF Ministries",
+              url: "https://klfministries.org",
+              logo: "https://klfministries.org/favicon.png",
+            }),
+          }}
+        />
+      </head>
+
       <body className="min-h-screen flex flex-col bg-transparent text-gray-900">
         {/* GLOBAL UI */}
         <ScrollProgress />
