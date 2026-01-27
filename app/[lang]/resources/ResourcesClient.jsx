@@ -38,6 +38,12 @@ export default function ResourcesClient({
       const text = `${item.title} ${item.description}`.toLowerCase();
       const matchesQuery = text.includes(query.toLowerCase());
 
+      // 🧭 Type filter
+      const matchesType =
+        !currentType || currentType === "all"
+          ? true
+          : item.type === currentType;
+
       // 🧭 Category filter
       const category = getCategory(item);
       const matchesCategory =
@@ -45,7 +51,7 @@ export default function ResourcesClient({
           ? true
           : category === currentCategory;
 
-      return matchesQuery && matchesCategory;
+      return matchesQuery && matchesType && matchesCategory;
     })
     .sort((a, b) => {
       if (!a.date || !b.date) return 0;
@@ -63,7 +69,7 @@ export default function ResourcesClient({
   /* ================= CATEGORY LINKS ================= */
   const makeCategoryHref = (category) => {
     const base =
-      currentType === "all"
+      !currentType || currentType === "all"
         ? `/${lang}/resources`
         : `/${lang}/resources?type=${currentType}`;
 
@@ -112,7 +118,7 @@ export default function ResourcesClient({
             key={type}
             href={makeTypeHref(type)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentType === type
+              currentType === type || (!currentType && type === "all")
                 ? "bg-blue-900 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
@@ -142,7 +148,7 @@ export default function ResourcesClient({
             key={cat}
             href={makeCategoryHref(cat)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              currentCategory === cat
+              currentCategory === cat || (!currentCategory && cat === "all")
                 ? "bg-black text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
