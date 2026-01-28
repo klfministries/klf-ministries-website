@@ -36,16 +36,13 @@ export async function generateMetadata({ params }) {
   return {
     title: seo[lang].title,
     description: seo[lang].description,
-
     metadataBase: new URL(baseUrl),
 
-    // ===== FAVICON + SITE ICONS =====
     icons: {
       icon: "/favicon.png",
       apple: "/favicon.png",
     },
 
-    // ===== OPEN GRAPH (WhatsApp, Facebook, iMessage, etc.) =====
     openGraph: {
       type: "website",
       url: `${baseUrl}/${lang}`,
@@ -54,7 +51,7 @@ export async function generateMetadata({ params }) {
       siteName: "KLF Ministries",
       images: [
         {
-          url: `${baseUrl}/og-image.png`,   // 🔴 FORCE ABSOLUTE URL
+          url: `${baseUrl}/og-image.png`,
           width: 1200,
           height: 1200,
           alt: "KLF Ministries",
@@ -62,12 +59,11 @@ export async function generateMetadata({ params }) {
       ],
     },
 
-    // ===== TWITTER / X =====
     twitter: {
       card: "summary_large_image",
       title: seo[lang].title,
       description: seo[lang].description,
-      images: [`${baseUrl}/og-image.png`], // 🔴 FORCE ABSOLUTE URL
+      images: [`${baseUrl}/og-image.png`],
     },
   };
 }
@@ -79,7 +75,6 @@ export default function LangLayout({ children, params }) {
   return (
     <html lang={lang}>
       <head>
-        {/* ===== GOOGLE ORGANIZATION LOGO FOR SEARCH RESULTS ===== */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -100,15 +95,15 @@ export default function LangLayout({ children, params }) {
         <Analytics />
         <DonationModal />
 
-        {/* NAV */}
-        <Nav lang={lang} />
+        {/* NAV (FIXED) */}
+        <Nav />
 
-        {/* Spacer for fixed nav */}
-        <div className="h-24" />
+        {/* Spacer for fixed / shrinking nav */}
+        <div className="h-20 lg:h-24" />
 
         {/* HEADER */}
-        <header className="bg-white border-b shadow-sm">
-          <div className="max-w-7xl mx-auto px-6 pt-4 pb-4 text-center">
+        <header className="bg-white border-b">
+          <div className="max-w-7xl mx-auto px-6 py-6 text-center">
             <Image
               src="/images/klf-logo-gold.png"
               alt="KLF Ministries"
@@ -158,7 +153,7 @@ export default function LangLayout({ children, params }) {
           </div>
         </footer>
 
-        {/* ===== WHATSAPP FLOAT (CLIENT COMPONENT) ===== */}
+        {/* WHATSAPP FLOAT */}
         <WhatsAppFloat />
       </body>
     </html>

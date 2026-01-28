@@ -45,6 +45,7 @@ export default function PrayerRequest({ params }) {
       error:
         "There was an error sending your request. Please try again in a moment.",
       back: "Return to Home",
+      trust: "We treat every request with care and confidentiality.",
     },
     es: {
       title: "Enviar una Petición de Oración",
@@ -67,16 +68,15 @@ export default function PrayerRequest({ params }) {
       error:
         "Hubo un error al enviar su petición. Por favor intente nuevamente.",
       back: "Volver al Inicio",
+      trust: "Tratamos cada petición con cuidado y total confidencialidad.",
     },
   };
 
   const t = content[lang];
 
-  // 🔴 Your ACTIVE deployed Apps Script Web App URL
   const EXEC_URL =
     "https://script.google.com/macros/s/AKfycbxyeSxfqgK2hkuz7qePggLXOMBS9TEnkYGfM2xe-Q7jbGefU_TR1YxUQ8c0RDRi0-QE/exec";
 
-  // ✅ FINAL, CORS-SAFE SUBMIT HANDLER
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -98,17 +98,14 @@ export default function PrayerRequest({ params }) {
     };
 
     try {
-      // 🔴 CRITICAL FIX: no-cors mode, no headers, no response reading
       await fetch(EXEC_URL, {
         method: "POST",
         mode: "no-cors",
         body: JSON.stringify(payload),
       });
 
-      // If we reach here, the request was sent successfully
       setSubmitted(true);
       form.reset();
-
     } catch (err) {
       console.error("Network error:", err);
       setError(t.error);
@@ -134,7 +131,7 @@ export default function PrayerRequest({ params }) {
         <div className="absolute inset-0 bg-black/60" />
       </div>
 
-      <section className="relative max-w-3xl w-full mx-auto py-20 px-6 text-center">
+      <section className="relative max-w-3xl w-full mx-auto py-24 px-6 text-center">
         {!submitted ? (
           <>
             <h1 className="text-3xl font-bold text-white mb-6">
@@ -153,29 +150,25 @@ export default function PrayerRequest({ params }) {
                 type="text"
                 name="name"
                 placeholder={t.name}
-                className="w-full border border-gray-300 rounded-md px-4 py-3"
+                className="w-full border border-gray-300 rounded-md px-4 py-3 focus:ring-2 focus:ring-blue-800"
               />
 
               <input
                 type="email"
                 name="email"
                 placeholder={t.email}
-                className="w-full border border-gray-300 rounded-md px-4 py-3"
+                className="w-full border border-gray-300 rounded-md px-4 py-3 focus:ring-2 focus:ring-blue-800"
               />
 
-              {/* Honeypot field */}
-              <input
-                type="text"
-                name="website"
-                className="hidden"
-              />
+              {/* Honeypot */}
+              <input type="text" name="website" className="hidden" />
 
               <textarea
                 name="message"
                 rows="6"
                 required
                 placeholder={t.message}
-                className="w-full border border-gray-300 rounded-md px-4 py-3"
+                className="w-full border border-gray-300 rounded-md px-4 py-3 focus:ring-2 focus:ring-blue-800"
               ></textarea>
 
               {error && (
@@ -192,8 +185,13 @@ export default function PrayerRequest({ params }) {
                 {loading ? t.sending : t.button}
               </button>
 
+              {/* TRUST NOTE */}
               <p className="text-sm text-gray-500 text-center mt-2">
-                🔒 {t.privacy}
+                🔒 {t.trust}
+              </p>
+
+              <p className="text-xs text-gray-400 text-center">
+                {t.privacy}
               </p>
             </form>
           </>

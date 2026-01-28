@@ -6,7 +6,7 @@ import Head from "next/head";
 
 const PAGE_SIZE = 6;
 
-// Simple keyword-based categories
+/* ========= CATEGORY RULES ========= */
 const CATEGORY_RULES = [
   { label: "All", value: "all", match: () => true },
   { label: "Sermons", value: "sermon", match: (t) => t.includes("kiwayne") },
@@ -43,8 +43,6 @@ export default function VideosPage() {
 
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // For embedded modal player
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   const category = searchParams.get("category") || "all";
@@ -68,7 +66,7 @@ export default function VideosPage() {
     loadVideos();
   }, []);
 
-  /* ================= FEATURED (LATEST) ================= */
+  /* ================= FEATURED ================= */
   const featured = useMemo(() => {
     if (videos.length === 0) return null;
     return [...videos].sort(
@@ -76,11 +74,10 @@ export default function VideosPage() {
     )[0];
   }, [videos]);
 
-  /* ================= FILTER + SEARCH ================= */
+  /* ================= FILTER ================= */
   const filtered = useMemo(() => {
     let list = videos;
 
-    // Category filter
     if (category !== "all") {
       const rule = CATEGORY_RULES.find((c) => c.value === category);
       if (rule) {
@@ -90,7 +87,6 @@ export default function VideosPage() {
       }
     }
 
-    // Search filter
     if (query) {
       const q = query.toLowerCase();
       list = list.filter((v) =>
@@ -101,28 +97,24 @@ export default function VideosPage() {
     return list;
   }, [videos, category, query]);
 
-  /* ================= COUNTS FOR FILTERS ================= */
+  /* ================= COUNTS ================= */
   const counts = useMemo(() => {
     const map = {};
-
     CATEGORY_RULES.forEach((cat) => {
-      if (cat.value === "all") {
-        map[cat.value] = videos.length;
-      } else {
-        map[cat.value] = videos.filter((v) =>
-          cat.match(v.title.toLowerCase())
-        ).length;
-      }
+      map[cat.value] =
+        cat.value === "all"
+          ? videos.length
+          : videos.filter((v) =>
+              cat.match(v.title.toLowerCase())
+            ).length;
     });
-
     return map;
   }, [videos]);
 
   /* ================= PAGINATION ================= */
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const start = (page - 1) * PAGE_SIZE;
-  const end = start + PAGE_SIZE;
-  const currentVideos = filtered.slice(start, end);
+  const currentVideos = filtered.slice(start, start + PAGE_SIZE);
 
   const setParam = (key, value) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -133,17 +125,12 @@ export default function VideosPage() {
       params.set(key, value);
     }
 
-    // Reset page when filter/search changes
-    if (key !== "page") {
-      params.delete("page");
-    }
-
+    if (key !== "page") params.delete("page");
     router.push(`?${params.toString()}`);
   };
 
   const highlight = (text) => {
     if (!query) return text;
-
     const regex = new RegExp(`(${query})`, "gi");
     return text.split(regex).map((part, i) =>
       part.toLowerCase() === query.toLowerCase() ? (
@@ -173,27 +160,22 @@ export default function VideosPage() {
           name="description"
           content="Watch sermons and Bible messages from Pastor Kiwayne Ferron on the KLF Ministries YouTube channel."
         />
-        <meta property="og:title" content="Videos | KLF Ministries" />
-        <meta
-          property="og:description"
-          content="Browse recent sermons and messages from Pastor Kiwayne Ferron."
-        />
       </Head>
 
-      <div className="max-w-6xl mx-auto py-20 px-6 space-y-12">
+      <div className="max-w-6xl mx-auto pt-20 pb-24 px-6 space-y-14">
         {/* ===== TITLE ===== */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-blue-900">
             Latest Messages on YouTube
           </h1>
-          <p className="text-gray-600">
-            Browse recent sermons and messages from Pastor Kiwayne Ferron.
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Browse sermons, Bible studies, and messages to encourage faithful and prepared living.
           </p>
         </div>
 
-        {/* ===== FEATURED (EMBEDDED) ===== */}
+        {/* ===== FEATURED ===== */}
         {featured && (
-          <div className="border rounded-2xl p-6 bg-white shadow flex flex-col md:flex-row gap-6">
+          <div className="bg-white border rounded-2xl shadow flex flex-col md:flex-row gap-6 p-6">
             <div className="w-full md:w-1/2 aspect-video rounded-lg overflow-hidden">
               <iframe
                 className="w-full h-full"
@@ -203,7 +185,7 @@ export default function VideosPage() {
               />
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               <span className="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">
                 Latest Sermon
               </span>
@@ -220,7 +202,7 @@ export default function VideosPage() {
                 href={featured.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-3 bg-blue-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition"
+                className="inline-block bg-blue-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition"
               >
                 Watch on YouTube →
               </a>
@@ -235,20 +217,20 @@ export default function VideosPage() {
             placeholder="Search video titles..."
             value={query}
             onChange={(e) => setParam("q", e.target.value)}
-            className="w-full sm:w-96 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-96 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-900"
           />
         </div>
 
-        {/* ===== CATEGORY FILTERS WITH COUNTS ===== */}
+        {/* ===== FILTERS ===== */}
         <div className="flex flex-wrap justify-center gap-3">
           {CATEGORY_RULES.map((cat) => (
             <button
               key={cat.value}
               onClick={() => setParam("category", cat.value)}
-              className={`px-5 py-2 rounded-full border transition ${
+              className={`px-5 py-2 rounded-full font-medium transition ${
                 category === cat.value
                   ? "bg-blue-900 text-white"
-                  : "bg-white text-blue-900 hover:bg-blue-100"
+                  : "bg-white text-blue-900 border hover:bg-blue-50"
               }`}
             >
               {cat.label} ({counts[cat.value] || 0})
@@ -256,7 +238,7 @@ export default function VideosPage() {
           ))}
         </div>
 
-        {/* ===== VIDEOS GRID (EMBED MODAL + HOVER) ===== */}
+        {/* ===== VIDEO GRID ===== */}
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {currentVideos.map((video) => (
             <div
@@ -264,16 +246,21 @@ export default function VideosPage() {
               onClick={() => setSelectedVideo(video)}
               className="group cursor-pointer bg-white rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1 overflow-hidden"
             >
-              <div className="relative aspect-video overflow-hidden">
+              <div className="relative aspect-video">
                 <img
                   src={video.thumbnail}
                   alt={video.title}
                   className="w-full h-full object-cover"
                 />
 
-                {/* Play Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition">
-                  <div className="bg-white/90 rounded-full p-4 text-xl">
+                {/* DATE BADGE */}
+                <span className="absolute top-2 left-2 bg-white/90 text-xs px-2 py-1 rounded">
+                  {formatDate(video.publishedAt)}
+                </span>
+
+                {/* PLAY OVERLAY */}
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition">
+                  <div className="bg-white rounded-full p-4 text-xl">
                     ▶
                   </div>
                 </div>
@@ -283,17 +270,14 @@ export default function VideosPage() {
                 <h3 className="font-semibold text-blue-900 line-clamp-2">
                   {highlight(video.title)}
                 </h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  {formatDate(video.publishedAt)}
-                </p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* ===== PAGINATION (PAGE NUMBERS) ===== */}
+        {/* ===== PAGINATION ===== */}
         {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 pt-8 flex-wrap">
+          <div className="flex justify-center items-center gap-2 flex-wrap pt-6">
             <button
               onClick={() => setParam("page", String(page - 1))}
               disabled={page === 1}
@@ -311,7 +295,7 @@ export default function VideosPage() {
                   className={`px-3 py-2 rounded border ${
                     p === page
                       ? "bg-blue-900 text-white"
-                      : "bg-white hover:bg-blue-100"
+                      : "bg-white hover:bg-blue-50"
                   }`}
                 >
                   {p}
@@ -330,7 +314,7 @@ export default function VideosPage() {
         )}
       </div>
 
-      {/* ===== MODAL EMBED PLAYER ===== */}
+      {/* ===== MODAL PLAYER ===== */}
       {selectedVideo && (
         <div
           className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"

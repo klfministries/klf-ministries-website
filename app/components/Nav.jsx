@@ -87,7 +87,7 @@ export default function Nav() {
         </div>
 
         {/* DESKTOP NAV */}
-        <nav className="hidden lg:flex items-center gap-4">
+        <nav className="hidden lg:flex items-center gap-2">
           {links.map(([path, label]) => {
             const href = `${base}/${path}`;
             const isActive =
@@ -97,10 +97,10 @@ export default function Nav() {
               <Link
                 key={path}
                 href={href}
-                className={`px-4 py-2 font-medium transition ${
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
                   isActive
-                    ? "text-blue-900 font-semibold underline underline-offset-4"
-                    : "text-gray-700 hover:text-blue-900"
+                    ? "bg-blue-50 text-blue-900 font-semibold"
+                    : "text-gray-700 hover:text-blue-900 hover:bg-gray-100"
                 }`}
               >
                 {label}
@@ -111,10 +111,10 @@ export default function Nav() {
           {/* RESOURCES */}
           <Link
             href={`${base}/resources`}
-            className={`px-4 py-2 font-medium transition ${
+            className={`px-4 py-2 rounded-full font-medium transition-all ${
               isInResources
-                ? "text-blue-900 font-semibold underline underline-offset-4"
-                : "text-gray-700 hover:text-blue-900"
+                ? "bg-blue-50 text-blue-900 font-semibold"
+                : "text-gray-700 hover:text-blue-900 hover:bg-gray-100"
             }`}
           >
             Resources
@@ -161,10 +161,10 @@ export default function Nav() {
                 key={path}
                 href={href}
                 onClick={() => setOpen(false)}
-                className={`block text-lg font-medium py-3 border-b transition ${
+                className={`block rounded-lg px-4 py-3 text-lg font-medium transition ${
                   isActive
-                    ? "text-blue-900 font-semibold"
-                    : "text-gray-800 hover:text-blue-900"
+                    ? "bg-blue-50 text-blue-900 font-semibold"
+                    : "text-gray-800 hover:bg-gray-100 hover:text-blue-900"
                 }`}
               >
                 {label}
@@ -176,10 +176,10 @@ export default function Nav() {
           <Link
             href={`${base}/resources`}
             onClick={() => setOpen(false)}
-            className={`block text-lg font-medium py-3 transition ${
+            className={`block rounded-lg px-4 py-3 text-lg font-medium transition ${
               isInResources
-                ? "text-blue-900 font-semibold"
-                : "text-gray-800 hover:text-blue-900"
+                ? "bg-blue-50 text-blue-900 font-semibold"
+                : "text-gray-800 hover:bg-gray-100 hover:text-blue-900"
             }`}
           >
             Resources

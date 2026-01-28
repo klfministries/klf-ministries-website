@@ -109,11 +109,10 @@ export default function Devotionals({ params }) {
   );
 
   return (
-    // 🌍 ROOT WRAPPER — LET GLOBAL CREAM SHOW
     <div className="bg-transparent">
 
       {/* ================= HEADER + SEARCH ================= */}
-      <section className="max-w-4xl mx-auto pt-32 pb-12 px-6 text-center bg-transparent">
+      <section className="max-w-4xl mx-auto pt-20 pb-12 px-6 text-center">
         <h1 className="text-3xl font-bold text-blue-900 mb-4">
           {lang === "es" ? "Devocionales" : "Devotionals"}
         </h1>
@@ -124,6 +123,39 @@ export default function Devotionals({ params }) {
             : "Biblical reflections to strengthen your faith."}
         </p>
 
+        {/* WHAT YOU’LL RECEIVE */}
+        <ul className="mb-8 space-y-2 text-gray-700">
+          <li>📖 {lang === "es" ? "Reflexiones bíblicas semanales" : "Weekly Bible-based reflections"}</li>
+          <li>🙏 {lang === "es" ? "Ánimo espiritual para la vida diaria" : "Spiritual encouragement for daily living"}</li>
+          <li>⏳ {lang === "es" ? "Esperanza centrada en el regreso de Cristo" : "Hope centered on Christ’s return"}</li>
+        </ul>
+      </section>
+
+      {/* ================= SCRIPTURE BANNER IMAGE ================= */}
+      <section className="max-w-5xl mx-auto px-6 mb-20">
+        <div className="relative rounded-2xl overflow-hidden shadow-lg">
+          <img
+            src="/images/devotional-banner.jpg"
+            alt="Scripture reflection"
+            className="w-full h-64 sm:h-80 object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-center px-6">
+            <div className="text-white max-w-3xl">
+              <p className="text-xl sm:text-2xl italic leading-relaxed">
+                {lang === "es"
+                  ? "“Lámpara es a mis pies tu palabra, y lumbrera a mi camino.”"
+                  : "“Your word is a lamp to my feet and a light to my path.”"}
+              </p>
+              <p className="mt-4 text-sm sm:text-base opacity-90">
+                — Psalm 119:105
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= SEARCH ================= */}
+      <section className="max-w-4xl mx-auto px-6 pb-14 text-center">
         <input
           type="text"
           placeholder={
@@ -139,7 +171,7 @@ export default function Devotionals({ params }) {
 
       {/* ================= MOST READ ================= */}
       {!query && (
-        <section className="max-w-4xl mx-auto px-6 pb-20 bg-transparent">
+        <section className="max-w-4xl mx-auto px-6 pb-20">
           <h2 className="text-xl font-bold mb-6 text-center">
             {lang === "es" ? "Más Leídos" : "Most Read"}
           </h2>
@@ -148,13 +180,25 @@ export default function Devotionals({ params }) {
             {mostRead.map((d, i) => (
               <div
                 key={i}
-                className="bg-white p-6 rounded-xl shadow border-l-4 border-yellow-400"
+                className="bg-white rounded-xl shadow overflow-hidden transition hover:shadow-lg"
               >
-                <h3 className="font-semibold mb-1">{d.title}</h3>
-                <p className="italic text-gray-600 text-sm mb-2">
-                  {d.verse}
-                </p>
-                <p className="text-gray-700">{d.body}</p>
+                {/* IMAGE */}
+                <img
+                  src={`/images/devotionals/featured-${i + 1}.jpg`}
+                  alt={d.title}
+                  className="w-full h-40 object-cover"
+                />
+
+                {/* CONTENT */}
+                <div className="p-6 border-l-4 border-yellow-400">
+                  <h3 className="font-semibold mb-1 text-lg">
+                    {d.title}
+                  </h3>
+                  <p className="italic text-gray-600 text-sm mb-2">
+                    {d.verse}
+                  </p>
+                  <p className="text-gray-700">{d.body}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -162,7 +206,7 @@ export default function Devotionals({ params }) {
       )}
 
       {/* ================= SEARCH RESULTS ================= */}
-      <section className="max-w-4xl mx-auto px-6 pb-20 bg-transparent">
+      <section className="max-w-4xl mx-auto px-6 pb-20">
         {filtered.length === 0 ? (
           <p className="text-center text-gray-500 italic">
             {lang === "es"
@@ -174,7 +218,7 @@ export default function Devotionals({ params }) {
             {filtered.map((d, i) => (
               <div
                 key={i}
-                className="bg-white p-6 rounded-xl shadow"
+                className="bg-white p-6 rounded-xl shadow transition hover:shadow-lg"
               >
                 <h2 className="text-xl font-semibold mb-2">
                   {highlight(d.title, query)}

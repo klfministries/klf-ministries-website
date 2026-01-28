@@ -9,26 +9,33 @@ export default function Contact({ params }) {
           {lang === "es" ? "Contacto" : "Contact"}
         </h1>
 
-        <p className="text-gray-600 mb-10">
+        <p className="text-gray-600 mb-4">
           {lang === "es"
             ? "Nos encantaría saber de usted."
             : "We would love to hear from you."}
         </p>
 
-        {/* Card Container */}
+        {/* INTRO SENTENCE */}
+        <p className="text-gray-500 mb-10">
+          {lang === "es"
+            ? "Para consultas del ministerio, peticiones de oración o recursos, no dude en comunicarse."
+            : "For ministry inquiries, prayer requests, or resources, feel free to reach out."}
+        </p>
+
+        {/* CARD CONTAINER */}
         <div
           className="
-            bg-white 
-            shadow-sm 
-            rounded-xl 
-            p-10 
-            max-w-md 
-            mx-auto 
-            space-y-6 
+            bg-white
+            shadow-sm
+            rounded-xl
+            p-10
+            max-w-lg
+            mx-auto
+            space-y-6
             text-lg
-            transition 
-            duration-300 
-            hover:shadow-xl 
+            transition
+            duration-300
+            hover:shadow-xl
             hover:-translate-y-1
           "
         >
